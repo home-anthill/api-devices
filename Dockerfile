@@ -25,5 +25,6 @@ RUN make build
 FROM golang:1.19-alpine
 WORKDIR /
 COPY --from=builder /app/build/api-devices /api-devices
+COPY --from=builder /app/.env_template /.env
 
 ENTRYPOINT ["/api-devices"]

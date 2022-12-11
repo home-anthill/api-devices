@@ -69,10 +69,14 @@ func NewTLSConfig() *tls.Config {
   }
 }
 
-func InitMqtt() {
+func InitMqtt(clientID, user, password string) {
   mqttUrl := os.Getenv("MQTT_URL") + ":" + os.Getenv("MQTT_PORT")
 
   opts := mqtt.NewClientOptions()
+  if os.Getenv("MQTT_AUTH") == "true" {
+    opts.SetUsername(user)
+    opts.SetPassword(password)
+  }
   opts.SetKeepAlive(5 * time.Second)
   opts.SetPingTimeout(2 * time.Second)
   opts.AddBroker(mqttUrl)
@@ -80,9 +84,9 @@ func InitMqtt() {
 
   if os.Getenv("MQTT_TLS") == "true" {
     tlsConfig := NewTLSConfig()
-    opts.SetClientID("apiDevices").SetTLSConfig(tlsConfig)
+    opts.SetClientID(clientID).SetTLSConfig(tlsConfig)
   } else {
-    opts.SetClientID("apiDevices")
+    opts.SetClientID(clientID)
   }
 
   mqttClient = mqtt.NewClient(opts)

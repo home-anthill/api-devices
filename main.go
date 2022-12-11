@@ -54,6 +54,10 @@ func main() {
   fmt.Println("MQTT_CA_FILE = " + os.Getenv("MQTT_CA_FILE"))
   fmt.Println("MQTT_CERT_FILE = " + os.Getenv("MQTT_CERT_FILE"))
   fmt.Println("MQTT_KEY_FILE = " + os.Getenv("MQTT_KEY_FILE"))
+  fmt.Println("MQTT_CLIENT_ID = " + os.Getenv("MQTT_CLIENT_ID"))
+  fmt.Println("MQTT_AUTH = " + os.Getenv("MQTT_AUTH"))
+  fmt.Println("MQTT_USER = " + os.Getenv("MQTT_USER"))
+  fmt.Println("MQTT_PASSWORD = " + os.Getenv("MQTT_PASSWORD"))
   fmt.Println("GRPC_URL = " + os.Getenv("GRPC_URL"))
   fmt.Println("GRPC_TLS = " + os.Getenv("GRPC_TLS"))
   fmt.Println("CERT_FOLDER_PATH = " + os.Getenv("CERT_FOLDER_PATH"))
@@ -66,6 +70,10 @@ func main() {
   logger.Info("MQTT_CA_FILE = " + os.Getenv("MQTT_CA_FILE"))
   logger.Info("MQTT_CERT_FILE = " + os.Getenv("MQTT_CERT_FILE"))
   logger.Info("MQTT_KEY_FILE = " + os.Getenv("MQTT_KEY_FILE"))
+  logger.Info("MQTT_CLIENT_ID = " + os.Getenv("MQTT_CLIENT_ID"))
+  logger.Info("MQTT_AUTH = " + os.Getenv("MQTT_AUTH"))
+  logger.Info("MQTT_USER = " + os.Getenv("MQTT_USER"))
+  logger.Info("MQTT_PASSWORD = " + os.Getenv("MQTT_PASSWORD"))
   logger.Info("GRPC_URL = " + os.Getenv("GRPC_URL"))
   logger.Info("GRPC_TLS = " + os.Getenv("GRPC_TLS"))
   logger.Info("CERT_FOLDER_PATH = " + os.Getenv("CERT_FOLDER_PATH"))
@@ -91,7 +99,10 @@ func main() {
   keepAliveGrpc = api.NewKeepAliveGrpc(ctx, logger)
 
   // 8. Init MQTT and start it
-  mqttClient.InitMqtt()
+  mqttUser := os.Getenv("MQTT_USER")
+  mqttPassword := os.Getenv("MQTT_PASSWORD")
+  mqttClientID := os.Getenv("MQTT_CLIENT_ID")
+  mqttClient.InitMqtt(mqttClientID, mqttUser, mqttPassword)
   fmt.Println("MQTT initialized")
 
   // 9. Start gRPC listener
