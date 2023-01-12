@@ -33,11 +33,16 @@ run: vet proto
 .PHONY: run
 
 test:
-	ENV=testing go test ./...
+	mkdir -p ./coverage
+	ENV=testing go test -v -coverpkg ./... -coverprofile ./coverage/profile.cov ./...
+	# go tool cover -html ./coverage/profile.cov
+	go tool cover -html ./coverage/profile.cov -o ./coverage/cover.html
+	go-cover-treemap -coverprofile ./coverage/profile.cov > ./coverage/out.svg
 .PHONY: test
 
 deps:
 	go install golang.org/x/tools/go/analysis/passes/shadow/cmd/shadow@latest
 	go get -u
 	go mod tidy
+	go install github.com/nikolaydubina/go-cover-treemap@latest
 .PHONY: deps
