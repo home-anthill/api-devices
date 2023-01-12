@@ -69,8 +69,11 @@ func NewTLSConfig() *tls.Config {
 	}
 }
 
-func InitMqtt(clientID, user, password string) {
+func InitMqtt() {
 	mqttUrl := os.Getenv("MQTT_URL") + ":" + os.Getenv("MQTT_PORT")
+	user := os.Getenv("MQTT_USER")
+	password := os.Getenv("MQTT_PASSWORD")
+	clientID := os.Getenv("MQTT_CLIENT_ID")
 
 	opts := mqtt.NewClientOptions()
 	if os.Getenv("MQTT_AUTH") == "true" {
@@ -93,6 +96,4 @@ func InitMqtt(clientID, user, password string) {
 	if token := mqttClient.Connect(); token.Wait() && token.Error() != nil {
 		panic(token.Error())
 	}
-
-	time.Sleep(6 * time.Second)
 }
