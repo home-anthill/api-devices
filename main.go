@@ -1,22 +1,22 @@
 package main
 
 import (
-	"api-devices/init_config"
-	mqttClient "api-devices/mqtt-client"
+	"api-devices/initialization"
+	"api-devices/mqtt-client"
 )
 
 func main() {
-	// 1. Init config
-	logger := init_config.BuildConfig()
+	logger, server, listener, _, _ := initialization.Start()
 	defer logger.Sync()
 
-	// 2. Init and start
-	mqttClient.InitMqtt()
-	logger.Info("MQTT initialized")
+	logger.Info("MQTT starting...")
+	mqtt_client.InitMqtt()
+	if token := mqtt_client.Connect(); token.Wait() && token.Error() != nil {
+		panic(token.Error())
+	}
+	logger.Info("MQTT running")
 
-	// 3. Init and start gRPC server
-	server, listener, _, _ := init_config.BuildServer(logger)
-	logger.Infof("gRPC server listening at %v", listener.Addr())
+	logger.Infof("gRPC - starting server at %v", listener.Addr())
 	if errGrpc := server.Serve(listener); errGrpc != nil {
 		logger.Fatalf("gRPC server failed to serve: %v", errGrpc)
 	}

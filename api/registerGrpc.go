@@ -3,7 +3,6 @@ package api
 import (
 	"api-devices/api/register"
 	"context"
-	"fmt"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -27,8 +26,7 @@ func NewRegisterGrpc(ctx context.Context, logger *zap.SugaredLogger, collection 
 }
 
 func (handler *RegisterGrpc) Register(ctx context.Context, in *register.RegisterRequest) (*register.RegisterReply, error) {
-	handler.logger.Info("gRPC - Register - Called")
-	fmt.Println("Received: ", in)
+	handler.logger.Infof("gRPC - Register - Called with in: %#v", in)
 
 	// update ac
 	upsert := true
@@ -52,7 +50,8 @@ func (handler *RegisterGrpc) Register(ctx context.Context, in *register.Register
 	}, &opts)
 
 	if err != nil {
-		handler.logger.Error("gRPC - Register - Cannot update db with the registered AC with id " + in.Id)
+		handler.logger.Error("gRPC - Register - Cannot update db with the registered AC with mac " + in.Mac)
+		return nil, err
 	}
 
 	return &register.RegisterReply{Status: "200", Message: "Inserted"}, err

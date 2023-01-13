@@ -3,9 +3,9 @@ package integration_tests
 import (
 	"api-devices/api"
 	"api-devices/api/register"
-	"api-devices/init_config"
+	"api-devices/initialization"
 	"api-devices/models"
-	mqttClient "api-devices/mqtt-client"
+	mqtt_client "api-devices/mqtt-client"
 	"api-devices/test_utils"
 	"context"
 	. "github.com/onsi/ginkgo/v2"
@@ -40,15 +40,18 @@ var _ = Describe("Register", func() {
 	}
 
 	BeforeEach(func() {
-		// 1. Init config
-		logger = init_config.BuildConfig()
+		logger, server, listener, ctx, collectionACs = initialization.Start()
 		defer logger.Sync()
-		// 2. Init and start
-		mqttClient.InitMqtt()
-		// 3. Init and start gRPC server
-		server, listener, ctx, collectionACs = init_config.BuildServer(logger)
+
+		// create and start a mocked MQTT client
+		mqtt_client.SetMqttClient(test_utils.NewMockClient())
+		if token := mqtt_client.Connect(); token.Wait() && token.Error() != nil {
+			panic(token.Error())
+		}
+
+		logger.Infof("gRPC server listening at %v", listener.Addr())
 		go func() {
-			server.Serve(listener)
+			_ = server.Serve(listener)
 		}()
 	})
 

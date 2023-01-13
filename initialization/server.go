@@ -1,4 +1,4 @@
-package init_config
+package initialization
 
 import (
 	"api-devices/api"
@@ -15,23 +15,7 @@ import (
 	"os"
 )
 
-func BuildConfig() *zap.SugaredLogger {
-	// Init logger
-	logger := BuildLogger()
-	logger.Info("BuildConfig - called")
-
-	// Load .env file and print variables
-	envFile, err := InitEnv()
-	logger.Debugf("BuildConfig - envFile = %s", envFile)
-	if err != nil {
-		logger.Error("BuildConfig - failed to load the env file")
-		panic("failed to load the env file at ./" + envFile)
-	}
-	PrintEnv(logger)
-	return logger
-}
-
-func BuildServer(logger *zap.SugaredLogger) (*grpc.Server, net.Listener, context.Context, *mongo.Collection) {
+func StartServer(logger *zap.SugaredLogger) (*grpc.Server, net.Listener, context.Context, *mongo.Collection) {
 	// Initialization
 	ctx := context.Background()
 
@@ -39,7 +23,7 @@ func BuildServer(logger *zap.SugaredLogger) (*grpc.Server, net.Listener, context
 	collectionACs := db.InitDb(ctx, logger)
 
 	// Instantiate gRPC and apply some middlewares
-	logger.Info("BuildServer - gRPC - Initializing...")
+	logger.Info("StartServer - gRPC - Initializing...")
 
 	// Create gRPC API instances
 	registerGrpc := api.NewRegisterGrpc(ctx, logger, collectionACs)
@@ -54,12 +38,12 @@ func BuildServer(logger *zap.SugaredLogger) (*grpc.Server, net.Listener, context
 			os.Getenv("CERT_FOLDER_PATH")+"/server-key.pem",
 		)
 		if credErr != nil {
-			logger.Fatalf("BuildServer - NewServerTLSFromFile error %v", credErr)
+			logger.Fatalf("StartServer - NewServerTLSFromFile error %v", credErr)
 		}
-		logger.Info("BuildServer - gRPC TLS security enabled")
+		logger.Info("StartServer - gRPC TLS security enabled")
 		server = grpc.NewServer(grpc.Creds(creds))
 	} else {
-		logger.Info("BuildServer - gRPC TLS security not enabled")
+		logger.Info("StartServer - gRPC TLS security not enabled")
 		server = grpc.NewServer()
 	}
 
@@ -72,9 +56,9 @@ func BuildServer(logger *zap.SugaredLogger) (*grpc.Server, net.Listener, context
 	grpcUrl := os.Getenv("GRPC_URL")
 	listener, errGrpc := net.Listen("tcp", grpcUrl)
 	if errGrpc != nil {
-		logger.Fatalf("BuildServer - failed to listen: %v", errGrpc)
+		logger.Fatalf("StartServer - failed to listen: %v", errGrpc)
 	}
-	logger.Info("BuildServer - gRPC client listening at " + listener.Addr().String())
+	logger.Info("StartServer - gRPC client listening at " + listener.Addr().String())
 
 	return server, listener, ctx, collectionACs
 }

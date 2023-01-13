@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-const qos byte = 0
+const QOS byte = 0
 
 var mqttClient mqtt.Client
 
@@ -21,12 +21,52 @@ var defaultHandler mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Messa
 	fmt.Printf("------------------")
 }
 
-func SendValues(uuid string, messageJSON []byte) mqtt.Token {
-	fmt.Println("SendValues - publishing message...")
-	return mqttClient.Publish("devices/"+uuid+"/values", qos, false, messageJSON)
+func InitMqtt() {
+	opts := getMqttConfig()
+	mqttClient = mqtt.NewClient(opts)
 }
 
-func NewTLSConfig() *tls.Config {
+// SetMqttClient public function used in testing to set a MQTT Mock Client
+// as mqttClient local private variable.
+func SetMqttClient(client mqtt.Client) {
+	mqttClient = client
+}
+
+func Connect() mqtt.Token {
+	return mqttClient.Connect()
+}
+
+func SendValues(uuid string, messageJSON []byte) mqtt.Token {
+	fmt.Println("SendValues - publishing message...")
+	return mqttClient.Publish("devices/"+uuid+"/values", QOS, false, messageJSON)
+}
+
+func getMqttConfig() *mqtt.ClientOptions {
+	mqttUrl := os.Getenv("MQTT_URL") + ":" + os.Getenv("MQTT_PORT")
+	user := os.Getenv("MQTT_USER")
+	password := os.Getenv("MQTT_PASSWORD")
+	clientID := os.Getenv("MQTT_CLIENT_ID")
+
+	opts := mqtt.NewClientOptions()
+	if os.Getenv("MQTT_AUTH") == "true" {
+		opts.SetUsername(user)
+		opts.SetPassword(password)
+	}
+	opts.SetKeepAlive(5 * time.Second)
+	opts.SetPingTimeout(2 * time.Second)
+	opts.AddBroker(mqttUrl)
+	opts.SetDefaultPublishHandler(defaultHandler)
+
+	if os.Getenv("MQTT_TLS") == "true" {
+		tlsConfig := newTLSConfig()
+		opts.SetClientID(clientID).SetTLSConfig(tlsConfig)
+	} else {
+		opts.SetClientID(clientID)
+	}
+	return opts
+}
+
+func newTLSConfig() *tls.Config {
 	// Import trusted certificates from CAfile.pem.
 	// Alternatively, manually add CA certificates to
 	// default openssl CA bundle.
@@ -66,34 +106,5 @@ func NewTLSConfig() *tls.Config {
 		InsecureSkipVerify: false,
 		// Certificates = list of certs client sends to server.
 		Certificates: []tls.Certificate{cert},
-	}
-}
-
-func InitMqtt() {
-	mqttUrl := os.Getenv("MQTT_URL") + ":" + os.Getenv("MQTT_PORT")
-	user := os.Getenv("MQTT_USER")
-	password := os.Getenv("MQTT_PASSWORD")
-	clientID := os.Getenv("MQTT_CLIENT_ID")
-
-	opts := mqtt.NewClientOptions()
-	if os.Getenv("MQTT_AUTH") == "true" {
-		opts.SetUsername(user)
-		opts.SetPassword(password)
-	}
-	opts.SetKeepAlive(5 * time.Second)
-	opts.SetPingTimeout(2 * time.Second)
-	opts.AddBroker(mqttUrl)
-	opts.SetDefaultPublishHandler(defaultHandler)
-
-	if os.Getenv("MQTT_TLS") == "true" {
-		tlsConfig := NewTLSConfig()
-		opts.SetClientID(clientID).SetTLSConfig(tlsConfig)
-	} else {
-		opts.SetClientID(clientID)
-	}
-
-	mqttClient = mqtt.NewClient(opts)
-	if token := mqttClient.Connect(); token.Wait() && token.Error() != nil {
-		panic(token.Error())
 	}
 }

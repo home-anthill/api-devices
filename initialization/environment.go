@@ -1,7 +1,6 @@
-package init_config
+package initialization
 
 import (
-	"fmt"
 	"github.com/joho/godotenv"
 	"go.uber.org/zap"
 	"os"
@@ -10,7 +9,18 @@ import (
 
 const projectDirName = "api-devices"
 
-func InitEnv() (string, error) {
+func InitEnv(logger *zap.SugaredLogger) {
+	// Load .env file and print variables
+	envFile, err := readEnv()
+	logger.Debugf("InitLogger - envFile = %s", envFile)
+	if err != nil {
+		logger.Error("InitEnv - failed to load the env file")
+		panic("InitEnv - failed to load the env file at ./" + envFile)
+	}
+	printEnv(logger)
+}
+
+func readEnv() (string, error) {
 	// solution taken from https://stackoverflow.com/a/68347834/3590376
 	projectName := regexp.MustCompile(`^(.*` + projectDirName + `)`)
 	currentWorkDirectory, _ := os.Getwd()
@@ -20,23 +30,7 @@ func InitEnv() (string, error) {
 	return envFilePath, err
 }
 
-func PrintEnv(logger *zap.SugaredLogger) {
-	fmt.Println("ENVIRONMENT = " + os.Getenv("ENV"))
-	fmt.Println("MONGODB_URL = " + os.Getenv("MONGODB_URL"))
-	fmt.Println("MQTT_URL = " + os.Getenv("MQTT_URL"))
-	fmt.Println("MQTT_PORT = " + os.Getenv("MQTT_PORT"))
-	fmt.Println("MQTT_TLS = " + os.Getenv("MQTT_TLS"))
-	fmt.Println("MQTT_CA_FILE = " + os.Getenv("MQTT_CA_FILE"))
-	fmt.Println("MQTT_CERT_FILE = " + os.Getenv("MQTT_CERT_FILE"))
-	fmt.Println("MQTT_KEY_FILE = " + os.Getenv("MQTT_KEY_FILE"))
-	fmt.Println("MQTT_CLIENT_ID = " + os.Getenv("MQTT_CLIENT_ID"))
-	fmt.Println("MQTT_AUTH = " + os.Getenv("MQTT_AUTH"))
-	fmt.Println("MQTT_USER = " + os.Getenv("MQTT_USER"))
-	fmt.Println("MQTT_PASSWORD = " + os.Getenv("MQTT_PASSWORD"))
-	fmt.Println("GRPC_URL = " + os.Getenv("GRPC_URL"))
-	fmt.Println("GRPC_TLS = " + os.Getenv("GRPC_TLS"))
-	fmt.Println("CERT_FOLDER_PATH = " + os.Getenv("CERT_FOLDER_PATH"))
-
+func printEnv(logger *zap.SugaredLogger) {
 	logger.Info("ENVIRONMENT = " + os.Getenv("ENV"))
 	logger.Info("MONGODB_URL = " + os.Getenv("MONGODB_URL"))
 	logger.Info("MQTT_URL = " + os.Getenv("MQTT_URL"))
