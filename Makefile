@@ -34,7 +34,7 @@ run: vet proto
 
 test:
 	mkdir -p ./coverage
-	ENV=testing go test -v -coverpkg ./... -coverprofile ./coverage/profile.cov ./...
+	ENV=testing go test -v -count=1 -coverpkg ./... -coverprofile ./coverage/profile.cov ./...
 	# go tool cover -html ./coverage/profile.cov
 	go tool cover -html ./coverage/profile.cov -o ./coverage/cover.html
 	go-cover-treemap -coverprofile ./coverage/profile.cov > ./coverage/out.svg

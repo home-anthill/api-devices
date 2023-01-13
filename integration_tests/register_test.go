@@ -2,7 +2,7 @@ package integration_tests
 
 import (
 	"api-devices/api"
-	device2 "api-devices/api/device"
+	"api-devices/api/register"
 	"api-devices/init_config"
 	"api-devices/models"
 	mqttClient "api-devices/mqtt-client"
@@ -18,7 +18,7 @@ import (
 	"time"
 )
 
-var _ = Describe("Devices", func() {
+var _ = Describe("Register", func() {
 	var ctx context.Context
 	var logger *zap.SugaredLogger
 	var collectionACs *mongo.Collection
@@ -26,7 +26,7 @@ var _ = Describe("Devices", func() {
 	var listener net.Listener
 
 	var device = models.AirConditioner{
-		ID:             primitive.NewObjectID(),
+		ID:             primitive.ObjectID{},
 		UUID:           "65a24635-abb8-418c-ba35-0c0ed30aeefe",
 		Mac:            "11:22:33:44:55:66",
 		Name:           "ac-beko",
@@ -61,36 +61,25 @@ var _ = Describe("Devices", func() {
 		test_utils.DropAllCollections(ctx, collectionACs)
 	})
 
-	Context("calling devices grpc api", func() {
+	Context("calling register grpc api", func() {
 		It("should return success", func() {
-			err := test_utils.InsertOne(ctx, collectionACs, device)
-			Expect(err).ShouldNot(HaveOccurred())
-
-			status := models.Status{
-				On:          true,
-				Temperature: 28,
-				Mode:        1,
-				FanSpeed:    2,
-			}
-
-			client := api.NewDevicesGrpc(ctx, logger, collectionACs)
-			responseSet, err := client.SetValues(ctx, &device2.ValuesRequest{
-				Id:          device.ID.Hex(),
-				Uuid:        device.UUID,
-				Mac:         device.Mac,
-				ApiToken:    device.ApiToken,
-				On:          status.On,
-				Temperature: int32(status.Temperature),
-				Mode:        int32(status.Mode),
-				FanSpeed:    int32(status.FanSpeed),
+			client := api.NewRegisterGrpc(ctx, logger, collectionACs)
+			response, err := client.Register(ctx, &register.RegisterRequest{
+				Id:             device.ID.Hex(),
+				Uuid:           device.UUID,
+				Mac:            device.Mac,
+				Name:           device.Name,
+				Manufacturer:   device.Manufacturer,
+				Model:          device.Model,
+				ProfileOwnerId: device.ProfileOwnerId,
+				ApiToken:       device.ApiToken,
 			})
 			Expect(err).ShouldNot(HaveOccurred())
-			Expect(responseSet.GetStatus()).To(Equal("200"))
-			Expect(responseSet.GetMessage()).To(Equal("Updated"))
+			Expect(response.GetStatus()).To(Equal("200"))
+			Expect(response.GetMessage()).To(Equal("Inserted"))
 
-			ac, err := test_utils.FindOneById[models.AirConditioner](ctx, collectionACs, device.ID)
+			ac, err := test_utils.FindOneByKeyValue[models.AirConditioner](ctx, collectionACs, "mac", device.Mac)
 			Expect(err).ShouldNot(HaveOccurred())
-			Expect(ac.ID).To(Equal(device.ID))
 			Expect(ac.UUID).To(Equal(device.UUID))
 			Expect(ac.Mac).To(Equal(device.Mac))
 			Expect(ac.Name).To(Equal(device.Name))
@@ -98,23 +87,6 @@ var _ = Describe("Devices", func() {
 			Expect(ac.Model).To(Equal(device.Model))
 			Expect(ac.ProfileOwnerId).To(Equal(device.ProfileOwnerId))
 			Expect(ac.ApiToken).To(Equal(device.ApiToken))
-			Expect(ac.Status).To(Equal(status))
-
-			responseGet, err := client.GetStatus(ctx, &device2.StatusRequest{
-				Id:       device.ID.Hex(),
-				Uuid:     device.UUID,
-				Mac:      device.Mac,
-				ApiToken: device.ApiToken,
-			})
-			Expect(err).ShouldNot(HaveOccurred())
-			Expect(responseGet.GetOn()).To(Equal(status.On))
-			Expect(responseGet.GetTemperature()).To(Equal(int32(status.Temperature)))
-			Expect(responseGet.GetMode()).To(Equal(int32(status.Mode)))
-			Expect(responseGet.GetFanSpeed()).To(Equal(int32(status.FanSpeed)))
-
-			ac, err = test_utils.FindOneById[models.AirConditioner](ctx, collectionACs, device.ID)
-			Expect(err).ShouldNot(HaveOccurred())
-			Expect(ac.Status).To(Equal(status))
 		})
 	})
 })

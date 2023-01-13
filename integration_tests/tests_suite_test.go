@@ -1,4 +1,4 @@
-package main_test
+package integration_tests_test
 
 import (
 	"testing"
@@ -7,7 +7,7 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-func TestApiDevices(t *testing.T) {
+func TestTests(t *testing.T) {
 	RegisterFailHandler(Fail)
-	RunSpecs(t, "ApiDevices Suite")
+	RunSpecs(t, "Integration tests")
 }

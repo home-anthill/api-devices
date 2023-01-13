@@ -12,13 +12,21 @@ func BuildLogger() *zap.SugaredLogger {
 	config := zap.NewProductionEncoderConfig()
 	config.EncodeTime = zapcore.ISO8601TimeEncoder
 
-	fileEncoder := zapcore.NewJSONEncoder(config)
 	consoleEncoder := zapcore.NewConsoleEncoder(config)
 
-	core := zapcore.NewTee(
-		zapcore.NewCore(fileEncoder, getLogFileWriter(), zapcore.DebugLevel),
-		zapcore.NewCore(consoleEncoder, zapcore.AddSync(os.Stdout), zapcore.DebugLevel),
-	)
+	var core zapcore.Core
+	if os.Getenv("ENV") == "testing" {
+		// if "testing" skip file logger
+		core = zapcore.NewTee(
+			zapcore.NewCore(consoleEncoder, zapcore.AddSync(os.Stdout), zapcore.DebugLevel),
+		)
+	} else {
+		fileEncoder := zapcore.NewJSONEncoder(config)
+		core = zapcore.NewTee(
+			zapcore.NewCore(fileEncoder, getLogFileWriter(), zapcore.DebugLevel),
+			zapcore.NewCore(consoleEncoder, zapcore.AddSync(os.Stdout), zapcore.DebugLevel),
+		)
+	}
 	logger := zap.New(core, zap.AddCaller(), zap.AddStacktrace(zapcore.ErrorLevel))
 
 	sugarLogger := logger.Sugar()
