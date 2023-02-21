@@ -4,6 +4,7 @@ import (
 	"api-devices/api/register"
 	"context"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.uber.org/zap"
@@ -28,12 +29,17 @@ func NewRegisterGrpc(ctx context.Context, logger *zap.SugaredLogger, collection 
 func (handler *RegisterGrpc) Register(ctx context.Context, in *register.RegisterRequest) (*register.RegisterReply, error) {
 	handler.logger.Infof("gRPC - Register - Called with in: %#v", in)
 
+	profileOwnerId, err := primitive.ObjectIDFromHex(in.ProfileOwnerId)
+	if err != nil {
+		handler.logger.Error("gRPC - Register - Cannot update db because profileOwnerId = " + in.ProfileOwnerId + " is not a valid ObjectID")
+		return nil, err
+	}
 	// update ac
 	upsert := true
 	opts := options.UpdateOptions{
 		Upsert: &upsert,
 	}
-	_, err := handler.airConditionerCollection.UpdateOne(handler.ctx, bson.M{
+	_, err = handler.airConditionerCollection.UpdateOne(handler.ctx, bson.M{
 		"mac": in.Mac,
 	}, bson.M{
 		"$set": bson.M{
@@ -42,7 +48,7 @@ func (handler *RegisterGrpc) Register(ctx context.Context, in *register.Register
 			"name":           in.Name,
 			"manufacturer":   in.Manufacturer,
 			"model":          in.Model,
-			"profileOwnerId": in.ProfileOwnerId,
+			"profileOwnerId": profileOwnerId,
 			"apiToken":       in.ApiToken,
 			"createdAt":      time.Now(),
 			"modifiedAt":     time.Now(),

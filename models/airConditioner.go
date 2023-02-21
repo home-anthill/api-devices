@@ -22,7 +22,7 @@ type AirConditioner struct {
 	Name           string             `json:"name" bson:"name"`
 	Manufacturer   string             `json:"manufacturer" bson:"manufacturer"`
 	Model          string             `json:"model" bson:"model"`
-	ProfileOwnerId string             `json:"profileOwnerId" bson:"profileOwnerId"`
+	ProfileOwnerId primitive.ObjectID `json:"profileOwnerId" bson:"profileOwnerId"`
 	ApiToken       string             `json:"apiToken" bson:"apiToken"`
 	Status         Status             `json:"status" bson:"status"`
 

@@ -5,7 +5,7 @@ import (
 	"api-devices/api/register"
 	"api-devices/initialization"
 	"api-devices/models"
-	mqtt_client "api-devices/mqtt-client"
+	mqttclient "api-devices/mqtt-client"
 	"api-devices/test_utils"
 	"context"
 	. "github.com/onsi/ginkgo/v2"
@@ -32,7 +32,7 @@ var _ = Describe("Register", func() {
 		Name:           "ac-beko",
 		Manufacturer:   "ks89",
 		Model:          "ac-beko",
-		ProfileOwnerId: primitive.NewObjectID().Hex(),
+		ProfileOwnerId: primitive.NewObjectID(),
 		ApiToken:       "473a4861-632b-4915-b01e-cf1d418966c6",
 		Status:         models.Status{},
 		CreatedAt:      time.Time{},
@@ -44,8 +44,8 @@ var _ = Describe("Register", func() {
 		defer logger.Sync()
 
 		// create and start a mocked MQTT client
-		mqtt_client.SetMqttClient(test_utils.NewMockClient())
-		if token := mqtt_client.Connect(); token.Wait() && token.Error() != nil {
+		mqttclient.SetMqttClient(test_utils.NewMockClient())
+		if token := mqttclient.Connect(); token.Wait() && token.Error() != nil {
 			panic(token.Error())
 		}
 
@@ -74,7 +74,7 @@ var _ = Describe("Register", func() {
 				Name:           device.Name,
 				Manufacturer:   device.Manufacturer,
 				Model:          device.Model,
-				ProfileOwnerId: device.ProfileOwnerId,
+				ProfileOwnerId: device.ProfileOwnerId.Hex(),
 				ApiToken:       device.ApiToken,
 			})
 			Expect(err).ShouldNot(HaveOccurred())
@@ -91,5 +91,22 @@ var _ = Describe("Register", func() {
 			Expect(ac.ProfileOwnerId).To(Equal(device.ProfileOwnerId))
 			Expect(ac.ApiToken).To(Equal(device.ApiToken))
 		})
+	})
+
+	It("should return error, because profileOwnerId is not a valid ObjectId", func() {
+		client := api.NewRegisterGrpc(ctx, logger, collectionACs)
+		response, err := client.Register(ctx, &register.RegisterRequest{
+			Id:             device.ID.Hex(),
+			Uuid:           device.UUID,
+			Mac:            device.Mac,
+			Name:           device.Name,
+			Manufacturer:   device.Manufacturer,
+			Model:          device.Model,
+			ProfileOwnerId: "bad_string_profile_owner_id",
+			ApiToken:       device.ApiToken,
+		})
+		Expect(response).Should(BeNil())
+		Expect(err).Should(HaveOccurred())
+		Expect(err.Error()).To(Equal("the provided hex string is not a valid ObjectID"))
 	})
 })
