@@ -114,6 +114,8 @@ var _ = Describe("Devices", func() {
 			Expect(responseGet.GetTemperature()).To(Equal(int32(status.Temperature)))
 			Expect(responseGet.GetMode()).To(Equal(int32(status.Mode)))
 			Expect(responseGet.GetFanSpeed()).To(Equal(int32(status.FanSpeed)))
+			Expect(responseGet.GetCreatedAt()).To(Equal(ac.CreatedAt.UnixMilli()))
+			Expect(responseGet.GetModifiedAt()).To(Equal(ac.ModifiedAt.UnixMilli()))
 
 			ac, err = test_utils.FindOneById[models.AirConditioner](ctx, collectionACs, device.ID)
 			Expect(err).ShouldNot(HaveOccurred())

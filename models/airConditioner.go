@@ -5,7 +5,6 @@ import (
 	"time"
 )
 
-// swagger:parameters acs newAC
 type Status struct {
 	On          bool `json:"on" bson:"on"`
 	Mode        int  `json:"mode" bson:"mode"`
@@ -13,9 +12,7 @@ type Status struct {
 	FanSpeed    int  `json:"fanSpeed" bson:"fanSpeed"`
 }
 
-// swagger:parameters acs newAC
 type AirConditioner struct {
-	//swagger:ignore
 	ID             primitive.ObjectID `json:"id" bson:"_id"`
 	UUID           string             `json:"uuid" bson:"uuid"`
 	Mac            string             `json:"mac" bson:"mac"`
