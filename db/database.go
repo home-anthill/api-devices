@@ -18,10 +18,14 @@ func InitDb(ctx context.Context, logger *zap.SugaredLogger) *mongo.Collection {
 	// connect to DB
 	var err error
 	client, err = mongo.Connect(ctx, options.Client().ApplyURI(mongoDBUrl))
+	if err != nil {
+		logger.Fatalf("Cannot connect to MongoDB: %s", err)
+		panic("Cannot connect to MongoDB")
+	}
 	if os.Getenv("ENV") != "prod" {
 		if err = client.Ping(context.TODO(), readpref.Primary()); err != nil {
-			logger.Fatalf("Cannot connect to MongoDB: %s", err)
-			panic("Cannot connect to MongoDB")
+			logger.Fatalf("Cannot ping MongoDB: %s", err)
+			panic("Cannot ping MongoDB")
 		}
 	}
 	logger.Info("Connected to MongoDB")

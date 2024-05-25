@@ -31,16 +31,11 @@ func (c *mqttClientMock) Connect() mqtt.Token {
 	t := newToken()
 	go func() {
 		t.release()
-		return
 	}()
 	return t
 }
-func (c *mqttClientMock) Disconnect(quiesce uint) {
-	return
-}
-func (c *mqttClientMock) AddRoute(topic string, callback mqtt.MessageHandler) {
-	return
-}
+func (c *mqttClientMock) Disconnect(quiesce uint)                             {}
+func (c *mqttClientMock) AddRoute(topic string, callback mqtt.MessageHandler) {}
 func (c *mqttClientMock) OptionsReader() mqtt.ClientOptionsReader {
 	return mqtt.ClientOptionsReader{}
 }
@@ -48,7 +43,6 @@ func (c *mqttClientMock) Publish(topic string, qos byte, retained bool, payload 
 	t := newToken()
 	go func() {
 		t.release()
-		return
 	}()
 	return t
 }

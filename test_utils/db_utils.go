@@ -2,16 +2,15 @@ package test_utils
 
 import (
 	"context"
-	. "github.com/onsi/gomega"
+	"github.com/onsi/gomega"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
 func DropAllCollections(ctx context.Context, collectionACs *mongo.Collection) {
-	var err error
-	err = collectionACs.Drop(ctx)
-	Expect(err).ShouldNot(HaveOccurred())
+	err := collectionACs.Drop(ctx)
+	gomega.Expect(err).ShouldNot(gomega.HaveOccurred())
 }
 
 func FindOneById[T interface{}](ctx context.Context, collection *mongo.Collection, id primitive.ObjectID) (T, error) {
