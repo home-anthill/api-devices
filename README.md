@@ -21,6 +21,7 @@ GitHub releases [HERE](https://github.com/home-anthill/api-devices/releases)
 
 Versions:
 
+- 25/05/2024 - 1.1.0
 - 19/05/2024 - 1.0.0
 - 08/03/2023 - 1.0.0-beta.4
 - 22/02/2023 - 1.0.0-beta.3
