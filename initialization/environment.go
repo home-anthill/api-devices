@@ -9,6 +9,7 @@ import (
 
 const projectDirName = "api-devices"
 
+// InitEnv function
 func InitEnv(logger *zap.SugaredLogger) {
 	// Load .env file and print variables
 	envFile, err := readEnv()

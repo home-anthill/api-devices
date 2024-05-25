@@ -11,6 +11,7 @@ import (
 	"time"
 )
 
+// RegisterGrpc struct
 type RegisterGrpc struct {
 	register.UnimplementedRegistrationServer
 	airConditionerCollection *mongo.Collection
@@ -18,6 +19,7 @@ type RegisterGrpc struct {
 	logger                   *zap.SugaredLogger
 }
 
+// NewRegisterGrpc function
 func NewRegisterGrpc(ctx context.Context, logger *zap.SugaredLogger, collection *mongo.Collection) *RegisterGrpc {
 	return &RegisterGrpc{
 		airConditionerCollection: collection,
@@ -26,12 +28,13 @@ func NewRegisterGrpc(ctx context.Context, logger *zap.SugaredLogger, collection 
 	}
 }
 
+// Register function
 func (handler *RegisterGrpc) Register(ctx context.Context, in *register.RegisterRequest) (*register.RegisterReply, error) {
 	handler.logger.Infof("gRPC - Register - Called with in: %#v", in)
 
-	profileOwnerId, err := primitive.ObjectIDFromHex(in.ProfileOwnerId)
+	profileOwnerID, err := primitive.ObjectIDFromHex(in.ProfileOwnerId)
 	if err != nil {
-		handler.logger.Error("gRPC - Register - Cannot update db because profileOwnerId = " + in.ProfileOwnerId + " is not a valid ObjectID")
+		handler.logger.Error("gRPC - Register - Cannot update db because profileOwnerID = " + in.ProfileOwnerId + " is not a valid ObjectID")
 		return nil, err
 	}
 	// update ac
@@ -48,7 +51,7 @@ func (handler *RegisterGrpc) Register(ctx context.Context, in *register.Register
 			"name":           in.Name,
 			"manufacturer":   in.Manufacturer,
 			"model":          in.Model,
-			"profileOwnerId": profileOwnerId,
+			"profileOwnerId": profileOwnerID,
 			"apiToken":       in.ApiToken,
 			"createdAt":      time.Now(),
 			"modifiedAt":     time.Now(),

@@ -8,6 +8,7 @@ import (
 	"net"
 )
 
+// Start function
 func Start() (*zap.SugaredLogger, *grpc.Server, net.Listener, context.Context, *mongo.Collection) {
 	// 1. Init logger
 	logger := InitLogger()

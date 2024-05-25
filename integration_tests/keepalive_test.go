@@ -4,8 +4,8 @@ import (
 	"api-devices/api"
 	"api-devices/api/keepalive"
 	"api-devices/initialization"
-	mqtt_client "api-devices/mqtt-client"
-	"api-devices/test_utils"
+	mqtt_client "api-devices/mqttclient"
+	"api-devices/testutils"
 	"context"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -25,7 +25,7 @@ var _ = Describe("KeepAlive", func() {
 		defer logger.Sync()
 
 		// create and start a mocked MQTT client
-		mqtt_client.SetMqttClient(test_utils.NewMockClient())
+		mqtt_client.SetMqttClient(testutils.NewMockClient())
 		if token := mqtt_client.Connect(); token.Wait() && token.Error() != nil {
 			panic(token.Error())
 		}

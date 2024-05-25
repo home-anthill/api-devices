@@ -5,8 +5,8 @@ import (
 	"api-devices/api/register"
 	"api-devices/initialization"
 	"api-devices/models"
-	mqttclient "api-devices/mqtt-client"
-	"api-devices/test_utils"
+	mqttclient "api-devices/mqttclient"
+	"api-devices/testutils"
 	"context"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -32,8 +32,8 @@ var _ = Describe("Register", func() {
 		Name:           "ac-beko",
 		Manufacturer:   "ks89",
 		Model:          "ac-beko",
-		ProfileOwnerId: primitive.NewObjectID(),
-		ApiToken:       "473a4861-632b-4915-b01e-cf1d418966c6",
+		ProfileOwnerID: primitive.NewObjectID(),
+		APIToken:       "473a4861-632b-4915-b01e-cf1d418966c6",
 		Status:         models.Status{},
 		CreatedAt:      time.Time{},
 		ModifiedAt:     time.Time{},
@@ -44,7 +44,7 @@ var _ = Describe("Register", func() {
 		defer logger.Sync()
 
 		// create and start a mocked MQTT client
-		mqttclient.SetMqttClient(test_utils.NewMockClient())
+		mqttclient.SetMqttClient(testutils.NewMockClient())
 		if token := mqttclient.Connect(); token.Wait() && token.Error() != nil {
 			panic(token.Error())
 		}
@@ -61,7 +61,7 @@ var _ = Describe("Register", func() {
 
 		server.Stop()
 
-		test_utils.DropAllCollections(ctx, collectionACs)
+		testutils.DropAllCollections(ctx, collectionACs)
 	})
 
 	Context("calling register grpc api", func() {
@@ -74,22 +74,22 @@ var _ = Describe("Register", func() {
 				Name:           device.Name,
 				Manufacturer:   device.Manufacturer,
 				Model:          device.Model,
-				ProfileOwnerId: device.ProfileOwnerId.Hex(),
-				ApiToken:       device.ApiToken,
+				ProfileOwnerId: device.ProfileOwnerID.Hex(),
+				ApiToken:       device.APIToken,
 			})
 			Expect(err).ShouldNot(HaveOccurred())
 			Expect(response.GetStatus()).To(Equal("200"))
 			Expect(response.GetMessage()).To(Equal("Inserted"))
 
-			ac, err := test_utils.FindOneByKeyValue[models.AirConditioner](ctx, collectionACs, "mac", device.Mac)
+			ac, err := testutils.FindOneByKeyValue[models.AirConditioner](ctx, collectionACs, "mac", device.Mac)
 			Expect(err).ShouldNot(HaveOccurred())
 			Expect(ac.UUID).To(Equal(device.UUID))
 			Expect(ac.Mac).To(Equal(device.Mac))
 			Expect(ac.Name).To(Equal(device.Name))
 			Expect(ac.Manufacturer).To(Equal(device.Manufacturer))
 			Expect(ac.Model).To(Equal(device.Model))
-			Expect(ac.ProfileOwnerId).To(Equal(device.ProfileOwnerId))
-			Expect(ac.ApiToken).To(Equal(device.ApiToken))
+			Expect(ac.ProfileOwnerID).To(Equal(device.ProfileOwnerID))
+			Expect(ac.APIToken).To(Equal(device.APIToken))
 		})
 	})
 
@@ -103,7 +103,7 @@ var _ = Describe("Register", func() {
 			Manufacturer:   device.Manufacturer,
 			Model:          device.Model,
 			ProfileOwnerId: "bad_string_profile_owner_id",
-			ApiToken:       device.ApiToken,
+			ApiToken:       device.APIToken,
 		})
 		Expect(response).Should(BeNil())
 		Expect(err).Should(HaveOccurred())

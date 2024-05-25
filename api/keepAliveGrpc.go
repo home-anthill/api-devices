@@ -6,12 +6,14 @@ import (
 	"go.uber.org/zap"
 )
 
+// KeepAliveGrpc struct
 type KeepAliveGrpc struct {
 	keepalive.UnimplementedKeepAliveServer
 	ctx    context.Context
 	logger *zap.SugaredLogger
 }
 
+// NewKeepAliveGrpc function
 func NewKeepAliveGrpc(ctx context.Context, logger *zap.SugaredLogger) *KeepAliveGrpc {
 	return &KeepAliveGrpc{
 		ctx:    ctx,
@@ -19,6 +21,7 @@ func NewKeepAliveGrpc(ctx context.Context, logger *zap.SugaredLogger) *KeepAlive
 	}
 }
 
+// GetKeepAlive function
 func (handler *KeepAliveGrpc) GetKeepAlive(ctx context.Context, in *keepalive.StatusRequest) (*keepalive.StatusResponse, error) {
 	handler.logger.Info("gRPC - GetKeepAlive - Called")
 	return &keepalive.StatusResponse{}, nil

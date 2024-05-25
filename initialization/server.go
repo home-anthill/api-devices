@@ -15,6 +15,7 @@ import (
 	"os"
 )
 
+// StartServer function
 func StartServer(logger *zap.SugaredLogger) (*grpc.Server, net.Listener, context.Context, *mongo.Collection) {
 	// Initialization
 	ctx := context.Background()
@@ -53,8 +54,8 @@ func StartServer(logger *zap.SugaredLogger) (*grpc.Server, net.Listener, context
 	pbk.RegisterKeepAliveServer(server, keepAliveGrpc)
 
 	// Start gRPC listener
-	grpcUrl := os.Getenv("GRPC_URL")
-	listener, errGrpc := net.Listen("tcp", grpcUrl)
+	grpcURL := os.Getenv("GRPC_URL")
+	listener, errGrpc := net.Listen("tcp", grpcURL)
 	if errGrpc != nil {
 		logger.Fatalf("StartServer - failed to listen: %v", errGrpc)
 	}

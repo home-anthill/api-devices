@@ -3,7 +3,7 @@ package api
 import (
 	"api-devices/api/device"
 	"api-devices/models"
-	mqtt_client "api-devices/mqtt-client"
+	mqtt_client "api-devices/mqttclient"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -15,6 +15,7 @@ import (
 
 const devicesTimeout = 5 * time.Second
 
+// DevicesGrpc struct
 type DevicesGrpc struct {
 	device.UnimplementedDeviceServer
 	airConditionerCollection *mongo.Collection
@@ -22,6 +23,7 @@ type DevicesGrpc struct {
 	logger                   *zap.SugaredLogger
 }
 
+// NewDevicesGrpc function
 func NewDevicesGrpc(ctx context.Context, logger *zap.SugaredLogger, collection *mongo.Collection) *DevicesGrpc {
 	return &DevicesGrpc{
 		airConditionerCollection: collection,
@@ -30,6 +32,7 @@ func NewDevicesGrpc(ctx context.Context, logger *zap.SugaredLogger, collection *
 	}
 }
 
+// GetStatus function
 func (handler *DevicesGrpc) GetStatus(ctx context.Context, in *device.StatusRequest) (*device.StatusResponse, error) {
 	handler.logger.Infof("gRPC - GetStatus - Called with in: %#v", in)
 
@@ -52,6 +55,7 @@ func (handler *DevicesGrpc) GetStatus(ctx context.Context, in *device.StatusRequ
 	}, err
 }
 
+// SetValues function
 func (handler *DevicesGrpc) SetValues(ctx context.Context, in *device.ValuesRequest) (*device.ValuesResponse, error) {
 	handler.logger.Infof("gRPC - SetValues - Called with in: %#v", in)
 
@@ -78,8 +82,8 @@ func (handler *DevicesGrpc) SetValues(ctx context.Context, in *device.ValuesRequ
 	}
 
 	values := models.Values{
-		Uuid:        in.Uuid,
-		ApiToken:    in.ApiToken,
+		UUID:        in.Uuid,
+		APIToken:    in.ApiToken,
 		On:          in.On,
 		Temperature: int(in.Temperature),
 		Mode:        int(in.Mode),
@@ -90,13 +94,12 @@ func (handler *DevicesGrpc) SetValues(ctx context.Context, in *device.ValuesRequ
 		handler.logger.Errorf("gRPC - SetValues - Cannot create mqtt payload %v\n", err)
 		return nil, err
 	}
-	t := mqtt_client.SendValues(values.Uuid, messageJSON)
+	t := mqtt_client.SendValues(values.UUID, messageJSON)
 	timeoutResult := t.WaitTimeout(devicesTimeout)
 	if t.Error() != nil || !timeoutResult {
 		handler.logger.Errorf("gRPC - SetValues - Cannot send data via mqtt %v\n", t.Error())
 		return nil, t.Error()
-	} else {
-		handler.logger.Debug("gRPC - SetValues - Sending response")
-		return &device.ValuesResponse{Status: "200", Message: "Updated"}, err
 	}
+	handler.logger.Debug("gRPC - SetValues - Sending response")
+	return &device.ValuesResponse{Status: "200", Message: "Updated"}, err
 }

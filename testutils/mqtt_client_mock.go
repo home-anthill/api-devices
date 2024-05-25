@@ -1,4 +1,4 @@
-package test_utils
+package testutils
 
 import (
 	mqtt "github.com/eclipse/paho.mqtt.golang"

@@ -1,4 +1,4 @@
-package mqtt_client
+package mqttclient
 
 import (
 	"crypto/tls"
@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-const QOS byte = 0
+const qos byte = 0
 
 var mqttClient mqtt.Client
 
@@ -21,6 +21,7 @@ var defaultHandler mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Messa
 	fmt.Printf("------------------")
 }
 
+// InitMqtt function
 func InitMqtt() {
 	opts := getMqttConfig()
 	mqttClient = mqtt.NewClient(opts)
@@ -32,17 +33,19 @@ func SetMqttClient(client mqtt.Client) {
 	mqttClient = client
 }
 
+// Connect function
 func Connect() mqtt.Token {
 	return mqttClient.Connect()
 }
 
+// SendValues function
 func SendValues(uuid string, messageJSON []byte) mqtt.Token {
 	fmt.Println("SendValues - publishing message...")
-	return mqttClient.Publish("devices/"+uuid+"/values", QOS, false, messageJSON)
+	return mqttClient.Publish("devices/"+uuid+"/values", qos, false, messageJSON)
 }
 
 func getMqttConfig() *mqtt.ClientOptions {
-	mqttUrl := os.Getenv("MQTT_URL") + ":" + os.Getenv("MQTT_PORT")
+	mqttURL := os.Getenv("MQTT_URL") + ":" + os.Getenv("MQTT_PORT")
 	user := os.Getenv("MQTT_USER")
 	password := os.Getenv("MQTT_PASSWORD")
 	clientID := os.Getenv("MQTT_CLIENT_ID")
@@ -54,7 +57,7 @@ func getMqttConfig() *mqtt.ClientOptions {
 	}
 	opts.SetKeepAlive(5 * time.Second)
 	opts.SetPingTimeout(2 * time.Second)
-	opts.AddBroker(mqttUrl)
+	opts.AddBroker(mqttURL)
 	opts.SetDefaultPublishHandler(defaultHandler)
 
 	if os.Getenv("MQTT_TLS") == "true" {

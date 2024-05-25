@@ -2,7 +2,7 @@ package main
 
 import (
 	"api-devices/initialization"
-	"api-devices/mqtt-client"
+	"api-devices/mqttclient"
 )
 
 func main() {
@@ -10,8 +10,8 @@ func main() {
 	defer logger.Sync()
 
 	logger.Info("MQTT starting...")
-	mqtt_client.InitMqtt()
-	if token := mqtt_client.Connect(); token.Wait() && token.Error() != nil {
+	mqttclient.InitMqtt()
+	if token := mqttclient.Connect(); token.Wait() && token.Error() != nil {
 		panic(token.Error())
 	}
 	logger.Info("MQTT running")

@@ -25,15 +25,15 @@ proto:
 			--proto_path=.
 .PHONY: proto
 
-build: vet proto
+build: vet lint proto
 	go build -o ./build/api-devices .
 .PHONY: build
 
-run: vet proto
+run: vet lint proto
 	air
 .PHONY: run
 
-test:
+test: lint
 	mkdir -p ./coverage
 	ENV=testing go test -v -count=1 -coverpkg ./... -coverprofile ./coverage/profile.cov ./...
 	# go tool cover -html ./coverage/profile.cov

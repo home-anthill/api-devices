@@ -11,6 +11,7 @@ import (
 
 var client *mongo.Client
 
+// InitDb function
 func InitDb(ctx context.Context, logger *zap.SugaredLogger) *mongo.Collection {
 	mongoDBUrl := os.Getenv("MONGODB_URL")
 	logger.Info("InitDb - connecting to MongoDB URL = " + mongoDBUrl)

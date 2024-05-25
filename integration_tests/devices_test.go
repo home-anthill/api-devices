@@ -5,8 +5,8 @@ import (
 	device2 "api-devices/api/device"
 	"api-devices/initialization"
 	"api-devices/models"
-	mqtt_client "api-devices/mqtt-client"
-	"api-devices/test_utils"
+	mqtt_client "api-devices/mqttclient"
+	"api-devices/testutils"
 	"context"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -32,8 +32,8 @@ var _ = Describe("Devices", func() {
 		Name:           "ac-beko",
 		Manufacturer:   "ks89",
 		Model:          "ac-beko",
-		ProfileOwnerId: primitive.NewObjectID(),
-		ApiToken:       "473a4861-632b-4915-b01e-cf1d418966c6",
+		ProfileOwnerID: primitive.NewObjectID(),
+		APIToken:       "473a4861-632b-4915-b01e-cf1d418966c6",
 		Status:         models.Status{},
 		CreatedAt:      time.Time{},
 		ModifiedAt:     time.Time{},
@@ -44,7 +44,7 @@ var _ = Describe("Devices", func() {
 		defer logger.Sync()
 
 		// create and start a mocked MQTT client
-		mqtt_client.SetMqttClient(test_utils.NewMockClient())
+		mqtt_client.SetMqttClient(testutils.NewMockClient())
 		if token := mqtt_client.Connect(); token.Wait() && token.Error() != nil {
 			panic(token.Error())
 		}
@@ -61,12 +61,12 @@ var _ = Describe("Devices", func() {
 
 		server.Stop()
 
-		test_utils.DropAllCollections(ctx, collectionACs)
+		testutils.DropAllCollections(ctx, collectionACs)
 	})
 
 	Context("calling devices grpc api", func() {
 		It("should setValues of an existing device and get those values via getValues", func() {
-			err := test_utils.InsertOne(ctx, collectionACs, device)
+			err := testutils.InsertOne(ctx, collectionACs, device)
 			Expect(err).ShouldNot(HaveOccurred())
 
 			status := models.Status{
@@ -81,7 +81,7 @@ var _ = Describe("Devices", func() {
 				Id:          device.ID.Hex(),
 				Uuid:        device.UUID,
 				Mac:         device.Mac,
-				ApiToken:    device.ApiToken,
+				ApiToken:    device.APIToken,
 				On:          status.On,
 				Temperature: int32(status.Temperature),
 				Mode:        int32(status.Mode),
@@ -91,7 +91,7 @@ var _ = Describe("Devices", func() {
 			Expect(responseSet.GetStatus()).To(Equal("200"))
 			Expect(responseSet.GetMessage()).To(Equal("Updated"))
 
-			ac, err := test_utils.FindOneById[models.AirConditioner](ctx, collectionACs, device.ID)
+			ac, err := testutils.FindOneById[models.AirConditioner](ctx, collectionACs, device.ID)
 			Expect(err).ShouldNot(HaveOccurred())
 			Expect(ac.ID).To(Equal(device.ID))
 			Expect(ac.UUID).To(Equal(device.UUID))
@@ -99,15 +99,15 @@ var _ = Describe("Devices", func() {
 			Expect(ac.Name).To(Equal(device.Name))
 			Expect(ac.Manufacturer).To(Equal(device.Manufacturer))
 			Expect(ac.Model).To(Equal(device.Model))
-			Expect(ac.ProfileOwnerId).To(Equal(device.ProfileOwnerId))
-			Expect(ac.ApiToken).To(Equal(device.ApiToken))
+			Expect(ac.ProfileOwnerID).To(Equal(device.ProfileOwnerID))
+			Expect(ac.APIToken).To(Equal(device.APIToken))
 			Expect(ac.Status).To(Equal(status))
 
 			responseGet, err := client.GetStatus(ctx, &device2.StatusRequest{
 				Id:       device.ID.Hex(),
 				Uuid:     device.UUID,
 				Mac:      device.Mac,
-				ApiToken: device.ApiToken,
+				ApiToken: device.APIToken,
 			})
 			Expect(err).ShouldNot(HaveOccurred())
 			Expect(responseGet.GetOn()).To(Equal(status.On))
@@ -117,7 +117,7 @@ var _ = Describe("Devices", func() {
 			Expect(responseGet.GetCreatedAt()).To(Equal(ac.CreatedAt.UnixMilli()))
 			Expect(responseGet.GetModifiedAt()).To(Equal(ac.ModifiedAt.UnixMilli()))
 
-			ac, err = test_utils.FindOneById[models.AirConditioner](ctx, collectionACs, device.ID)
+			ac, err = testutils.FindOneById[models.AirConditioner](ctx, collectionACs, device.ID)
 			Expect(err).ShouldNot(HaveOccurred())
 			Expect(ac.Status).To(Equal(status))
 		})
@@ -130,7 +130,7 @@ var _ = Describe("Devices", func() {
 					Id:       device.ID.Hex(),
 					Uuid:     device.UUID,
 					Mac:      missingMacDevice,
-					ApiToken: device.ApiToken,
+					ApiToken: device.APIToken,
 				})
 				Expect(err).Should(HaveOccurred())
 				Expect(err.Error()).Should(Equal("cannot find device with mac " + missingMacDevice))
@@ -151,7 +151,7 @@ var _ = Describe("Devices", func() {
 					Id:          device.ID.Hex(),
 					Uuid:        device.UUID,
 					Mac:         missingMacDevice,
-					ApiToken:    device.ApiToken,
+					ApiToken:    device.APIToken,
 					On:          status.On,
 					Temperature: int32(status.Temperature),
 					Mode:        int32(status.Mode),
