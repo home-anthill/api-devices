@@ -23,6 +23,5 @@ func NewKeepAliveGrpc(ctx context.Context, logger *zap.SugaredLogger) *KeepAlive
 
 // GetKeepAlive function
 func (handler *KeepAliveGrpc) GetKeepAlive(ctx context.Context, in *keepalive.StatusRequest) (*keepalive.StatusResponse, error) {
-	handler.logger.Info("gRPC - GetKeepAlive - Called")
 	return &keepalive.StatusResponse{}, nil
 }
