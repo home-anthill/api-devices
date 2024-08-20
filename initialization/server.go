@@ -3,7 +3,6 @@ package initialization
 import (
 	"api-devices/api"
 	pbd "api-devices/api/device"
-	pbk "api-devices/api/keepalive"
 	pbr "api-devices/api/register"
 	"api-devices/db"
 	"context"
@@ -11,6 +10,8 @@ import (
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
+	"google.golang.org/grpc/health"
+	"google.golang.org/grpc/health/grpc_health_v1"
 	"net"
 	"os"
 )
@@ -29,7 +30,6 @@ func StartServer(logger *zap.SugaredLogger) (*grpc.Server, net.Listener, context
 	// Create gRPC API instances
 	registerGrpc := api.NewRegisterGrpc(ctx, logger, collectionACs)
 	devicesGrpc := api.NewDevicesGrpc(ctx, logger, collectionACs)
-	keepAliveGrpc := api.NewKeepAliveGrpc(ctx, logger)
 
 	// Create new gRPC server with (blank) options
 	var server *grpc.Server
@@ -48,10 +48,13 @@ func StartServer(logger *zap.SugaredLogger) (*grpc.Server, net.Listener, context
 		server = grpc.NewServer()
 	}
 
+	// will default to respond with SERVING
+	hs := health.NewServer()
+	grpc_health_v1.RegisterHealthServer(server, hs)
+
 	// Register the service with the server
 	pbr.RegisterRegistrationServer(server, registerGrpc)
 	pbd.RegisterDeviceServer(server, devicesGrpc)
-	pbk.RegisterKeepAliveServer(server, keepAliveGrpc)
 
 	// Start gRPC listener
 	grpcURL := os.Getenv("GRPC_URL")
