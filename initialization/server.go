@@ -48,7 +48,7 @@ func StartServer(logger *zap.SugaredLogger) (*grpc.Server, net.Listener, context
 		server = grpc.NewServer()
 	}
 
-	// will default to respond with SERVING
+	// Register standard health check server using grpc_health_v1 package
 	hs := health.NewServer()
 	grpc_health_v1.RegisterHealthServer(server, hs)
 
