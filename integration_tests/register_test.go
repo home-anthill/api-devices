@@ -3,6 +3,7 @@ package integration_tests
 import (
 	"api-devices/api"
 	"api-devices/api/register"
+	"api-devices/db"
 	"api-devices/initialization"
 	"api-devices/models"
 	mqttclient "api-devices/mqttclient"
@@ -21,6 +22,7 @@ import (
 var _ = Describe("Register", func() {
 	var ctx context.Context
 	var logger *zap.SugaredLogger
+	var client *mongo.Client
 	var collectionACs *mongo.Collection
 	var server *grpc.Server
 	var listener net.Listener
@@ -40,8 +42,10 @@ var _ = Describe("Register", func() {
 	}
 
 	BeforeEach(func() {
-		logger, server, listener, ctx, collectionACs = initialization.Start()
+		logger, server, listener, ctx, client = initialization.Start()
 		defer logger.Sync()
+
+		collectionACs = db.GetCollections(client).AirConditioners
 
 		// create and start a mocked MQTT client
 		mqttclient.SetMqttClient(testutils.NewMockClient())
@@ -66,7 +70,7 @@ var _ = Describe("Register", func() {
 
 	Context("calling register grpc api", func() {
 		It("should return success", func() {
-			client := api.NewRegisterGrpc(ctx, logger, collectionACs)
+			client := api.NewRegisterGrpc(ctx, logger, client)
 			response, err := client.Register(ctx, &register.RegisterRequest{
 				Id:             device.ID.Hex(),
 				Uuid:           device.UUID,
@@ -94,7 +98,7 @@ var _ = Describe("Register", func() {
 	})
 
 	It("should return error, because profileOwnerId is not a valid ObjectId", func() {
-		client := api.NewRegisterGrpc(ctx, logger, collectionACs)
+		client := api.NewRegisterGrpc(ctx, logger, client)
 		response, err := client.Register(ctx, &register.RegisterRequest{
 			Id:             device.ID.Hex(),
 			Uuid:           device.UUID,

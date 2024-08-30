@@ -2,6 +2,7 @@ package api
 
 import (
 	"api-devices/api/device"
+	"api-devices/db"
 	"api-devices/models"
 	mqtt_client "api-devices/mqttclient"
 	"context"
@@ -18,15 +19,17 @@ const devicesTimeout = 5 * time.Second
 // DevicesGrpc struct
 type DevicesGrpc struct {
 	device.UnimplementedDeviceServer
+	client                   *mongo.Client
 	airConditionerCollection *mongo.Collection
 	contextRef               context.Context
 	logger                   *zap.SugaredLogger
 }
 
 // NewDevicesGrpc function
-func NewDevicesGrpc(ctx context.Context, logger *zap.SugaredLogger, collection *mongo.Collection) *DevicesGrpc {
+func NewDevicesGrpc(ctx context.Context, logger *zap.SugaredLogger, client *mongo.Client) *DevicesGrpc {
 	return &DevicesGrpc{
-		airConditionerCollection: collection,
+		client:                   client,
+		airConditionerCollection: db.GetCollections(client).AirConditioners,
 		contextRef:               ctx,
 		logger:                   logger,
 	}

@@ -9,7 +9,7 @@ import (
 )
 
 // Start function
-func Start() (*zap.SugaredLogger, *grpc.Server, net.Listener, context.Context, *mongo.Collection) {
+func Start() (*zap.SugaredLogger, *grpc.Server, net.Listener, context.Context, *mongo.Client) {
 	// 1. Init logger
 	logger := InitLogger()
 
@@ -17,11 +17,11 @@ func Start() (*zap.SugaredLogger, *grpc.Server, net.Listener, context.Context, *
 	InitEnv(logger)
 
 	// 3. Init and start gRPC server
-	server, listener, ctx, collectionAcs := StartServer(logger)
+	server, listener, ctx, client := StartServer(logger)
 	//logger.Infof("gRPC server listening at %v", listener.Addr())
 	//if errGrpc := server.Serve(listener); errGrpc != nil {
 	//  logger.Fatalf("gRPC server failed to serve: %v", errGrpc)
 	//}
 
-	return logger, server, listener, ctx, collectionAcs
+	return logger, server, listener, ctx, client
 }

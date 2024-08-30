@@ -17,19 +17,19 @@ import (
 )
 
 // StartServer function
-func StartServer(logger *zap.SugaredLogger) (*grpc.Server, net.Listener, context.Context, *mongo.Collection) {
+func StartServer(logger *zap.SugaredLogger) (*grpc.Server, net.Listener, context.Context, *mongo.Client) {
 	// Initialization
 	ctx := context.Background()
 
 	// Connect to DB
-	collectionACs := db.InitDb(ctx, logger)
+	client := db.InitDb(ctx, logger)
 
 	// Instantiate gRPC and apply some middlewares
 	logger.Info("StartServer - gRPC - Initializing...")
 
 	// Create gRPC API instances
-	registerGrpc := api.NewRegisterGrpc(ctx, logger, collectionACs)
-	devicesGrpc := api.NewDevicesGrpc(ctx, logger, collectionACs)
+	registerGrpc := api.NewRegisterGrpc(ctx, logger, client)
+	devicesGrpc := api.NewDevicesGrpc(ctx, logger, client)
 
 	// Create new gRPC server with (blank) options
 	var server *grpc.Server
@@ -64,5 +64,5 @@ func StartServer(logger *zap.SugaredLogger) (*grpc.Server, net.Listener, context
 	}
 	logger.Info("StartServer - gRPC client listening at " + listener.Addr().String())
 
-	return server, listener, ctx, collectionACs
+	return server, listener, ctx, client
 }

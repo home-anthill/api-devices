@@ -3,6 +3,7 @@ package integration_tests
 import (
 	"api-devices/api"
 	device2 "api-devices/api/device"
+	"api-devices/db"
 	"api-devices/initialization"
 	"api-devices/models"
 	mqtt_client "api-devices/mqttclient"
@@ -21,6 +22,7 @@ import (
 var _ = Describe("Devices", func() {
 	var ctx context.Context
 	var logger *zap.SugaredLogger
+	var client *mongo.Client
 	var collectionACs *mongo.Collection
 	var server *grpc.Server
 	var listener net.Listener
@@ -40,8 +42,10 @@ var _ = Describe("Devices", func() {
 	}
 
 	BeforeEach(func() {
-		logger, server, listener, ctx, collectionACs = initialization.Start()
+		logger, server, listener, ctx, client = initialization.Start()
 		defer logger.Sync()
+
+		collectionACs = db.GetCollections(client).AirConditioners
 
 		// create and start a mocked MQTT client
 		mqtt_client.SetMqttClient(testutils.NewMockClient())
@@ -76,7 +80,7 @@ var _ = Describe("Devices", func() {
 				FanSpeed:    2,
 			}
 
-			client := api.NewDevicesGrpc(ctx, logger, collectionACs)
+			client := api.NewDevicesGrpc(ctx, logger, client)
 			responseSet, err := client.SetValues(ctx, &device2.ValuesRequest{
 				Id:          device.ID.Hex(),
 				Uuid:        device.UUID,
@@ -125,7 +129,7 @@ var _ = Describe("Devices", func() {
 		When("getValues", func() {
 			It("should return an error, because device doesn't exist on db", func() {
 				missingMacDevice := "99:99:99:99:99:99"
-				client := api.NewDevicesGrpc(ctx, logger, collectionACs)
+				client := api.NewDevicesGrpc(ctx, logger, client)
 				_, err := client.GetStatus(ctx, &device2.StatusRequest{
 					Id:       device.ID.Hex(),
 					Uuid:     device.UUID,
@@ -146,7 +150,7 @@ var _ = Describe("Devices", func() {
 					FanSpeed:    2,
 				}
 				missingMacDevice := "99:99:99:99:99:99"
-				client := api.NewDevicesGrpc(ctx, logger, collectionACs)
+				client := api.NewDevicesGrpc(ctx, logger, client)
 				_, err := client.SetValues(ctx, &device2.ValuesRequest{
 					Id:          device.ID.Hex(),
 					Uuid:        device.UUID,

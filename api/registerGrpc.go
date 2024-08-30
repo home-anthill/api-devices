@@ -2,6 +2,7 @@ package api
 
 import (
 	"api-devices/api/register"
+	"api-devices/db"
 	"context"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -14,15 +15,17 @@ import (
 // RegisterGrpc struct
 type RegisterGrpc struct {
 	register.UnimplementedRegistrationServer
+	client                   *mongo.Client
 	airConditionerCollection *mongo.Collection
 	ctx                      context.Context
 	logger                   *zap.SugaredLogger
 }
 
 // NewRegisterGrpc function
-func NewRegisterGrpc(ctx context.Context, logger *zap.SugaredLogger, collection *mongo.Collection) *RegisterGrpc {
+func NewRegisterGrpc(ctx context.Context, logger *zap.SugaredLogger, client *mongo.Client) *RegisterGrpc {
 	return &RegisterGrpc{
-		airConditionerCollection: collection,
+		client:                   client,
+		airConditionerCollection: db.GetCollections(client).AirConditioners,
 		ctx:                      ctx,
 		logger:                   logger,
 	}

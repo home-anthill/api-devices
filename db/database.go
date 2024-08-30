@@ -11,8 +11,13 @@ import (
 
 var client *mongo.Client
 
+// Collections struct
+type Collections struct {
+	AirConditioners *mongo.Collection
+}
+
 // InitDb function
-func InitDb(ctx context.Context, logger *zap.SugaredLogger) *mongo.Collection {
+func InitDb(ctx context.Context, logger *zap.SugaredLogger) *mongo.Client {
 	mongoDBUrl := os.Getenv("MONGODB_URL")
 	logger.Info("InitDb - connecting to MongoDB URL = " + mongoDBUrl)
 
@@ -31,12 +36,21 @@ func InitDb(ctx context.Context, logger *zap.SugaredLogger) *mongo.Collection {
 	}
 	logger.Info("Connected to MongoDB")
 
-	var dbName string
-	if os.Getenv("ENV") == "testing" {
-		dbName = "api-devices-test"
-	} else {
-		dbName = "api-devices"
+	return client
+}
+
+// GetCollections function
+func GetCollections(client *mongo.Client) *Collections {
+	return &Collections{
+		AirConditioners: client.Database(getDbName()).Collection("airconditioners"),
 	}
-	collectionACs := client.Database(dbName).Collection("airconditioners")
-	return collectionACs
+}
+
+// getDbName function
+func getDbName() string {
+	if os.Getenv("ENV") == "testing" {
+		return "api-devices-test"
+	} else {
+		return "api-devices"
+	}
 }
