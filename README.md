@@ -21,7 +21,7 @@ GitHub releases [HERE](https://github.com/home-anthill/api-devices/releases)
 
 Versions:
 
-- ??/09/2024 - 1.2.0
+- ??/??/2025 - 1.2.0
 - 20/08/2024 - 1.1.2
 - 20/08/2024 - 1.1.1
 - 25/05/2024 - 1.1.0
@@ -43,7 +43,7 @@ Versions:
 
 The MIT License (MIT)
 
-Copyright (c) 2021-2024 Stefano Cappa (Ks89)
+Copyright (c) 2021-2025 Stefano Cappa (Ks89)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
