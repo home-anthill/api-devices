@@ -9,14 +9,15 @@ import (
 	mqtt_client "api-devices/mqttclient"
 	"api-devices/testutils"
 	"context"
+	"net"
+	"time"
+
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
-	"net"
-	"time"
 )
 
 var _ = Describe("Devices", func() {

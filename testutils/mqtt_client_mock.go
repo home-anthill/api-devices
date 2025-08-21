@@ -1,8 +1,9 @@
 package testutils
 
 import (
-	mqtt "github.com/eclipse/paho.mqtt.golang"
 	"time"
+
+	mqtt "github.com/eclipse/paho.mqtt.golang"
 )
 
 // This is out mqtt.Client struct mock!

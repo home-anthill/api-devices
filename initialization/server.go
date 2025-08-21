@@ -6,14 +6,15 @@ import (
 	pbr "api-devices/api/register"
 	"api-devices/db"
 	"context"
+	"net"
+	"os"
+
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/health"
 	"google.golang.org/grpc/health/grpc_health_v1"
-	"net"
-	"os"
 )
 
 // StartServer function
