@@ -9,8 +9,8 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func DropAllCollections(ctx context.Context, collectionACs *mongo.Collection) {
-	err := collectionACs.Drop(ctx)
+func DropAllCollections(ctx context.Context, collectionDevices *mongo.Collection) {
+	err := collectionDevices.Drop(ctx)
 	gomega.Expect(err).ShouldNot(gomega.HaveOccurred())
 }
 

@@ -15,6 +15,8 @@ var client *mongo.Client
 // Collections struct
 type Collections struct {
 	AirConditioners *mongo.Collection
+	Setpoints       *mongo.Collection
+	Tolerances      *mongo.Collection
 }
 
 // InitDb function
@@ -44,6 +46,8 @@ func InitDb(ctx context.Context, logger *zap.SugaredLogger) *mongo.Client {
 func GetCollections(client *mongo.Client) *Collections {
 	return &Collections{
 		AirConditioners: client.Database(getDbName()).Collection("airconditioners"),
+		Setpoints:       client.Database(getDbName()).Collection("setpoints"),
+		Tolerances:      client.Database(getDbName()).Collection("tolerances"),
 	}
 }
 

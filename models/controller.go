@@ -6,17 +6,26 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
+// Type string
+type Type string
+
+// Controller and Sensor types
+const (
+	Controller Type = "controller"
+	Sensor     Type = "sensor"
+)
+
 // Status struct
 type Status struct {
-	On          bool `json:"on" bson:"on"`
-	Mode        int  `json:"mode" bson:"mode"`
-	Temperature int  `json:"temperature" bson:"temperature"`
-	FanSpeed    int  `json:"fanSpeed" bson:"fanSpeed"`
+	Value      float32   `json:"value" bson:"value"`
+	CreatedAt  time.Time `json:"createdAt" bson:"createdAt"`
+	ModifiedAt time.Time `json:"modifiedAt" bson:"modifiedAt"`
 }
 
-// AirConditioner struct
-type AirConditioner struct {
-	ID             primitive.ObjectID `json:"id" bson:"_id"`
+// Device struct
+type Device struct {
+	ID primitive.ObjectID `json:"id" bson:"_id"`
+	// UUID is the feature UUID
 	UUID           string             `json:"uuid" bson:"uuid"`
 	Mac            string             `json:"mac" bson:"mac"`
 	Name           string             `json:"name" bson:"name"`
