@@ -4,7 +4,6 @@ import (
 	"api-devices/api/register"
 	"api-devices/db"
 	"context"
-	"fmt"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -17,23 +16,19 @@ import (
 // RegisterGrpc struct
 type RegisterGrpc struct {
 	register.UnimplementedRegistrationServer
-	client                   *mongo.Client
-	airConditionerCollection *mongo.Collection
-	setpointCollection       *mongo.Collection
-	toleranceCollection      *mongo.Collection
-	ctx                      context.Context
-	logger                   *zap.SugaredLogger
+	client                *mongo.Client
+	controllersCollection *mongo.Collection
+	ctx                   context.Context
+	logger                *zap.SugaredLogger
 }
 
 // NewRegisterGrpc function
 func NewRegisterGrpc(ctx context.Context, logger *zap.SugaredLogger, client *mongo.Client) *RegisterGrpc {
 	return &RegisterGrpc{
-		client:                   client,
-		airConditionerCollection: db.GetCollections(client).AirConditioners,
-		setpointCollection:       db.GetCollections(client).Setpoints,
-		toleranceCollection:      db.GetCollections(client).Tolerances,
-		ctx:                      ctx,
-		logger:                   logger,
+		client:                client,
+		controllersCollection: db.GetCollections(client).Controllers,
+		ctx:                   ctx,
+		logger:                logger,
 	}
 }
 
@@ -52,36 +47,41 @@ func (handler *RegisterGrpc) Register(ctx context.Context, in *register.Register
 		Upsert: &upsert,
 	}
 
+	// query to upsert the registered controller
 	var setQuery = bson.M{
 		"$set": bson.M{
-			"mac":               in.Mac,
-			"name":              in.Feature.FeatureName,
-			"manufacturer":      in.Manufacturer,
-			"model":             in.Model,
-			"profileOwnerId":    profileOwnerID,
-			"apiToken":          in.ApiToken,
-			"createdAt":         time.Now(),
-			"modifiedAt":        time.Now(),
+			// profile info
+			"profileOwnerId": profileOwnerID,
+			"apiToken":       in.ApiToken,
+			// device info
+			"deviceUuid":   in.DeviceUuid,
+			"mac":          in.Mac,
+			"model":        in.Model,
+			"manufacturer": in.Manufacturer,
+			// feature info
+			"featureUuid":       in.Feature.FeatureUuid,
+			"featureName":       in.Feature.FeatureName,
+			"status.value":      -999,
 			"status.createdAt":  time.Now(),
 			"status.modifiedAt": time.Now(),
+			// dates
+			"createdAt":  time.Now(),
+			"modifiedAt": time.Now(),
 		},
 	}
 
-	var collection *mongo.Collection
-	switch in.Feature.FeatureName {
-	case "ac-lg", "ac-beko":
-		collection = handler.airConditionerCollection
-	case "setpoint":
-		collection = handler.setpointCollection
-	case "tolerance":
-		collection = handler.toleranceCollection
-	default:
-		handler.logger.Error("gRPC - Register - Unknown controller feature '" + in.Feature.FeatureName + "' with mac " + in.Mac)
-		return nil, fmt.Errorf("unknown controller feature %s with mac %s", in.Feature.FeatureName, in.Mac)
-	}
-
-	_, err = collection.UpdateOne(handler.ctx, bson.M{
-		"uuid": in.Feature.FeatureUuid,
+	_, err = handler.controllersCollection.UpdateOne(handler.ctx, bson.M{
+		// profile info
+		"profileOwnerId": profileOwnerID,
+		"apiToken":       in.ApiToken,
+		// device info
+		"deviceUuid":   in.DeviceUuid,
+		"mac":          in.Mac,
+		"model":        in.Model,
+		"manufacturer": in.Manufacturer,
+		// feature info
+		"featureUuid": in.Feature.FeatureUuid,
+		"featureName": in.Feature.FeatureName,
 	}, setQuery, &opts)
 
 	if err != nil {

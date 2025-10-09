@@ -9,10 +9,10 @@ import (
 // Type string
 type Type string
 
-// Controller and Sensor types
+// ControllerType and SensorType types
 const (
-	Controller Type = "controller"
-	Sensor     Type = "sensor"
+	ControllerType Type = "controller"
+	SensorType     Type = "sensor"
 )
 
 // Status struct
@@ -22,19 +22,22 @@ type Status struct {
 	ModifiedAt time.Time `json:"modifiedAt" bson:"modifiedAt"`
 }
 
-// Device struct
-type Device struct {
-	ID primitive.ObjectID `json:"id" bson:"_id"`
-	// UUID is the feature UUID
-	UUID           string             `json:"uuid" bson:"uuid"`
-	Mac            string             `json:"mac" bson:"mac"`
-	Name           string             `json:"name" bson:"name"`
-	Manufacturer   string             `json:"manufacturer" bson:"manufacturer"`
-	Model          string             `json:"model" bson:"model"`
+// Controller struct
+type Controller struct {
+	// profile info
 	ProfileOwnerID primitive.ObjectID `json:"profileOwnerId" bson:"profileOwnerId"`
 	APIToken       string             `json:"apiToken" bson:"apiToken"`
-	Status         Status             `json:"status" bson:"status"`
-
+	// device info
+	ID           primitive.ObjectID `json:"id" bson:"_id"`
+	DeviceUUID   string             `json:"deviceUuid" bson:"deviceUuid"`
+	Mac          string             `json:"mac" bson:"mac"`
+	Model        string             `json:"model" bson:"model"`
+	Manufacturer string             `json:"manufacturer" bson:"manufacturer"`
+	// feature info
+	FeatureUUID string `json:"featureUuid" bson:"featureUuid"`
+	FeatureName string `json:"featureName" bson:"featureName"`
+	Status      Status `json:"status" bson:"status"`
+	// dates
 	CreatedAt  time.Time `json:"createdAt" bson:"createdAt"`
 	ModifiedAt time.Time `json:"modifiedAt" bson:"modifiedAt"`
 }

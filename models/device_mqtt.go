@@ -1,9 +1,15 @@
 package models
 
-// Values struct
-type Values struct {
-	UUID        string  `json:"uuid"`
-	APIToken    string  `json:"apiToken"`
+// MqttFeatureValue struct
+type MqttFeatureValue struct {
+	// profile info
+	APIToken string `json:"apiToken"`
+	// device info
+	DeviceUUID string `json:"deviceUuid"`
+	Mac        string `json:"mac"`
+	Model      string `json:"model"`
+	// feature info
+	FeatureUUID string  `json:"featureUuid"`
 	FeatureName string  `json:"featureName"`
-	Value       float64 `json:"value"`
+	Value       float32 `json:"value"`
 }
