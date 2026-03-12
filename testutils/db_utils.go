@@ -4,9 +4,8 @@ import (
 	"context"
 
 	"github.com/onsi/gomega"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/v2/bson"
+	"go.mongodb.org/mongo-driver/v2/mongo"
 )
 
 func DropAllCollections(ctx context.Context, collectionDevices *mongo.Collection) {
@@ -14,7 +13,7 @@ func DropAllCollections(ctx context.Context, collectionDevices *mongo.Collection
 	gomega.Expect(err).ShouldNot(gomega.HaveOccurred())
 }
 
-func FindOneById[T interface{}](ctx context.Context, collection *mongo.Collection, id primitive.ObjectID) (T, error) {
+func FindOneById[T interface{}](ctx context.Context, collection *mongo.Collection, id bson.ObjectID) (T, error) {
 	var model T
 	err := collection.FindOne(ctx, bson.M{
 		"_id": id,

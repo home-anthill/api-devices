@@ -9,7 +9,7 @@ import (
 	"net"
 	"os"
 
-	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/v2/mongo"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
@@ -23,7 +23,7 @@ func StartServer(logger *zap.SugaredLogger) (*grpc.Server, net.Listener, context
 	ctx := context.Background()
 
 	// Connect to DB
-	client := db.InitDb(ctx, logger)
+	client := db.InitDb(logger)
 
 	// Instantiate gRPC and apply some middlewares
 	logger.Info("StartServer - gRPC - Initializing...")

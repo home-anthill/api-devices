@@ -15,8 +15,8 @@ import (
 	"github.com/google/uuid"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
-	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/v2/bson"
+	"go.mongodb.org/mongo-driver/v2/mongo"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 )
@@ -60,10 +60,10 @@ var _ = Describe("Register", func() {
 
 	var on = models.Controller{
 		// profile info
-		ProfileOwnerID: primitive.NewObjectID(),
+		ProfileOwnerID: bson.NewObjectID(),
 		APIToken:       apiToken,
 		// device info
-		ID:           primitive.NewObjectID(),
+		ID:           bson.NewObjectID(),
 		DeviceUUID:   deviceUUID,
 		Mac:          "11:22:33:44:55:66",
 		Model:        "ac-beko",
@@ -78,10 +78,10 @@ var _ = Describe("Register", func() {
 	}
 	var setpoint = models.Controller{
 		// profile info
-		ProfileOwnerID: primitive.NewObjectID(),
+		ProfileOwnerID: bson.NewObjectID(),
 		APIToken:       apiToken,
 		// device info
-		ID:           primitive.NewObjectID(),
+		ID:           bson.NewObjectID(),
 		DeviceUUID:   deviceUUID,
 		Mac:          "11:22:33:44:55:66",
 		Model:        "thermostat",
@@ -96,10 +96,10 @@ var _ = Describe("Register", func() {
 	}
 	var mode = models.Controller{
 		// profile info
-		ProfileOwnerID: primitive.NewObjectID(),
+		ProfileOwnerID: bson.NewObjectID(),
 		APIToken:       apiToken,
 		// device info
-		ID:           primitive.NewObjectID(),
+		ID:           bson.NewObjectID(),
 		DeviceUUID:   deviceUUID,
 		Mac:          "11:22:33:44:55:66",
 		Model:        "ac-beko",
@@ -114,10 +114,10 @@ var _ = Describe("Register", func() {
 	}
 	var fanSpeed = models.Controller{
 		// profile info
-		ProfileOwnerID: primitive.NewObjectID(),
+		ProfileOwnerID: bson.NewObjectID(),
 		APIToken:       apiToken,
 		// device info
-		ID:           primitive.NewObjectID(),
+		ID:           bson.NewObjectID(),
 		DeviceUUID:   deviceUUID,
 		Mac:          "11:22:33:44:55:66",
 		Model:        "ac-beko",
@@ -132,10 +132,10 @@ var _ = Describe("Register", func() {
 	}
 	var tolerance = models.Controller{
 		// profile info
-		ProfileOwnerID: primitive.NewObjectID(),
+		ProfileOwnerID: bson.NewObjectID(),
 		APIToken:       apiToken,
 		// device info
-		ID:           primitive.NewObjectID(),
+		ID:           bson.NewObjectID(),
 		DeviceUUID:   deviceUUID,
 		Mac:          "11:22:33:44:55:66",
 		Model:        "thermostat",

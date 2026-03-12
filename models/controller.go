@@ -3,7 +3,7 @@ package models
 import (
 	"time"
 
-	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/v2/bson"
 )
 
 // Type string
@@ -25,14 +25,14 @@ type Status struct {
 // Controller struct
 type Controller struct {
 	// profile info
-	ProfileOwnerID primitive.ObjectID `json:"profileOwnerId" bson:"profileOwnerId"`
-	APIToken       string             `json:"apiToken" bson:"apiToken"`
+	ProfileOwnerID bson.ObjectID `json:"profileOwnerId" bson:"profileOwnerId"`
+	APIToken       string        `json:"apiToken" bson:"apiToken"`
 	// device info
-	ID           primitive.ObjectID `json:"id" bson:"_id"`
-	DeviceUUID   string             `json:"deviceUuid" bson:"deviceUuid"`
-	Mac          string             `json:"mac" bson:"mac"`
-	Model        string             `json:"model" bson:"model"`
-	Manufacturer string             `json:"manufacturer" bson:"manufacturer"`
+	ID           bson.ObjectID `json:"id" bson:"_id"`
+	DeviceUUID   string        `json:"deviceUuid" bson:"deviceUuid"`
+	Mac          string        `json:"mac" bson:"mac"`
+	Model        string        `json:"model" bson:"model"`
+	Manufacturer string        `json:"manufacturer" bson:"manufacturer"`
 	// feature info
 	FeatureUUID string `json:"featureUuid" bson:"featureUuid"`
 	FeatureName string `json:"featureName" bson:"featureName"`

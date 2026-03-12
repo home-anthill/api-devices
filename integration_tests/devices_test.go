@@ -15,8 +15,8 @@ import (
 	"github.com/google/uuid"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
-	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/v2/bson"
+	"go.mongodb.org/mongo-driver/v2/mongo"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 )
@@ -31,14 +31,14 @@ var _ = Describe("Devices", func() {
 
 	// profile info
 	apiToken := "473a4861-632b-4915-b01e-cf1d41896601"
-	profileOwnerId := primitive.NewObjectID()
+	profileOwnerId := bson.NewObjectID()
 	// device info
-	airConditionerId := primitive.NewObjectID()
+	airConditionerId := bson.NewObjectID()
 	airConditionerUUID := uuid.NewString()
 	airConditionerMac := "11:22:33:44:55:66"
 	airConditionerModel := "ac-beko"
 	airConditionerManufacturer := "ks89"
-	thermostatId := primitive.NewObjectID()
+	thermostatId := bson.NewObjectID()
 	thermostatUUID := uuid.NewString()
 	thermostatMac := "AA:BB:CC:DD:EE:FF"
 	thermostatModel := "thermostat"
@@ -55,7 +55,7 @@ var _ = Describe("Devices", func() {
 		ProfileOwnerID: profileOwnerId,
 		APIToken:       apiToken,
 		// device info
-		ID:           primitive.NewObjectID(), // controller _id
+		ID:           bson.NewObjectID(), // controller _id
 		DeviceUUID:   airConditionerUUID,
 		Mac:          airConditionerMac,
 		Model:        airConditionerModel,
@@ -73,7 +73,7 @@ var _ = Describe("Devices", func() {
 		ProfileOwnerID: profileOwnerId,
 		APIToken:       apiToken,
 		// device info
-		ID:           primitive.NewObjectID(), // controller _id
+		ID:           bson.NewObjectID(), // controller _id
 		DeviceUUID:   airConditionerUUID,
 		Mac:          airConditionerMac,
 		Model:        airConditionerModel,
@@ -91,7 +91,7 @@ var _ = Describe("Devices", func() {
 		ProfileOwnerID: profileOwnerId,
 		APIToken:       apiToken,
 		// device info
-		ID:           primitive.NewObjectID(), // controller _id
+		ID:           bson.NewObjectID(), // controller _id
 		DeviceUUID:   airConditionerUUID,
 		Mac:          airConditionerMac,
 		Model:        airConditionerModel,
@@ -109,7 +109,7 @@ var _ = Describe("Devices", func() {
 		ProfileOwnerID: profileOwnerId,
 		APIToken:       apiToken,
 		// device info
-		ID:           primitive.NewObjectID(), // controller _id
+		ID:           bson.NewObjectID(), // controller _id
 		DeviceUUID:   airConditionerUUID,
 		Mac:          airConditionerMac,
 		Model:        airConditionerModel,
@@ -128,7 +128,7 @@ var _ = Describe("Devices", func() {
 		ProfileOwnerID: profileOwnerId,
 		APIToken:       apiToken,
 		// device info
-		ID:           primitive.NewObjectID(), // controller _id
+		ID:           bson.NewObjectID(), // controller _id
 		DeviceUUID:   thermostatUUID,
 		Mac:          thermostatMac,
 		Model:        thermostatModel,
@@ -146,7 +146,7 @@ var _ = Describe("Devices", func() {
 		ProfileOwnerID: profileOwnerId,
 		APIToken:       apiToken,
 		// device info
-		ID:           primitive.NewObjectID(), // controller _id
+		ID:           bson.NewObjectID(), // controller _id
 		DeviceUUID:   thermostatUUID,
 		Mac:          thermostatMac,
 		Model:        thermostatModel,
@@ -160,7 +160,7 @@ var _ = Describe("Devices", func() {
 		ModifiedAt: time.Time{},
 	}
 
-	checkFeature := func(client *api.DevicesGrpc, status models.Status, deviceId primitive.ObjectID, deviceUUID, mac, model, manufacturer string, featureId primitive.ObjectID) {
+	checkFeature := func(client *api.DevicesGrpc, status models.Status, deviceId bson.ObjectID, deviceUUID, mac, model, manufacturer string, featureId bson.ObjectID) {
 		controller, err := testutils.FindOneById[models.Controller](ctx, controllersCollection, featureId)
 		Expect(err).ShouldNot(HaveOccurred())
 		// check profile info
