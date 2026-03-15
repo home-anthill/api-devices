@@ -21,7 +21,7 @@ RUN make deps
 
 RUN make build
 
-FROM dhi.io/golang:1-alpine3.23
+FROM dhi.io/golang:1-alpine3.23-dev
 WORKDIR /
 COPY --from=builder /app/build/api-devices /api-devices
 COPY --from=builder /app/.env_template /.env

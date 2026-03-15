@@ -34,6 +34,7 @@ func readEnv() (string, error) {
 
 func printEnv(logger *zap.SugaredLogger) {
 	logger.Info("ENVIRONMENT = " + os.Getenv("ENV"))
+	logger.Info("LOG_FOLDER = " + os.Getenv("LOG_FOLDER"))
 	logger.Info("MONGODB_URL = " + os.Getenv("MONGODB_URL"))
 	logger.Info("MQTT_URL = " + os.Getenv("MQTT_URL"))
 	logger.Info("MQTT_PORT = " + os.Getenv("MQTT_PORT"))
