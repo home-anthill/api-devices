@@ -1,4 +1,6 @@
 # syntax=docker/dockerfile:1
+
+# ── Stage 1: Builder ────────────────────────────────────────────────
 FROM golang:1.26-alpine AS builder
 RUN apk update && apk add --no-cache \
     protoc \
@@ -21,9 +23,24 @@ RUN make deps
 
 RUN make build
 
-FROM dhi.io/golang:1-alpine3.23-dev
-WORKDIR /
-COPY --from=builder /app/build/api-devices /api-devices
-COPY --from=builder /app/.env_template /.env
+# Pre-create a dedicated, empty logs directory owned by nobody (uid/gid 65534)
+# We do this in a separate folder so we don't accidentally copy source code
+RUN mkdir -p /scratch/logs && chown -R 65534:65534 /scratch/logs
 
+# ── Stage 2: Hardened runtime ────────────────────────────────────────────────
+FROM dhi.io/alpine-base:3.23
+
+ENV ENV=prod
+ENV LOG_FOLDER=/logs/
+
+WORKDIR /
+
+# App directory skeleton (empty /logs owned by nobody).
+COPY --from=builder --chown=65534:65534 /scratch/logs /logs
+
+# Binary and env template.
+COPY --from=builder --chown=65534:65534 /app/build/api-devices /api-devices
+COPY --from=builder --chown=65534:65534 /app/.env_template /.env
+
+USER 65534
 ENTRYPOINT ["/api-devices"]

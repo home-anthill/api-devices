@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package device;
 
-option go_package = "github.com/Ks89/home-anthill/api-devices/device";
+option go_package = "api-devices/api/device";
 
 service Device {
   rpc GetValue (GetValueRequest) returns (GetValueResponse) {}
@@ -10,33 +10,33 @@ service Device {
 }
 
 message GetValueRequest {
-  string id = 1;
-  string deviceUuid = 2;
-  string featureUuid = 3;
-  string featureName = 4;
+  reserved 1;
+  string device_uuid = 2;
+  string feature_uuid = 3;
+  string feature_name = 4;
   string mac = 5;
   string api_token = 6;
 }
 
 message GetValueResponse {
-  string featureUuid = 1;
-  string featureName = 2;
+  string feature_uuid = 1;
+  string feature_name = 2;
   float value = 3;
   int64 created_at = 4;
   int64 modified_at = 5;
 }
 
 message SetValuesRequest {
-  string id = 1; // device id
-  string deviceUuid = 2;
+  reserved 1;
+  string device_uuid = 2;
   string mac = 3;
   string api_token = 4;
-  repeated SetValueRequest featureValues = 5;
+  repeated SetValueRequest feature_values = 5;
 }
 
 message SetValueRequest {
-  string featureUuid = 1;
-  string featureName = 2;
+  string feature_uuid = 1;
+  string feature_name = 2;
   float value = 3;
 }
 

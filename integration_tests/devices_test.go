@@ -2,11 +2,11 @@ package integration_tests
 
 import (
 	"api-devices/api"
-	device2 "api-devices/api/device"
+	devicepb "api-devices/api/device"
 	"api-devices/db"
 	"api-devices/initialization"
 	"api-devices/models"
-	mqtt_client "api-devices/mqttclient"
+	mqttclient "api-devices/mqttclient"
 	"api-devices/testutils"
 	"context"
 	"net"
@@ -27,18 +27,15 @@ var _ = Describe("Devices", func() {
 	var client *mongo.Client
 	var controllersCollection *mongo.Collection
 	var server *grpc.Server
-	var listener net.Listener
 
 	// profile info
 	apiToken := "473a4861-632b-4915-b01e-cf1d41896601"
 	profileOwnerId := bson.NewObjectID()
 	// device info
-	airConditionerId := bson.NewObjectID()
 	airConditionerUUID := uuid.NewString()
 	airConditionerMac := "11:22:33:44:55:66"
 	airConditionerModel := "ac-beko"
 	airConditionerManufacturer := "ks89"
-	thermostatId := bson.NewObjectID()
 	thermostatUUID := uuid.NewString()
 	thermostatMac := "AA:BB:CC:DD:EE:FF"
 	thermostatModel := "thermostat"
@@ -160,7 +157,7 @@ var _ = Describe("Devices", func() {
 		ModifiedAt: time.Time{},
 	}
 
-	checkFeature := func(client *api.DevicesGrpc, status models.Status, deviceId bson.ObjectID, deviceUUID, mac, model, manufacturer string, featureId bson.ObjectID) {
+	checkFeature := func(client *api.DevicesGrpc, status models.Status, deviceUUID, mac, model, manufacturer, expectedFeatureUUID, expectedFeatureName string, featureId bson.ObjectID) {
 		controller, err := testutils.FindOneById[models.Controller](ctx, controllersCollection, featureId)
 		Expect(err).ShouldNot(HaveOccurred())
 		// check profile info
@@ -173,15 +170,14 @@ var _ = Describe("Devices", func() {
 		Expect(controller.Model).To(Equal(model))
 		Expect(controller.Manufacturer).To(Equal(manufacturer))
 		// check feature info
-		Expect(controller.FeatureUUID).To(Equal(controller.FeatureUUID))
-		Expect(controller.FeatureName).To(Equal(controller.FeatureName))
+		Expect(controller.FeatureUUID).To(Equal(expectedFeatureUUID))
+		Expect(controller.FeatureName).To(Equal(expectedFeatureName))
 		Expect(controller.Status.Value).To(Equal(status.Value))
 
-		responseGet, err := client.GetValue(ctx, &device2.GetValueRequest{
+		responseGet, err := client.GetValue(ctx, &devicepb.GetValueRequest{
 			// profile info
 			ApiToken: apiToken,
 			// device info
-			Id:         deviceId.Hex(),
 			DeviceUuid: deviceUUID,
 			Mac:        mac,
 			// feature info
@@ -197,30 +193,26 @@ var _ = Describe("Devices", func() {
 	}
 
 	BeforeEach(func() {
-		logger, server, listener, ctx, client = initialization.Start()
-		defer logger.Sync()
+		var listener net.Listener
+		logger, server, listener, client = initialization.Start()
+		go server.Serve(listener) //nolint:errcheck
+		ctx = context.Background()
 
 		controllersCollection = db.GetCollections(client).Controllers
 
 		// create and start a mocked MQTT client
-		mqtt_client.SetMqttClient(testutils.NewMockClient())
-		if token := mqtt_client.Connect(); token.Wait() && token.Error() != nil {
+		mqttclient.SetMqttClient(testutils.NewMockClient())
+		if token := mqttclient.Connect(); token.Wait() && token.Error() != nil {
 			panic(token.Error())
 		}
-
-		logger.Infof("gRPC server listening at %v", listener.Addr())
-		go func() {
-			_ = server.Serve(listener)
-		}()
 	})
 
 	AfterEach(func() {
-		errLis := listener.Close()
-		Expect(errLis).ShouldNot(HaveOccurred())
-
 		server.Stop()
 
-		testutils.DropAllCollections(ctx, controllersCollection)
+		testutils.DropCollection(ctx, controllersCollection)
+
+		logger.Sync()
 	})
 
 	Context("calling devices grpc api", func() {
@@ -247,16 +239,15 @@ var _ = Describe("Devices", func() {
 				Value: 2,
 			}
 
-			client := api.NewDevicesGrpc(ctx, logger, client)
-			responseSet, err := client.SetValues(ctx, &device2.SetValuesRequest{
+			client := api.NewDevicesGrpc(logger, client)
+			responseSet, err := client.SetValues(ctx, &devicepb.SetValuesRequest{
 				// profile info
 				ApiToken: apiToken,
 				// device info
-				Id:         airConditionerId.Hex(),
 				DeviceUuid: airConditionerUUID,
 				Mac:        airConditionerMac,
 				// feature info
-				FeatureValues: []*device2.SetValueRequest{
+				FeatureValues: []*devicepb.SetValueRequest{
 					{
 						FeatureUuid: onAirConditioner.FeatureUUID,
 						FeatureName: onAirConditioner.FeatureName,
@@ -281,10 +272,10 @@ var _ = Describe("Devices", func() {
 			Expect(responseSet.GetMessage()).To(Equal("Updated"))
 
 			// check air conditioner features
-			checkFeature(client, onStatus, airConditionerId, airConditionerUUID, airConditionerMac, airConditionerModel, airConditionerManufacturer, onAirConditioner.ID)
-			checkFeature(client, setpointStatus, airConditionerId, airConditionerUUID, airConditionerMac, airConditionerModel, airConditionerManufacturer, setpointAirConditioner.ID)
-			checkFeature(client, modeStatus, airConditionerId, airConditionerUUID, airConditionerMac, airConditionerModel, airConditionerManufacturer, modeAirConditioner.ID)
-			checkFeature(client, fanSpeedStatus, airConditionerId, airConditionerUUID, airConditionerMac, airConditionerModel, airConditionerManufacturer, fanSpeedAirConditioner.ID)
+			checkFeature(client, onStatus, airConditionerUUID, airConditionerMac, airConditionerModel, airConditionerManufacturer, onAirConditioner.FeatureUUID, onAirConditioner.FeatureName, onAirConditioner.ID)
+			checkFeature(client, setpointStatus, airConditionerUUID, airConditionerMac, airConditionerModel, airConditionerManufacturer, setpointAirConditioner.FeatureUUID, setpointAirConditioner.FeatureName, setpointAirConditioner.ID)
+			checkFeature(client, modeStatus, airConditionerUUID, airConditionerMac, airConditionerModel, airConditionerManufacturer, modeAirConditioner.FeatureUUID, modeAirConditioner.FeatureName, modeAirConditioner.ID)
+			checkFeature(client, fanSpeedStatus, airConditionerUUID, airConditionerMac, airConditionerModel, airConditionerManufacturer, fanSpeedAirConditioner.FeatureUUID, fanSpeedAirConditioner.FeatureName, fanSpeedAirConditioner.ID)
 		})
 
 		It("should setValues of an existing thermostat and get those values via getValues", func() {
@@ -300,16 +291,15 @@ var _ = Describe("Devices", func() {
 				Value: 2.1,
 			}
 
-			client := api.NewDevicesGrpc(ctx, logger, client)
-			responseSet, err := client.SetValues(ctx, &device2.SetValuesRequest{
+			client := api.NewDevicesGrpc(logger, client)
+			responseSet, err := client.SetValues(ctx, &devicepb.SetValuesRequest{
 				// profile info
 				ApiToken: apiToken,
 				// device info
-				Id:         thermostatId.Hex(),
 				DeviceUuid: thermostatUUID,
 				Mac:        thermostatMac,
 				// feature info
-				FeatureValues: []*device2.SetValueRequest{
+				FeatureValues: []*devicepb.SetValueRequest{
 					{
 						FeatureUuid: setpointThermostat.FeatureUUID,
 						FeatureName: setpointThermostat.FeatureName,
@@ -325,20 +315,19 @@ var _ = Describe("Devices", func() {
 			Expect(responseSet.GetStatus()).To(Equal("200"))
 			Expect(responseSet.GetMessage()).To(Equal("Updated"))
 
-			// check air conditioner features
-			checkFeature(client, setpointStatus, thermostatId, thermostatUUID, thermostatMac, thermostatModel, thermostatManufacturer, setpointThermostat.ID)
-			checkFeature(client, toleranceStatus, thermostatId, thermostatUUID, thermostatMac, thermostatModel, thermostatManufacturer, toleranceThermostat.ID)
+			// check thermostat features
+			checkFeature(client, setpointStatus, thermostatUUID, thermostatMac, thermostatModel, thermostatManufacturer, setpointThermostat.FeatureUUID, setpointThermostat.FeatureName, setpointThermostat.ID)
+			checkFeature(client, toleranceStatus, thermostatUUID, thermostatMac, thermostatModel, thermostatManufacturer, toleranceThermostat.FeatureUUID, toleranceThermostat.FeatureName, toleranceThermostat.ID)
 		})
 
 		When("getValues", func() {
 			It("should return an error, because controller doesn't exist on db", func() {
 				missingMacDevice := "99:99:99:99:99:99"
-				client := api.NewDevicesGrpc(ctx, logger, client)
-				_, err := client.GetValue(ctx, &device2.GetValueRequest{
+				client := api.NewDevicesGrpc(logger, client)
+				_, err := client.GetValue(ctx, &devicepb.GetValueRequest{
 					// profile info
 					ApiToken: apiToken,
 					// device info
-					Id:         airConditionerId.Hex(),
 					DeviceUuid: airConditionerUUID,
 					Mac:        missingMacDevice,
 					// feature info
@@ -346,7 +335,7 @@ var _ = Describe("Devices", func() {
 					FeatureName: "on",
 				})
 				Expect(err).Should(HaveOccurred())
-				Expect(err.Error()).Should(Equal("cannot find controller with mac " + missingMacDevice))
+				Expect(err.Error()).Should(ContainSubstring("cannot find controller"))
 			})
 		})
 
@@ -356,16 +345,15 @@ var _ = Describe("Devices", func() {
 					Value: 20,
 				}
 				missingMacDevice := "99:99:99:99:99:99"
-				client := api.NewDevicesGrpc(ctx, logger, client)
-				_, err := client.SetValues(ctx, &device2.SetValuesRequest{
+				client := api.NewDevicesGrpc(logger, client)
+				_, err := client.SetValues(ctx, &devicepb.SetValuesRequest{
 					// profile info
 					ApiToken: apiToken,
 					// device info
-					Id:         airConditionerId.Hex(),
 					DeviceUuid: airConditionerUUID,
 					Mac:        missingMacDevice,
 					// feature info
-					FeatureValues: []*device2.SetValueRequest{
+					FeatureValues: []*devicepb.SetValueRequest{
 						{
 							FeatureUuid: onFeatureUUID,
 							FeatureName: "on",
@@ -374,7 +362,7 @@ var _ = Describe("Devices", func() {
 					},
 				})
 				Expect(err).Should(HaveOccurred())
-				Expect(err.Error()).To(Equal("cannot find controller with mac " + missingMacDevice))
+				Expect(err.Error()).Should(ContainSubstring("cannot find controller"))
 			})
 		})
 	})

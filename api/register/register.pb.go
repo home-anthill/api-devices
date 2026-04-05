@@ -23,8 +23,8 @@ const (
 
 type RegisterFeature struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	FeatureUuid   string                 `protobuf:"bytes,1,opt,name=featureUuid,proto3" json:"featureUuid,omitempty"`
-	FeatureName   string                 `protobuf:"bytes,2,opt,name=featureName,proto3" json:"featureName,omitempty"`
+	FeatureUuid   string                 `protobuf:"bytes,1,opt,name=feature_uuid,json=featureUuid,proto3" json:"feature_uuid,omitempty"`
+	FeatureName   string                 `protobuf:"bytes,2,opt,name=feature_name,json=featureName,proto3" json:"feature_name,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -75,12 +75,12 @@ func (x *RegisterFeature) GetFeatureName() string {
 
 type RegisterRequest struct {
 	state          protoimpl.MessageState `protogen:"open.v1"`
-	DeviceUuid     string                 `protobuf:"bytes,1,opt,name=deviceUuid,proto3" json:"deviceUuid,omitempty"`
+	DeviceUuid     string                 `protobuf:"bytes,1,opt,name=device_uuid,json=deviceUuid,proto3" json:"device_uuid,omitempty"`
 	Mac            string                 `protobuf:"bytes,2,opt,name=mac,proto3" json:"mac,omitempty"`
 	Manufacturer   string                 `protobuf:"bytes,3,opt,name=manufacturer,proto3" json:"manufacturer,omitempty"`
 	Model          string                 `protobuf:"bytes,4,opt,name=model,proto3" json:"model,omitempty"`
-	ProfileOwnerId string                 `protobuf:"bytes,5,opt,name=profileOwnerId,proto3" json:"profileOwnerId,omitempty"`
-	ApiToken       string                 `protobuf:"bytes,6,opt,name=apiToken,proto3" json:"apiToken,omitempty"`
+	ProfileOwnerId string                 `protobuf:"bytes,5,opt,name=profile_owner_id,json=profileOwnerId,proto3" json:"profile_owner_id,omitempty"`
+	ApiToken       string                 `protobuf:"bytes,6,opt,name=api_token,json=apiToken,proto3" json:"api_token,omitempty"`
 	Feature        *RegisterFeature       `protobuf:"bytes,7,opt,name=feature,proto3" json:"feature,omitempty"`
 	unknownFields  protoimpl.UnknownFields
 	sizeCache      protoimpl.SizeCache
@@ -221,25 +221,24 @@ var File_api_register_register_proto protoreflect.FileDescriptor
 
 const file_api_register_register_proto_rawDesc = "" +
 	"\n" +
-	"\x1bapi/register/register.proto\x12\bregister\"U\n" +
-	"\x0fRegisterFeature\x12 \n" +
-	"\vfeatureUuid\x18\x01 \x01(\tR\vfeatureUuid\x12 \n" +
-	"\vfeatureName\x18\x02 \x01(\tR\vfeatureName\"\xf6\x01\n" +
-	"\x0fRegisterRequest\x12\x1e\n" +
-	"\n" +
-	"deviceUuid\x18\x01 \x01(\tR\n" +
+	"\x1bapi/register/register.proto\x12\bregister\"W\n" +
+	"\x0fRegisterFeature\x12!\n" +
+	"\ffeature_uuid\x18\x01 \x01(\tR\vfeatureUuid\x12!\n" +
+	"\ffeature_name\x18\x02 \x01(\tR\vfeatureName\"\xfa\x01\n" +
+	"\x0fRegisterRequest\x12\x1f\n" +
+	"\vdevice_uuid\x18\x01 \x01(\tR\n" +
 	"deviceUuid\x12\x10\n" +
 	"\x03mac\x18\x02 \x01(\tR\x03mac\x12\"\n" +
 	"\fmanufacturer\x18\x03 \x01(\tR\fmanufacturer\x12\x14\n" +
-	"\x05model\x18\x04 \x01(\tR\x05model\x12&\n" +
-	"\x0eprofileOwnerId\x18\x05 \x01(\tR\x0eprofileOwnerId\x12\x1a\n" +
-	"\bapiToken\x18\x06 \x01(\tR\bapiToken\x123\n" +
+	"\x05model\x18\x04 \x01(\tR\x05model\x12(\n" +
+	"\x10profile_owner_id\x18\x05 \x01(\tR\x0eprofileOwnerId\x12\x1b\n" +
+	"\tapi_token\x18\x06 \x01(\tR\bapiToken\x123\n" +
 	"\afeature\x18\a \x01(\v2\x19.register.RegisterFeatureR\afeature\"A\n" +
 	"\rRegisterReply\x12\x16\n" +
 	"\x06status\x18\x01 \x01(\tR\x06status\x12\x18\n" +
 	"\amessage\x18\x02 \x01(\tR\amessage2P\n" +
 	"\fRegistration\x12@\n" +
-	"\bRegister\x12\x19.register.RegisterRequest\x1a\x17.register.RegisterReply\"\x00B3Z1github.com/Ks89/home-anthill/api-devices/registerb\x06proto3"
+	"\bRegister\x12\x19.register.RegisterRequest\x1a\x17.register.RegisterReply\"\x00B\x1aZ\x18api-devices/api/registerb\x06proto3"
 
 var (
 	file_api_register_register_proto_rawDescOnce sync.Once

@@ -6,7 +6,7 @@ import (
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 )
 
-// This is out mqtt.Client struct mock!
+// This is our mqtt.Client struct mock!
 // It must implement all methods of mqtt.Client to
 // implicitly implement that interface
 type mqttClientMock struct{}
@@ -49,14 +49,23 @@ func (c *mqttClientMock) Publish(topic string, qos byte, retained bool, payload 
 }
 func (c *mqttClientMock) Subscribe(topic string, qos byte, callback mqtt.MessageHandler) mqtt.Token {
 	t := newToken()
+	go func() {
+		t.release()
+	}()
 	return t
 }
 func (c *mqttClientMock) SubscribeMultiple(filters map[string]byte, callback mqtt.MessageHandler) mqtt.Token {
 	t := newToken()
+	go func() {
+		t.release()
+	}()
 	return t
 }
 func (c *mqttClientMock) Unsubscribe(topics ...string) mqtt.Token {
 	t := newToken()
+	go func() {
+		t.release()
+	}()
 	return t
 }
 

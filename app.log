@@ -1,0 +1,567 @@
+{"level":"info","ts":"2026-03-30T19:44:09.255+0200","caller":"initialization/logger_config.go:16","msg":"InitLogger - called"}
+{"level":"debug","ts":"2026-03-30T19:44:09.256+0200","caller":"initialization/environment.go:19","msg":"InitLogger - envFile = /Users/ks89/git/home-anthill/api-devices/.env"}
+{"level":"info","ts":"2026-03-30T19:44:09.256+0200","caller":"initialization/environment.go:41","msg":"ENVIRONMENT = "}
+{"level":"info","ts":"2026-03-30T19:44:09.256+0200","caller":"initialization/environment.go:42","msg":"LOG_FOLDER = ./logs/"}
+{"level":"info","ts":"2026-03-30T19:44:09.256+0200","caller":"initialization/environment.go:43","msg":"MONGODB_URL = ****"}
+{"level":"info","ts":"2026-03-30T19:44:09.256+0200","caller":"initialization/environment.go:44","msg":"MQTT_URL = tcp://localhost"}
+{"level":"info","ts":"2026-03-30T19:44:09.256+0200","caller":"initialization/environment.go:45","msg":"MQTT_PORT = 1883"}
+{"level":"info","ts":"2026-03-30T19:44:09.256+0200","caller":"initialization/environment.go:46","msg":"MQTT_TLS = false"}
+{"level":"info","ts":"2026-03-30T19:44:09.256+0200","caller":"initialization/environment.go:47","msg":"MQTT_CA_FILE = "}
+{"level":"info","ts":"2026-03-30T19:44:09.256+0200","caller":"initialization/environment.go:48","msg":"MQTT_CERT_FILE = "}
+{"level":"info","ts":"2026-03-30T19:44:09.256+0200","caller":"initialization/environment.go:49","msg":"MQTT_KEY_FILE = "}
+{"level":"info","ts":"2026-03-30T19:44:09.256+0200","caller":"initialization/environment.go:50","msg":"MQTT_CLIENT_ID = apiDevices"}
+{"level":"info","ts":"2026-03-30T19:44:09.256+0200","caller":"initialization/environment.go:51","msg":"MQTT_AUTH = true"}
+{"level":"info","ts":"2026-03-30T19:44:09.256+0200","caller":"initialization/environment.go:52","msg":"MQTT_USER = ****"}
+{"level":"info","ts":"2026-03-30T19:44:09.256+0200","caller":"initialization/environment.go:53","msg":"MQTT_PASSWORD = ****"}
+{"level":"info","ts":"2026-03-30T19:44:09.256+0200","caller":"initialization/environment.go:54","msg":"GRPC_URL = :50051"}
+{"level":"info","ts":"2026-03-30T19:44:09.256+0200","caller":"initialization/environment.go:55","msg":"GRPC_TLS = false"}
+{"level":"info","ts":"2026-03-30T19:44:09.256+0200","caller":"initialization/environment.go:56","msg":"CERT_FOLDER_PATH = cert"}
+{"level":"info","ts":"2026-03-30T19:44:09.256+0200","caller":"db/database.go:22","msg":"InitDb - connecting to MongoDB..."}
+{"level":"info","ts":"2026-03-30T19:44:09.264+0200","caller":"db/database.go:36","msg":"Connected to MongoDB"}
+{"level":"info","ts":"2026-03-30T19:44:09.264+0200","caller":"initialization/server.go:26","msg":"StartServer - gRPC - Initializing..."}
+{"level":"info","ts":"2026-03-30T19:44:09.264+0200","caller":"initialization/server.go:46","msg":"StartServer - gRPC TLS security not enabled"}
+{"level":"info","ts":"2026-03-30T19:44:09.264+0200","caller":"initialization/server.go:64","msg":"StartServer - gRPC client listening at [::]:50051"}
+{"level":"info","ts":"2026-03-30T19:44:09.264+0200","caller":"api-devices/main.go:17","msg":"MQTT starting..."}
+{"level":"fatal","ts":"2026-03-30T19:44:09.264+0200","caller":"api-devices/main.go:22","msg":"MQTT connection failed: no servers defined to connect to","stacktrace":"main.main\n\t/Users/ks89/git/home-anthill/api-devices/main.go:22\nruntime.main\n\t/opt/homebrew/Cellar/go/1.26.1/libexec/src/runtime/proc.go:290"}
+{"level":"info","ts":"2026-03-30T19:47:32.086+0200","caller":"initialization/logger_config.go:16","msg":"InitLogger - called"}
+{"level":"debug","ts":"2026-03-30T19:47:32.087+0200","caller":"initialization/environment.go:19","msg":"InitLogger - envFile = /Users/ks89/git/home-anthill/api-devices/.env"}
+{"level":"info","ts":"2026-03-30T19:47:32.087+0200","caller":"initialization/environment.go:41","msg":"ENVIRONMENT = "}
+{"level":"info","ts":"2026-03-30T19:47:32.087+0200","caller":"initialization/environment.go:42","msg":"LOG_FOLDER = ./logs/"}
+{"level":"info","ts":"2026-03-30T19:47:32.087+0200","caller":"initialization/environment.go:43","msg":"MONGODB_URL = ****"}
+{"level":"info","ts":"2026-03-30T19:47:32.087+0200","caller":"initialization/environment.go:44","msg":"MQTT_URL = tcp://localhost"}
+{"level":"info","ts":"2026-03-30T19:47:32.087+0200","caller":"initialization/environment.go:45","msg":"MQTT_PORT = 1883"}
+{"level":"info","ts":"2026-03-30T19:47:32.087+0200","caller":"initialization/environment.go:46","msg":"MQTT_TLS = false"}
+{"level":"info","ts":"2026-03-30T19:47:32.087+0200","caller":"initialization/environment.go:47","msg":"MQTT_CA_FILE = "}
+{"level":"info","ts":"2026-03-30T19:47:32.087+0200","caller":"initialization/environment.go:48","msg":"MQTT_CERT_FILE = "}
+{"level":"info","ts":"2026-03-30T19:47:32.087+0200","caller":"initialization/environment.go:49","msg":"MQTT_KEY_FILE = "}
+{"level":"info","ts":"2026-03-30T19:47:32.087+0200","caller":"initialization/environment.go:50","msg":"MQTT_CLIENT_ID = apiDevices"}
+{"level":"info","ts":"2026-03-30T19:47:32.087+0200","caller":"initialization/environment.go:51","msg":"MQTT_AUTH = true"}
+{"level":"info","ts":"2026-03-30T19:47:32.087+0200","caller":"initialization/environment.go:52","msg":"MQTT_USER = ****"}
+{"level":"info","ts":"2026-03-30T19:47:32.087+0200","caller":"initialization/environment.go:53","msg":"MQTT_PASSWORD = ****"}
+{"level":"info","ts":"2026-03-30T19:47:32.087+0200","caller":"initialization/environment.go:54","msg":"GRPC_URL = :50051"}
+{"level":"info","ts":"2026-03-30T19:47:32.087+0200","caller":"initialization/environment.go:55","msg":"GRPC_TLS = false"}
+{"level":"info","ts":"2026-03-30T19:47:32.087+0200","caller":"initialization/environment.go:56","msg":"CERT_FOLDER_PATH = cert"}
+{"level":"info","ts":"2026-03-30T19:47:32.087+0200","caller":"db/database.go:22","msg":"InitDb - connecting to MongoDB..."}
+{"level":"info","ts":"2026-03-30T19:47:32.092+0200","caller":"db/database.go:36","msg":"Connected to MongoDB"}
+{"level":"info","ts":"2026-03-30T19:47:32.093+0200","caller":"initialization/server.go:26","msg":"StartServer - gRPC - Initializing..."}
+{"level":"info","ts":"2026-03-30T19:47:32.093+0200","caller":"initialization/server.go:46","msg":"StartServer - gRPC TLS security not enabled"}
+{"level":"info","ts":"2026-03-30T19:47:32.093+0200","caller":"initialization/server.go:64","msg":"StartServer - gRPC client listening at [::]:50051"}
+{"level":"info","ts":"2026-03-30T19:47:32.093+0200","caller":"api-devices/main.go:17","msg":"MQTT starting..."}
+{"level":"fatal","ts":"2026-03-30T19:47:32.093+0200","caller":"api-devices/main.go:22","msg":"MQTT connection failed: no servers defined to connect to","stacktrace":"main.main\n\t/Users/ks89/git/home-anthill/api-devices/main.go:22\nruntime.main\n\t/opt/homebrew/Cellar/go/1.26.1/libexec/src/runtime/proc.go:290"}
+{"level":"info","ts":"2026-03-30T19:50:13.028+0200","caller":"initialization/logger_config.go:16","msg":"InitLogger - called"}
+{"level":"debug","ts":"2026-03-30T19:50:13.029+0200","caller":"initialization/environment.go:19","msg":"InitLogger - envFile = /Users/ks89/git/home-anthill/api-devices/.env"}
+{"level":"info","ts":"2026-03-30T19:50:13.029+0200","caller":"initialization/environment.go:41","msg":"ENVIRONMENT = "}
+{"level":"info","ts":"2026-03-30T19:50:13.029+0200","caller":"initialization/environment.go:42","msg":"LOG_FOLDER = ./logs/"}
+{"level":"info","ts":"2026-03-30T19:50:13.029+0200","caller":"initialization/environment.go:43","msg":"MONGODB_URL = ****"}
+{"level":"info","ts":"2026-03-30T19:50:13.029+0200","caller":"initialization/environment.go:44","msg":"MQTT_URL = tcp://localhost"}
+{"level":"info","ts":"2026-03-30T19:50:13.029+0200","caller":"initialization/environment.go:45","msg":"MQTT_PORT = 1883"}
+{"level":"info","ts":"2026-03-30T19:50:13.029+0200","caller":"initialization/environment.go:46","msg":"MQTT_TLS = false"}
+{"level":"info","ts":"2026-03-30T19:50:13.029+0200","caller":"initialization/environment.go:47","msg":"MQTT_CA_FILE = "}
+{"level":"info","ts":"2026-03-30T19:50:13.029+0200","caller":"initialization/environment.go:48","msg":"MQTT_CERT_FILE = "}
+{"level":"info","ts":"2026-03-30T19:50:13.029+0200","caller":"initialization/environment.go:49","msg":"MQTT_KEY_FILE = "}
+{"level":"info","ts":"2026-03-30T19:50:13.029+0200","caller":"initialization/environment.go:50","msg":"MQTT_CLIENT_ID = apiDevices"}
+{"level":"info","ts":"2026-03-30T19:50:13.029+0200","caller":"initialization/environment.go:51","msg":"MQTT_AUTH = true"}
+{"level":"info","ts":"2026-03-30T19:50:13.029+0200","caller":"initialization/environment.go:52","msg":"MQTT_USER = ****"}
+{"level":"info","ts":"2026-03-30T19:50:13.029+0200","caller":"initialization/environment.go:53","msg":"MQTT_PASSWORD = ****"}
+{"level":"info","ts":"2026-03-30T19:50:13.029+0200","caller":"initialization/environment.go:54","msg":"GRPC_URL = :50051"}
+{"level":"info","ts":"2026-03-30T19:50:13.029+0200","caller":"initialization/environment.go:55","msg":"GRPC_TLS = false"}
+{"level":"info","ts":"2026-03-30T19:50:13.029+0200","caller":"initialization/environment.go:56","msg":"CERT_FOLDER_PATH = cert"}
+{"level":"info","ts":"2026-03-30T19:50:13.029+0200","caller":"db/database.go:22","msg":"InitDb - connecting to MongoDB..."}
+{"level":"info","ts":"2026-03-30T19:50:13.037+0200","caller":"db/database.go:36","msg":"Connected to MongoDB"}
+{"level":"info","ts":"2026-03-30T19:50:13.037+0200","caller":"initialization/server.go:26","msg":"StartServer - gRPC - Initializing..."}
+{"level":"info","ts":"2026-03-30T19:50:13.037+0200","caller":"initialization/server.go:46","msg":"StartServer - gRPC TLS security not enabled"}
+{"level":"info","ts":"2026-03-30T19:50:13.037+0200","caller":"initialization/server.go:64","msg":"StartServer - gRPC client listening at [::]:50051"}
+{"level":"info","ts":"2026-03-30T19:50:13.037+0200","caller":"api-devices/main.go:17","msg":"MQTT starting..."}
+{"level":"info","ts":"2026-03-30T19:50:13.041+0200","caller":"api-devices/main.go:24","msg":"MQTT running"}
+{"level":"info","ts":"2026-03-30T19:50:13.041+0200","caller":"api-devices/main.go:28","msg":"gRPC - starting server at [::]:50051"}
+{"level":"info","ts":"2026-03-30T19:58:06.277+0200","caller":"initialization/logger_config.go:16","msg":"InitLogger - called"}
+{"level":"debug","ts":"2026-03-30T19:58:06.278+0200","caller":"initialization/environment.go:19","msg":"InitLogger - envFile = /Users/ks89/git/home-anthill/api-devices/.env"}
+{"level":"info","ts":"2026-03-30T19:58:06.278+0200","caller":"initialization/environment.go:41","msg":"ENVIRONMENT = "}
+{"level":"info","ts":"2026-03-30T19:58:06.278+0200","caller":"initialization/environment.go:42","msg":"LOG_FOLDER = ./logs/"}
+{"level":"info","ts":"2026-03-30T19:58:06.278+0200","caller":"initialization/environment.go:43","msg":"MONGODB_URL = ****"}
+{"level":"info","ts":"2026-03-30T19:58:06.278+0200","caller":"initialization/environment.go:44","msg":"MQTT_URL = tcp://localhost"}
+{"level":"info","ts":"2026-03-30T19:58:06.278+0200","caller":"initialization/environment.go:45","msg":"MQTT_PORT = 1883"}
+{"level":"info","ts":"2026-03-30T19:58:06.278+0200","caller":"initialization/environment.go:46","msg":"MQTT_TLS = false"}
+{"level":"info","ts":"2026-03-30T19:58:06.278+0200","caller":"initialization/environment.go:47","msg":"MQTT_CA_FILE = "}
+{"level":"info","ts":"2026-03-30T19:58:06.278+0200","caller":"initialization/environment.go:48","msg":"MQTT_CERT_FILE = "}
+{"level":"info","ts":"2026-03-30T19:58:06.278+0200","caller":"initialization/environment.go:49","msg":"MQTT_KEY_FILE = "}
+{"level":"info","ts":"2026-03-30T19:58:06.278+0200","caller":"initialization/environment.go:50","msg":"MQTT_CLIENT_ID = apiDevices"}
+{"level":"info","ts":"2026-03-30T19:58:06.278+0200","caller":"initialization/environment.go:51","msg":"MQTT_AUTH = true"}
+{"level":"info","ts":"2026-03-30T19:58:06.278+0200","caller":"initialization/environment.go:52","msg":"MQTT_USER = ****"}
+{"level":"info","ts":"2026-03-30T19:58:06.278+0200","caller":"initialization/environment.go:53","msg":"MQTT_PASSWORD = ****"}
+{"level":"info","ts":"2026-03-30T19:58:06.278+0200","caller":"initialization/environment.go:54","msg":"GRPC_URL = :50051"}
+{"level":"info","ts":"2026-03-30T19:58:06.278+0200","caller":"initialization/environment.go:55","msg":"GRPC_TLS = false"}
+{"level":"info","ts":"2026-03-30T19:58:06.278+0200","caller":"initialization/environment.go:56","msg":"CERT_FOLDER_PATH = cert"}
+{"level":"info","ts":"2026-03-30T19:58:06.278+0200","caller":"db/database.go:22","msg":"InitDb - connecting to MongoDB..."}
+{"level":"info","ts":"2026-03-30T19:58:06.286+0200","caller":"db/database.go:36","msg":"Connected to MongoDB"}
+{"level":"info","ts":"2026-03-30T19:58:06.286+0200","caller":"initialization/server.go:26","msg":"StartServer - gRPC - Initializing..."}
+{"level":"info","ts":"2026-03-30T19:58:06.286+0200","caller":"initialization/server.go:46","msg":"StartServer - gRPC TLS security not enabled"}
+{"level":"info","ts":"2026-03-30T19:58:06.286+0200","caller":"initialization/server.go:64","msg":"StartServer - gRPC client listening at [::]:50051"}
+{"level":"info","ts":"2026-03-30T19:58:06.286+0200","caller":"api-devices/main.go:17","msg":"MQTT starting..."}
+{"level":"info","ts":"2026-03-30T19:58:06.288+0200","caller":"api-devices/main.go:24","msg":"MQTT running"}
+{"level":"info","ts":"2026-03-30T19:58:06.288+0200","caller":"api-devices/main.go:28","msg":"gRPC - starting server at [::]:50051"}
+{"level":"info","ts":"2026-03-30T20:31:12.981+0200","caller":"initialization/logger_config.go:16","msg":"InitLogger - called"}
+{"level":"debug","ts":"2026-03-30T20:31:12.982+0200","caller":"initialization/environment.go:19","msg":"InitLogger - envFile = /Users/ks89/git/home-anthill/api-devices/.env"}
+{"level":"info","ts":"2026-03-30T20:31:12.982+0200","caller":"initialization/environment.go:41","msg":"ENVIRONMENT = "}
+{"level":"info","ts":"2026-03-30T20:31:12.982+0200","caller":"initialization/environment.go:42","msg":"LOG_FOLDER = ./logs/"}
+{"level":"info","ts":"2026-03-30T20:31:12.982+0200","caller":"initialization/environment.go:43","msg":"MONGODB_URL = ****"}
+{"level":"info","ts":"2026-03-30T20:31:12.982+0200","caller":"initialization/environment.go:44","msg":"MQTT_URL = tcp://localhost"}
+{"level":"info","ts":"2026-03-30T20:31:12.982+0200","caller":"initialization/environment.go:45","msg":"MQTT_PORT = 1883"}
+{"level":"info","ts":"2026-03-30T20:31:12.982+0200","caller":"initialization/environment.go:46","msg":"MQTT_TLS = false"}
+{"level":"info","ts":"2026-03-30T20:31:12.982+0200","caller":"initialization/environment.go:47","msg":"MQTT_CA_FILE = "}
+{"level":"info","ts":"2026-03-30T20:31:12.982+0200","caller":"initialization/environment.go:48","msg":"MQTT_CERT_FILE = "}
+{"level":"info","ts":"2026-03-30T20:31:12.982+0200","caller":"initialization/environment.go:49","msg":"MQTT_KEY_FILE = "}
+{"level":"info","ts":"2026-03-30T20:31:12.982+0200","caller":"initialization/environment.go:50","msg":"MQTT_CLIENT_ID = apiDevices"}
+{"level":"info","ts":"2026-03-30T20:31:12.982+0200","caller":"initialization/environment.go:51","msg":"MQTT_AUTH = true"}
+{"level":"info","ts":"2026-03-30T20:31:12.982+0200","caller":"initialization/environment.go:52","msg":"MQTT_USER = ****"}
+{"level":"info","ts":"2026-03-30T20:31:12.982+0200","caller":"initialization/environment.go:53","msg":"MQTT_PASSWORD = ****"}
+{"level":"info","ts":"2026-03-30T20:31:12.982+0200","caller":"initialization/environment.go:54","msg":"GRPC_URL = :50051"}
+{"level":"info","ts":"2026-03-30T20:31:12.982+0200","caller":"initialization/environment.go:55","msg":"GRPC_TLS = false"}
+{"level":"info","ts":"2026-03-30T20:31:12.982+0200","caller":"initialization/environment.go:56","msg":"CERT_FOLDER_PATH = cert"}
+{"level":"info","ts":"2026-03-30T20:31:12.982+0200","caller":"db/database.go:22","msg":"InitDb - connecting to MongoDB..."}
+{"level":"info","ts":"2026-03-30T20:31:12.990+0200","caller":"db/database.go:36","msg":"Connected to MongoDB"}
+{"level":"info","ts":"2026-03-30T20:31:12.991+0200","caller":"initialization/server.go:26","msg":"StartServer - gRPC - Initializing..."}
+{"level":"info","ts":"2026-03-30T20:31:12.991+0200","caller":"initialization/server.go:46","msg":"StartServer - gRPC TLS security not enabled"}
+{"level":"info","ts":"2026-03-30T20:31:12.991+0200","caller":"initialization/server.go:64","msg":"StartServer - gRPC client listening at [::]:50051"}
+{"level":"info","ts":"2026-03-30T20:31:12.991+0200","caller":"api-devices/main.go:17","msg":"MQTT starting..."}
+{"level":"info","ts":"2026-03-30T20:31:12.992+0200","caller":"api-devices/main.go:24","msg":"MQTT running"}
+{"level":"info","ts":"2026-03-30T20:31:12.993+0200","caller":"api-devices/main.go:28","msg":"gRPC - starting server at [::]:50051"}
+{"level":"info","ts":"2026-04-02T22:40:21.249+0200","caller":"initialization/logger_config.go:16","msg":"InitLogger - called"}
+{"level":"debug","ts":"2026-04-02T22:40:21.250+0200","caller":"initialization/environment.go:19","msg":"InitLogger - envFile = /Users/ks89/git/home-anthill/api-devices/.env"}
+{"level":"info","ts":"2026-04-02T22:40:21.250+0200","caller":"initialization/environment.go:41","msg":"ENVIRONMENT = "}
+{"level":"info","ts":"2026-04-02T22:40:21.250+0200","caller":"initialization/environment.go:42","msg":"LOG_FOLDER = ./logs/"}
+{"level":"info","ts":"2026-04-02T22:40:21.250+0200","caller":"initialization/environment.go:43","msg":"MONGODB_URL = ****"}
+{"level":"info","ts":"2026-04-02T22:40:21.250+0200","caller":"initialization/environment.go:44","msg":"MQTT_URL = tcp://localhost"}
+{"level":"info","ts":"2026-04-02T22:40:21.250+0200","caller":"initialization/environment.go:45","msg":"MQTT_PORT = 1883"}
+{"level":"info","ts":"2026-04-02T22:40:21.250+0200","caller":"initialization/environment.go:46","msg":"MQTT_TLS = false"}
+{"level":"info","ts":"2026-04-02T22:40:21.250+0200","caller":"initialization/environment.go:47","msg":"MQTT_CA_FILE = "}
+{"level":"info","ts":"2026-04-02T22:40:21.250+0200","caller":"initialization/environment.go:48","msg":"MQTT_CERT_FILE = "}
+{"level":"info","ts":"2026-04-02T22:40:21.250+0200","caller":"initialization/environment.go:49","msg":"MQTT_KEY_FILE = "}
+{"level":"info","ts":"2026-04-02T22:40:21.250+0200","caller":"initialization/environment.go:50","msg":"MQTT_CLIENT_ID = apiDevices"}
+{"level":"info","ts":"2026-04-02T22:40:21.250+0200","caller":"initialization/environment.go:51","msg":"MQTT_AUTH = true"}
+{"level":"info","ts":"2026-04-02T22:40:21.250+0200","caller":"initialization/environment.go:52","msg":"MQTT_USER = ****"}
+{"level":"info","ts":"2026-04-02T22:40:21.250+0200","caller":"initialization/environment.go:53","msg":"MQTT_PASSWORD = ****"}
+{"level":"info","ts":"2026-04-02T22:40:21.250+0200","caller":"initialization/environment.go:54","msg":"GRPC_URL = :50051"}
+{"level":"info","ts":"2026-04-02T22:40:21.250+0200","caller":"initialization/environment.go:55","msg":"GRPC_TLS = false"}
+{"level":"info","ts":"2026-04-02T22:40:21.250+0200","caller":"initialization/environment.go:56","msg":"CERT_FOLDER_PATH = cert"}
+{"level":"info","ts":"2026-04-02T22:40:21.250+0200","caller":"db/database.go:22","msg":"InitDb - connecting to MongoDB..."}
+{"level":"info","ts":"2026-04-02T22:40:21.259+0200","caller":"db/database.go:36","msg":"Connected to MongoDB"}
+{"level":"info","ts":"2026-04-02T22:40:21.259+0200","caller":"initialization/server.go:26","msg":"StartServer - gRPC - Initializing..."}
+{"level":"info","ts":"2026-04-02T22:40:21.259+0200","caller":"initialization/server.go:46","msg":"StartServer - gRPC TLS security not enabled"}
+{"level":"info","ts":"2026-04-02T22:40:21.259+0200","caller":"initialization/server.go:64","msg":"StartServer - gRPC client listening at [::]:50051"}
+{"level":"info","ts":"2026-04-02T22:40:21.259+0200","caller":"api-devices/main.go:17","msg":"MQTT starting..."}
+{"level":"info","ts":"2026-04-02T22:40:21.262+0200","caller":"api-devices/main.go:24","msg":"MQTT running"}
+{"level":"info","ts":"2026-04-02T22:40:21.262+0200","caller":"api-devices/main.go:28","msg":"gRPC - starting server at [::]:50051"}
+{"level":"info","ts":"2026-04-02T22:45:32.815+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-02T22:45:32.880+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-02T22:45:32.921+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-02T22:45:32.962+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-02T22:45:33.039+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-02T22:45:33.079+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-02T22:45:33.124+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-02T22:45:33.177+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-02T22:45:33.302+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-02T22:45:33.354+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-02T22:45:33.400+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-02T22:45:33.451+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-02T22:45:57.110+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-02T22:45:57.202+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-02T22:45:57.250+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-02T22:45:57.300+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-02T22:46:01.167+0200","caller":"api/devicesGrpc.go:69","msg":"gRPC - SetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64, featureValues: 4"}
+{"level":"debug","ts":"2026-04-02T22:46:01.170+0200","caller":"api/devicesGrpc.go:115","msg":"gRPC - SetValue - updatedStatus models.Status{Value:26, CreatedAt:time.Date(2026, time.April, 2, 22, 46, 1, 170612000, time.Local), ModifiedAt:time.Date(2026, time.April, 2, 22, 46, 1, 170612000, time.Local)} "}
+{"level":"debug","ts":"2026-04-02T22:46:01.174+0200","caller":"api/devicesGrpc.go:115","msg":"gRPC - SetValue - updatedStatus models.Status{Value:3, CreatedAt:time.Date(2026, time.April, 2, 22, 46, 1, 174010000, time.Local), ModifiedAt:time.Date(2026, time.April, 2, 22, 46, 1, 174010000, time.Local)} "}
+{"level":"debug","ts":"2026-04-02T22:46:01.174+0200","caller":"api/devicesGrpc.go:115","msg":"gRPC - SetValue - updatedStatus models.Status{Value:3, CreatedAt:time.Date(2026, time.April, 2, 22, 46, 1, 174036000, time.Local), ModifiedAt:time.Date(2026, time.April, 2, 22, 46, 1, 174036000, time.Local)} "}
+{"level":"debug","ts":"2026-04-02T22:46:01.174+0200","caller":"api/devicesGrpc.go:115","msg":"gRPC - SetValue - updatedStatus models.Status{Value:1, CreatedAt:time.Date(2026, time.April, 2, 22, 46, 1, 174573000, time.Local), ModifiedAt:time.Date(2026, time.April, 2, 22, 46, 1, 174573000, time.Local)} "}
+{"level":"debug","ts":"2026-04-02T22:46:01.181+0200","caller":"api/devicesGrpc.go:187","msg":"gRPC - SetValue - Sending response"}
+{"level":"info","ts":"2026-04-02T22:46:01.230+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-02T22:46:01.231+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-02T22:46:01.273+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-02T22:46:01.273+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-02T22:46:01.315+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-02T22:46:01.317+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-02T22:46:01.357+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-02T22:46:01.357+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-02T22:46:01.474+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-02T22:46:01.474+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-02T22:46:01.517+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-02T22:46:01.517+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-02T22:46:01.562+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-02T22:46:01.562+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-02T22:46:01.612+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-02T22:46:01.612+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-02T22:46:01.719+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-02T22:46:01.760+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-02T22:46:01.804+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-02T22:46:01.846+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-02T22:46:24.444+0200","caller":"api/devicesGrpc.go:69","msg":"gRPC - SetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64, featureValues: 4"}
+{"level":"debug","ts":"2026-04-02T22:46:24.447+0200","caller":"api/devicesGrpc.go:115","msg":"gRPC - SetValue - updatedStatus models.Status{Value:3, CreatedAt:time.Date(2026, time.April, 2, 22, 46, 24, 447242000, time.Local), ModifiedAt:time.Date(2026, time.April, 2, 22, 46, 24, 447242000, time.Local)} "}
+{"level":"debug","ts":"2026-04-02T22:46:24.447+0200","caller":"api/devicesGrpc.go:115","msg":"gRPC - SetValue - updatedStatus models.Status{Value:0, CreatedAt:time.Date(2026, time.April, 2, 22, 46, 24, 447282000, time.Local), ModifiedAt:time.Date(2026, time.April, 2, 22, 46, 24, 447282000, time.Local)} "}
+{"level":"debug","ts":"2026-04-02T22:46:24.447+0200","caller":"api/devicesGrpc.go:115","msg":"gRPC - SetValue - updatedStatus models.Status{Value:26, CreatedAt:time.Date(2026, time.April, 2, 22, 46, 24, 447250000, time.Local), ModifiedAt:time.Date(2026, time.April, 2, 22, 46, 24, 447250000, time.Local)} "}
+{"level":"debug","ts":"2026-04-02T22:46:24.447+0200","caller":"api/devicesGrpc.go:115","msg":"gRPC - SetValue - updatedStatus models.Status{Value:3, CreatedAt:time.Date(2026, time.April, 2, 22, 46, 24, 447498000, time.Local), ModifiedAt:time.Date(2026, time.April, 2, 22, 46, 24, 447498000, time.Local)} "}
+{"level":"debug","ts":"2026-04-02T22:46:24.453+0200","caller":"api/devicesGrpc.go:187","msg":"gRPC - SetValue - Sending response"}
+{"level":"info","ts":"2026-04-02T22:46:24.497+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-02T22:46:24.497+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-02T22:46:24.539+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-02T22:46:24.539+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-02T22:46:24.591+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-02T22:46:24.591+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-02T22:46:24.633+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-02T22:46:24.635+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-02T22:46:24.729+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-02T22:46:24.771+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-02T22:46:24.771+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-02T22:46:24.813+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-02T22:46:24.813+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-02T22:46:24.856+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-02T22:46:24.857+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-02T22:46:24.899+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-02T22:46:25.006+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-02T22:46:25.048+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-02T22:46:25.097+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-02T22:46:25.144+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-02T22:50:25.515+0200","caller":"api/registerGrpc.go:34","msg":"gRPC - Register - Called for deviceUuid: d21c1058-af1e-4031-9596-0fd7e219417e, mac: CC:02:55:99:99:99"}
+{"level":"info","ts":"2026-04-02T22:50:25.525+0200","caller":"api/registerGrpc.go:34","msg":"gRPC - Register - Called for deviceUuid: d21c1058-af1e-4031-9596-0fd7e219417e, mac: CC:02:55:99:99:99"}
+{"level":"info","ts":"2026-04-02T22:50:25.530+0200","caller":"api/registerGrpc.go:34","msg":"gRPC - Register - Called for deviceUuid: d21c1058-af1e-4031-9596-0fd7e219417e, mac: CC:02:55:99:99:99"}
+{"level":"info","ts":"2026-04-02T22:50:25.534+0200","caller":"api/registerGrpc.go:34","msg":"gRPC - Register - Called for deviceUuid: d21c1058-af1e-4031-9596-0fd7e219417e, mac: CC:02:55:99:99:99"}
+{"level":"info","ts":"2026-04-02T22:51:39.590+0200","caller":"api/registerGrpc.go:34","msg":"gRPC - Register - Called for deviceUuid: 5d105982-5b55-4502-a400-ec5091a73ce7, mac: 90:90:33:77:22:FA"}
+{"level":"info","ts":"2026-04-02T22:51:39.597+0200","caller":"api/registerGrpc.go:34","msg":"gRPC - Register - Called for deviceUuid: 5d105982-5b55-4502-a400-ec5091a73ce7, mac: 90:90:33:77:22:FA"}
+{"level":"info","ts":"2026-04-04T12:13:23.732+0200","caller":"initialization/logger_config.go:16","msg":"InitLogger - called"}
+{"level":"debug","ts":"2026-04-04T12:13:23.733+0200","caller":"initialization/environment.go:19","msg":"InitLogger - envFile = /Users/ks89/git/home-anthill/api-devices/.env"}
+{"level":"info","ts":"2026-04-04T12:13:23.733+0200","caller":"initialization/environment.go:41","msg":"ENVIRONMENT = "}
+{"level":"info","ts":"2026-04-04T12:13:23.733+0200","caller":"initialization/environment.go:42","msg":"LOG_FOLDER = ./logs/"}
+{"level":"info","ts":"2026-04-04T12:13:23.733+0200","caller":"initialization/environment.go:43","msg":"MONGODB_URL = ****"}
+{"level":"info","ts":"2026-04-04T12:13:23.733+0200","caller":"initialization/environment.go:44","msg":"MQTT_URL = tcp://localhost"}
+{"level":"info","ts":"2026-04-04T12:13:23.733+0200","caller":"initialization/environment.go:45","msg":"MQTT_PORT = 1883"}
+{"level":"info","ts":"2026-04-04T12:13:23.733+0200","caller":"initialization/environment.go:46","msg":"MQTT_TLS = false"}
+{"level":"info","ts":"2026-04-04T12:13:23.733+0200","caller":"initialization/environment.go:47","msg":"MQTT_CA_FILE = "}
+{"level":"info","ts":"2026-04-04T12:13:23.733+0200","caller":"initialization/environment.go:48","msg":"MQTT_CERT_FILE = "}
+{"level":"info","ts":"2026-04-04T12:13:23.733+0200","caller":"initialization/environment.go:49","msg":"MQTT_KEY_FILE = "}
+{"level":"info","ts":"2026-04-04T12:13:23.733+0200","caller":"initialization/environment.go:50","msg":"MQTT_CLIENT_ID = apiDevices"}
+{"level":"info","ts":"2026-04-04T12:13:23.733+0200","caller":"initialization/environment.go:51","msg":"MQTT_AUTH = true"}
+{"level":"info","ts":"2026-04-04T12:13:23.733+0200","caller":"initialization/environment.go:52","msg":"MQTT_USER = ****"}
+{"level":"info","ts":"2026-04-04T12:13:23.733+0200","caller":"initialization/environment.go:53","msg":"MQTT_PASSWORD = ****"}
+{"level":"info","ts":"2026-04-04T12:13:23.733+0200","caller":"initialization/environment.go:54","msg":"GRPC_URL = :50051"}
+{"level":"info","ts":"2026-04-04T12:13:23.733+0200","caller":"initialization/environment.go:55","msg":"GRPC_TLS = false"}
+{"level":"info","ts":"2026-04-04T12:13:23.733+0200","caller":"initialization/environment.go:56","msg":"CERT_FOLDER_PATH = cert"}
+{"level":"info","ts":"2026-04-04T12:13:23.733+0200","caller":"db/database.go:22","msg":"InitDb - connecting to MongoDB..."}
+{"level":"fatal","ts":"2026-04-04T12:13:33.735+0200","caller":"db/database.go:33","msg":"Cannot ping MongoDB: server selection error: context deadline exceeded, current topology: { Type: Unknown, Servers: [{ Addr: localhost:27017, Type: Unknown, Last error: dial tcp [::1]:27017: connect: connection refused }, ] }","stacktrace":"api-devices/db.InitDb\n\t/Users/ks89/git/home-anthill/api-devices/db/database.go:33\napi-devices/initialization.StartServer\n\t/Users/ks89/git/home-anthill/api-devices/initialization/server.go:23\napi-devices/initialization.Start\n\t/Users/ks89/git/home-anthill/api-devices/initialization/start.go:22\nmain.main\n\t/Users/ks89/git/home-anthill/api-devices/main.go:14\nruntime.main\n\t/opt/homebrew/Cellar/go/1.26.1/libexec/src/runtime/proc.go:290"}
+{"level":"info","ts":"2026-04-04T12:20:45.913+0200","caller":"initialization/logger_config.go:16","msg":"InitLogger - called"}
+{"level":"debug","ts":"2026-04-04T12:20:45.914+0200","caller":"initialization/environment.go:19","msg":"InitLogger - envFile = /Users/ks89/git/home-anthill/api-devices/.env"}
+{"level":"info","ts":"2026-04-04T12:20:45.914+0200","caller":"initialization/environment.go:41","msg":"ENVIRONMENT = "}
+{"level":"info","ts":"2026-04-04T12:20:45.914+0200","caller":"initialization/environment.go:42","msg":"LOG_FOLDER = ./logs/"}
+{"level":"info","ts":"2026-04-04T12:20:45.914+0200","caller":"initialization/environment.go:43","msg":"MONGODB_URL = ****"}
+{"level":"info","ts":"2026-04-04T12:20:45.914+0200","caller":"initialization/environment.go:44","msg":"MQTT_URL = tcp://localhost"}
+{"level":"info","ts":"2026-04-04T12:20:45.914+0200","caller":"initialization/environment.go:45","msg":"MQTT_PORT = 1883"}
+{"level":"info","ts":"2026-04-04T12:20:45.914+0200","caller":"initialization/environment.go:46","msg":"MQTT_TLS = false"}
+{"level":"info","ts":"2026-04-04T12:20:45.914+0200","caller":"initialization/environment.go:47","msg":"MQTT_CA_FILE = "}
+{"level":"info","ts":"2026-04-04T12:20:45.914+0200","caller":"initialization/environment.go:48","msg":"MQTT_CERT_FILE = "}
+{"level":"info","ts":"2026-04-04T12:20:45.914+0200","caller":"initialization/environment.go:49","msg":"MQTT_KEY_FILE = "}
+{"level":"info","ts":"2026-04-04T12:20:45.914+0200","caller":"initialization/environment.go:50","msg":"MQTT_CLIENT_ID = apiDevices"}
+{"level":"info","ts":"2026-04-04T12:20:45.914+0200","caller":"initialization/environment.go:51","msg":"MQTT_AUTH = true"}
+{"level":"info","ts":"2026-04-04T12:20:45.914+0200","caller":"initialization/environment.go:52","msg":"MQTT_USER = ****"}
+{"level":"info","ts":"2026-04-04T12:20:45.914+0200","caller":"initialization/environment.go:53","msg":"MQTT_PASSWORD = ****"}
+{"level":"info","ts":"2026-04-04T12:20:45.914+0200","caller":"initialization/environment.go:54","msg":"GRPC_URL = :50051"}
+{"level":"info","ts":"2026-04-04T12:20:45.914+0200","caller":"initialization/environment.go:55","msg":"GRPC_TLS = false"}
+{"level":"info","ts":"2026-04-04T12:20:45.914+0200","caller":"initialization/environment.go:56","msg":"CERT_FOLDER_PATH = cert"}
+{"level":"info","ts":"2026-04-04T12:20:45.914+0200","caller":"db/database.go:22","msg":"InitDb - connecting to MongoDB..."}
+{"level":"info","ts":"2026-04-04T12:20:45.921+0200","caller":"db/database.go:36","msg":"Connected to MongoDB"}
+{"level":"info","ts":"2026-04-04T12:20:45.921+0200","caller":"initialization/server.go:26","msg":"StartServer - gRPC - Initializing..."}
+{"level":"info","ts":"2026-04-04T12:20:45.921+0200","caller":"initialization/server.go:46","msg":"StartServer - gRPC TLS security not enabled"}
+{"level":"info","ts":"2026-04-04T12:20:45.922+0200","caller":"initialization/server.go:64","msg":"StartServer - gRPC client listening at [::]:50051"}
+{"level":"info","ts":"2026-04-04T12:20:45.922+0200","caller":"api-devices/main.go:17","msg":"MQTT starting..."}
+{"level":"info","ts":"2026-04-04T12:20:45.923+0200","caller":"api-devices/main.go:24","msg":"MQTT running"}
+{"level":"info","ts":"2026-04-04T12:20:45.923+0200","caller":"api-devices/main.go:28","msg":"gRPC - starting server at [::]:50051"}
+{"level":"info","ts":"2026-04-04T12:22:13.741+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T12:22:13.801+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T12:22:13.847+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T12:22:13.897+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T12:22:14.236+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T12:22:14.279+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T12:22:14.332+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T12:22:14.374+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T12:22:17.058+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: 962b365e-8fed-4f44-a5fb-53dd477c2312, mac: 84:F7:03:89:42:94"}
+{"level":"info","ts":"2026-04-04T12:22:17.109+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: 962b365e-8fed-4f44-a5fb-53dd477c2312, mac: 84:F7:03:89:42:94"}
+{"level":"info","ts":"2026-04-04T12:22:17.447+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: 962b365e-8fed-4f44-a5fb-53dd477c2312, mac: 84:F7:03:89:42:94"}
+{"level":"info","ts":"2026-04-04T12:22:17.502+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: 962b365e-8fed-4f44-a5fb-53dd477c2312, mac: 84:F7:03:89:42:94"}
+{"level":"info","ts":"2026-04-04T12:57:07.700+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: 962b365e-8fed-4f44-a5fb-53dd477c2312, mac: 84:F7:03:89:42:94"}
+{"level":"info","ts":"2026-04-04T12:57:07.753+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: 962b365e-8fed-4f44-a5fb-53dd477c2312, mac: 84:F7:03:89:42:94"}
+{"level":"info","ts":"2026-04-04T12:57:08.081+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: 962b365e-8fed-4f44-a5fb-53dd477c2312, mac: 84:F7:03:89:42:94"}
+{"level":"info","ts":"2026-04-04T12:57:08.136+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: 962b365e-8fed-4f44-a5fb-53dd477c2312, mac: 84:F7:03:89:42:94"}
+{"level":"info","ts":"2026-04-04T12:57:21.350+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T12:57:21.402+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T12:57:21.445+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T12:57:21.497+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T12:57:21.796+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T12:57:21.847+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T12:57:21.890+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T12:57:21.932+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T12:57:23.279+0200","caller":"api/devicesGrpc.go:69","msg":"gRPC - SetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64, featureValues: 4"}
+{"level":"debug","ts":"2026-04-04T12:57:23.283+0200","caller":"api/devicesGrpc.go:115","msg":"gRPC - SetValue - updatedStatus models.Status{Value:3, CreatedAt:time.Date(2026, time.April, 4, 12, 57, 23, 283630000, time.Local), ModifiedAt:time.Date(2026, time.April, 4, 12, 57, 23, 283630000, time.Local)} "}
+{"level":"debug","ts":"2026-04-04T12:57:23.289+0200","caller":"api/devicesGrpc.go:115","msg":"gRPC - SetValue - updatedStatus models.Status{Value:26, CreatedAt:time.Date(2026, time.April, 4, 12, 57, 23, 289034000, time.Local), ModifiedAt:time.Date(2026, time.April, 4, 12, 57, 23, 289034000, time.Local)} "}
+{"level":"debug","ts":"2026-04-04T12:57:23.289+0200","caller":"api/devicesGrpc.go:115","msg":"gRPC - SetValue - updatedStatus models.Status{Value:3, CreatedAt:time.Date(2026, time.April, 4, 12, 57, 23, 289306000, time.Local), ModifiedAt:time.Date(2026, time.April, 4, 12, 57, 23, 289306000, time.Local)} "}
+{"level":"debug","ts":"2026-04-04T12:57:23.289+0200","caller":"api/devicesGrpc.go:115","msg":"gRPC - SetValue - updatedStatus models.Status{Value:1, CreatedAt:time.Date(2026, time.April, 4, 12, 57, 23, 289525000, time.Local), ModifiedAt:time.Date(2026, time.April, 4, 12, 57, 23, 289525000, time.Local)} "}
+{"level":"debug","ts":"2026-04-04T12:57:23.295+0200","caller":"api/devicesGrpc.go:187","msg":"gRPC - SetValue - Sending response"}
+{"level":"info","ts":"2026-04-04T13:10:33.985+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T13:10:34.027+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T13:10:34.069+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T13:10:34.116+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T13:10:34.462+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T13:10:34.516+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T13:10:34.571+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T13:10:34.624+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T13:10:35.978+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T13:10:36.030+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T13:10:36.072+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T13:10:36.126+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T13:10:36.423+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T13:10:36.479+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T13:10:36.530+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T13:10:36.584+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T14:32:26.103+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: 962b365e-8fed-4f44-a5fb-53dd477c2312, mac: 84:F7:03:89:42:94"}
+{"level":"info","ts":"2026-04-04T14:32:26.154+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: 962b365e-8fed-4f44-a5fb-53dd477c2312, mac: 84:F7:03:89:42:94"}
+{"level":"info","ts":"2026-04-04T14:32:26.588+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: 962b365e-8fed-4f44-a5fb-53dd477c2312, mac: 84:F7:03:89:42:94"}
+{"level":"info","ts":"2026-04-04T14:32:26.632+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: 962b365e-8fed-4f44-a5fb-53dd477c2312, mac: 84:F7:03:89:42:94"}
+{"level":"info","ts":"2026-04-04T14:32:28.528+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: 962b365e-8fed-4f44-a5fb-53dd477c2312, mac: 84:F7:03:89:42:94"}
+{"level":"info","ts":"2026-04-04T14:32:28.584+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: 962b365e-8fed-4f44-a5fb-53dd477c2312, mac: 84:F7:03:89:42:94"}
+{"level":"info","ts":"2026-04-04T14:32:28.888+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: 962b365e-8fed-4f44-a5fb-53dd477c2312, mac: 84:F7:03:89:42:94"}
+{"level":"info","ts":"2026-04-04T14:32:28.930+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: 962b365e-8fed-4f44-a5fb-53dd477c2312, mac: 84:F7:03:89:42:94"}
+{"level":"info","ts":"2026-04-04T14:32:45.796+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T14:32:45.848+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T14:32:45.904+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T14:32:45.954+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T14:32:46.249+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T14:32:46.292+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T14:32:46.348+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T14:32:46.398+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T14:32:47.891+0200","caller":"api/devicesGrpc.go:69","msg":"gRPC - SetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64, featureValues: 4"}
+{"level":"debug","ts":"2026-04-04T14:32:47.893+0200","caller":"api/devicesGrpc.go:115","msg":"gRPC - SetValue - updatedStatus models.Status{Value:1, CreatedAt:time.Date(2026, time.April, 4, 14, 32, 47, 893238000, time.Local), ModifiedAt:time.Date(2026, time.April, 4, 14, 32, 47, 893238000, time.Local)} "}
+{"level":"debug","ts":"2026-04-04T14:32:47.893+0200","caller":"api/devicesGrpc.go:115","msg":"gRPC - SetValue - updatedStatus models.Status{Value:3, CreatedAt:time.Date(2026, time.April, 4, 14, 32, 47, 893238000, time.Local), ModifiedAt:time.Date(2026, time.April, 4, 14, 32, 47, 893238000, time.Local)} "}
+{"level":"debug","ts":"2026-04-04T14:32:47.893+0200","caller":"api/devicesGrpc.go:115","msg":"gRPC - SetValue - updatedStatus models.Status{Value:3, CreatedAt:time.Date(2026, time.April, 4, 14, 32, 47, 893578000, time.Local), ModifiedAt:time.Date(2026, time.April, 4, 14, 32, 47, 893578000, time.Local)} "}
+{"level":"debug","ts":"2026-04-04T14:32:47.893+0200","caller":"api/devicesGrpc.go:115","msg":"gRPC - SetValue - updatedStatus models.Status{Value:26, CreatedAt:time.Date(2026, time.April, 4, 14, 32, 47, 893760000, time.Local), ModifiedAt:time.Date(2026, time.April, 4, 14, 32, 47, 893760000, time.Local)} "}
+{"level":"debug","ts":"2026-04-04T14:32:47.897+0200","caller":"api/devicesGrpc.go:187","msg":"gRPC - SetValue - Sending response"}
+{"level":"info","ts":"2026-04-04T17:23:03.726+0200","caller":"initialization/logger_config.go:16","msg":"InitLogger - called"}
+{"level":"debug","ts":"2026-04-04T17:23:03.727+0200","caller":"initialization/environment.go:19","msg":"InitLogger - envFile = /Users/ks89/git/home-anthill/api-devices/.env"}
+{"level":"info","ts":"2026-04-04T17:23:03.727+0200","caller":"initialization/environment.go:41","msg":"ENVIRONMENT = "}
+{"level":"info","ts":"2026-04-04T17:23:03.727+0200","caller":"initialization/environment.go:42","msg":"LOG_FOLDER = ./logs/"}
+{"level":"info","ts":"2026-04-04T17:23:03.727+0200","caller":"initialization/environment.go:43","msg":"MONGODB_URL = ****"}
+{"level":"info","ts":"2026-04-04T17:23:03.727+0200","caller":"initialization/environment.go:44","msg":"MQTT_URL = tcp://localhost"}
+{"level":"info","ts":"2026-04-04T17:23:03.727+0200","caller":"initialization/environment.go:45","msg":"MQTT_PORT = 1883"}
+{"level":"info","ts":"2026-04-04T17:23:03.727+0200","caller":"initialization/environment.go:46","msg":"MQTT_TLS = false"}
+{"level":"info","ts":"2026-04-04T17:23:03.727+0200","caller":"initialization/environment.go:47","msg":"MQTT_CA_FILE = "}
+{"level":"info","ts":"2026-04-04T17:23:03.727+0200","caller":"initialization/environment.go:48","msg":"MQTT_CERT_FILE = "}
+{"level":"info","ts":"2026-04-04T17:23:03.727+0200","caller":"initialization/environment.go:49","msg":"MQTT_KEY_FILE = "}
+{"level":"info","ts":"2026-04-04T17:23:03.727+0200","caller":"initialization/environment.go:50","msg":"MQTT_CLIENT_ID = apiDevices"}
+{"level":"info","ts":"2026-04-04T17:23:03.727+0200","caller":"initialization/environment.go:51","msg":"MQTT_AUTH = true"}
+{"level":"info","ts":"2026-04-04T17:23:03.727+0200","caller":"initialization/environment.go:52","msg":"MQTT_USER = ****"}
+{"level":"info","ts":"2026-04-04T17:23:03.727+0200","caller":"initialization/environment.go:53","msg":"MQTT_PASSWORD = ****"}
+{"level":"info","ts":"2026-04-04T17:23:03.727+0200","caller":"initialization/environment.go:54","msg":"GRPC_URL = :50051"}
+{"level":"info","ts":"2026-04-04T17:23:03.727+0200","caller":"initialization/environment.go:55","msg":"GRPC_TLS = false"}
+{"level":"info","ts":"2026-04-04T17:23:03.727+0200","caller":"initialization/environment.go:56","msg":"CERT_FOLDER_PATH = cert"}
+{"level":"info","ts":"2026-04-04T17:23:03.727+0200","caller":"db/database.go:22","msg":"InitDb - connecting to MongoDB..."}
+{"level":"info","ts":"2026-04-04T17:23:03.740+0200","caller":"db/database.go:36","msg":"Connected to MongoDB"}
+{"level":"info","ts":"2026-04-04T17:23:03.740+0200","caller":"initialization/server.go:26","msg":"StartServer - gRPC - Initializing..."}
+{"level":"info","ts":"2026-04-04T17:23:03.740+0200","caller":"initialization/server.go:46","msg":"StartServer - gRPC TLS security not enabled"}
+{"level":"info","ts":"2026-04-04T17:23:03.741+0200","caller":"initialization/server.go:64","msg":"StartServer - gRPC client listening at [::]:50051"}
+{"level":"info","ts":"2026-04-04T17:23:03.741+0200","caller":"api-devices/main.go:17","msg":"MQTT starting..."}
+{"level":"info","ts":"2026-04-04T17:23:03.744+0200","caller":"api-devices/main.go:24","msg":"MQTT running"}
+{"level":"info","ts":"2026-04-04T17:23:03.744+0200","caller":"api-devices/main.go:28","msg":"gRPC - starting server at [::]:50051"}
+{"level":"info","ts":"2026-04-04T17:23:34.404+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T17:23:34.467+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T17:23:34.510+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T17:23:34.560+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T17:23:34.933+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T17:23:34.977+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T17:23:35.031+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T17:23:35.080+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T17:32:20.940+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: 962b365e-8fed-4f44-a5fb-53dd477c2312, mac: 84:F7:03:89:42:94"}
+{"level":"info","ts":"2026-04-04T17:32:20.992+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: 962b365e-8fed-4f44-a5fb-53dd477c2312, mac: 84:F7:03:89:42:94"}
+{"level":"info","ts":"2026-04-04T17:32:21.375+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: 962b365e-8fed-4f44-a5fb-53dd477c2312, mac: 84:F7:03:89:42:94"}
+{"level":"info","ts":"2026-04-04T17:32:21.427+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: 962b365e-8fed-4f44-a5fb-53dd477c2312, mac: 84:F7:03:89:42:94"}
+{"level":"info","ts":"2026-04-04T17:32:23.114+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T17:32:23.163+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T17:32:23.218+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T17:32:23.277+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T17:32:23.601+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T17:32:23.651+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T17:32:23.694+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T17:32:23.745+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T19:06:05.397+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T19:06:05.470+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T19:06:05.606+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T19:06:05.648+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T19:06:06.010+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T19:06:06.053+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T19:06:06.106+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T19:06:06.158+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T19:06:12.787+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T19:06:12.838+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T19:06:12.889+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T19:06:12.942+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T19:06:13.270+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T19:06:13.322+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T19:06:13.366+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T19:06:13.420+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T19:06:14.574+0200","caller":"api/devicesGrpc.go:69","msg":"gRPC - SetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64, featureValues: 4"}
+{"level":"debug","ts":"2026-04-04T19:06:14.579+0200","caller":"api/devicesGrpc.go:115","msg":"gRPC - SetValue - updatedStatus models.Status{Value:3, CreatedAt:time.Date(2026, time.April, 4, 19, 6, 14, 579914000, time.Local), ModifiedAt:time.Date(2026, time.April, 4, 19, 6, 14, 579914000, time.Local)} "}
+{"level":"debug","ts":"2026-04-04T19:06:14.582+0200","caller":"api/devicesGrpc.go:115","msg":"gRPC - SetValue - updatedStatus models.Status{Value:26, CreatedAt:time.Date(2026, time.April, 4, 19, 6, 14, 582550000, time.Local), ModifiedAt:time.Date(2026, time.April, 4, 19, 6, 14, 582550000, time.Local)} "}
+{"level":"debug","ts":"2026-04-04T19:06:14.584+0200","caller":"api/devicesGrpc.go:115","msg":"gRPC - SetValue - updatedStatus models.Status{Value:3, CreatedAt:time.Date(2026, time.April, 4, 19, 6, 14, 584702000, time.Local), ModifiedAt:time.Date(2026, time.April, 4, 19, 6, 14, 584702000, time.Local)} "}
+{"level":"debug","ts":"2026-04-04T19:06:14.585+0200","caller":"api/devicesGrpc.go:115","msg":"gRPC - SetValue - updatedStatus models.Status{Value:1, CreatedAt:time.Date(2026, time.April, 4, 19, 6, 14, 584696000, time.Local), ModifiedAt:time.Date(2026, time.April, 4, 19, 6, 14, 584696000, time.Local)} "}
+{"level":"debug","ts":"2026-04-04T19:06:14.590+0200","caller":"api/devicesGrpc.go:187","msg":"gRPC - SetValue - Sending response"}
+{"level":"info","ts":"2026-04-04T19:37:52.768+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: 962b365e-8fed-4f44-a5fb-53dd477c2312, mac: 84:F7:03:89:42:94"}
+{"level":"info","ts":"2026-04-04T19:37:52.821+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: 962b365e-8fed-4f44-a5fb-53dd477c2312, mac: 84:F7:03:89:42:94"}
+{"level":"info","ts":"2026-04-04T19:37:53.225+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: 962b365e-8fed-4f44-a5fb-53dd477c2312, mac: 84:F7:03:89:42:94"}
+{"level":"info","ts":"2026-04-04T19:37:53.280+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: 962b365e-8fed-4f44-a5fb-53dd477c2312, mac: 84:F7:03:89:42:94"}
+{"level":"info","ts":"2026-04-04T19:40:08.597+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T19:40:08.639+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T19:40:08.683+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T19:40:08.724+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T19:40:09.076+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T19:40:09.115+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T19:40:09.159+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T19:40:09.202+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T19:40:10.636+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T19:40:10.685+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T19:40:10.727+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T19:40:10.771+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T19:40:11.089+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T19:40:11.132+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T19:40:11.183+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T19:40:11.226+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T20:54:17.665+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T20:54:17.718+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T20:54:17.762+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T20:54:17.815+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T20:54:18.187+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T20:54:18.220+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T20:54:18.270+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T20:54:18.313+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T20:54:19.064+0200","caller":"api/devicesGrpc.go:69","msg":"gRPC - SetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64, featureValues: 4"}
+{"level":"debug","ts":"2026-04-04T20:54:19.067+0200","caller":"api/devicesGrpc.go:115","msg":"gRPC - SetValue - updatedStatus models.Status{Value:1, CreatedAt:time.Date(2026, time.April, 4, 20, 54, 19, 67949000, time.Local), ModifiedAt:time.Date(2026, time.April, 4, 20, 54, 19, 67949000, time.Local)} "}
+{"level":"debug","ts":"2026-04-04T20:54:19.067+0200","caller":"api/devicesGrpc.go:115","msg":"gRPC - SetValue - updatedStatus models.Status{Value:3, CreatedAt:time.Date(2026, time.April, 4, 20, 54, 19, 67949000, time.Local), ModifiedAt:time.Date(2026, time.April, 4, 20, 54, 19, 67949000, time.Local)} "}
+{"level":"debug","ts":"2026-04-04T20:54:19.068+0200","caller":"api/devicesGrpc.go:115","msg":"gRPC - SetValue - updatedStatus models.Status{Value:3, CreatedAt:time.Date(2026, time.April, 4, 20, 54, 19, 68787000, time.Local), ModifiedAt:time.Date(2026, time.April, 4, 20, 54, 19, 68787000, time.Local)} "}
+{"level":"debug","ts":"2026-04-04T20:54:19.069+0200","caller":"api/devicesGrpc.go:115","msg":"gRPC - SetValue - updatedStatus models.Status{Value:26, CreatedAt:time.Date(2026, time.April, 4, 20, 54, 19, 69581000, time.Local), ModifiedAt:time.Date(2026, time.April, 4, 20, 54, 19, 69581000, time.Local)} "}
+{"level":"debug","ts":"2026-04-04T20:54:19.073+0200","caller":"api/devicesGrpc.go:187","msg":"gRPC - SetValue - Sending response"}
+{"level":"info","ts":"2026-04-04T20:54:22.109+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T20:54:22.159+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T20:54:22.202+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T20:54:22.243+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T20:54:22.574+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T20:54:22.615+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T20:54:22.659+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T20:54:22.700+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T20:54:28.477+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T20:54:28.520+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T20:54:28.573+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T20:54:28.616+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T20:54:28.932+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T20:54:28.975+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T20:54:29.028+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T20:54:29.070+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T20:54:30.395+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T20:54:30.438+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T20:54:30.482+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T20:54:30.533+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T20:54:30.851+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T20:54:30.896+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T20:54:30.939+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T20:54:30.993+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T20:56:43.194+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: 962b365e-8fed-4f44-a5fb-53dd477c2312, mac: 84:F7:03:89:42:94"}
+{"level":"info","ts":"2026-04-04T20:56:43.235+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: 962b365e-8fed-4f44-a5fb-53dd477c2312, mac: 84:F7:03:89:42:94"}
+{"level":"info","ts":"2026-04-04T20:56:43.605+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: 962b365e-8fed-4f44-a5fb-53dd477c2312, mac: 84:F7:03:89:42:94"}
+{"level":"info","ts":"2026-04-04T20:56:43.654+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: 962b365e-8fed-4f44-a5fb-53dd477c2312, mac: 84:F7:03:89:42:94"}
+{"level":"info","ts":"2026-04-04T20:56:48.418+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T20:56:48.462+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T20:56:48.503+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T20:56:48.546+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T20:56:48.873+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T20:56:48.916+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T20:56:48.957+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T20:56:49.001+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T20:56:51.289+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T20:56:51.328+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T20:56:51.368+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T20:56:51.418+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T20:56:51.736+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T20:56:51.789+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T20:56:51.830+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T20:56:51.872+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T23:51:12.529+0200","caller":"initialization/logger_config.go:16","msg":"InitLogger - called"}
+{"level":"debug","ts":"2026-04-04T23:51:12.530+0200","caller":"initialization/environment.go:19","msg":"InitLogger - envFile = /Users/ks89/git/home-anthill/api-devices/.env"}
+{"level":"info","ts":"2026-04-04T23:51:12.530+0200","caller":"initialization/environment.go:41","msg":"ENVIRONMENT = "}
+{"level":"info","ts":"2026-04-04T23:51:12.530+0200","caller":"initialization/environment.go:42","msg":"LOG_FOLDER = ./logs/"}
+{"level":"info","ts":"2026-04-04T23:51:12.530+0200","caller":"initialization/environment.go:43","msg":"MONGODB_URL = ****"}
+{"level":"info","ts":"2026-04-04T23:51:12.530+0200","caller":"initialization/environment.go:44","msg":"MQTT_URL = tcp://localhost"}
+{"level":"info","ts":"2026-04-04T23:51:12.530+0200","caller":"initialization/environment.go:45","msg":"MQTT_PORT = 1883"}
+{"level":"info","ts":"2026-04-04T23:51:12.530+0200","caller":"initialization/environment.go:46","msg":"MQTT_TLS = false"}
+{"level":"info","ts":"2026-04-04T23:51:12.530+0200","caller":"initialization/environment.go:47","msg":"MQTT_CA_FILE = "}
+{"level":"info","ts":"2026-04-04T23:51:12.530+0200","caller":"initialization/environment.go:48","msg":"MQTT_CERT_FILE = "}
+{"level":"info","ts":"2026-04-04T23:51:12.530+0200","caller":"initialization/environment.go:49","msg":"MQTT_KEY_FILE = "}
+{"level":"info","ts":"2026-04-04T23:51:12.530+0200","caller":"initialization/environment.go:50","msg":"MQTT_CLIENT_ID = apiDevices"}
+{"level":"info","ts":"2026-04-04T23:51:12.530+0200","caller":"initialization/environment.go:51","msg":"MQTT_AUTH = true"}
+{"level":"info","ts":"2026-04-04T23:51:12.530+0200","caller":"initialization/environment.go:52","msg":"MQTT_USER = ****"}
+{"level":"info","ts":"2026-04-04T23:51:12.530+0200","caller":"initialization/environment.go:53","msg":"MQTT_PASSWORD = ****"}
+{"level":"info","ts":"2026-04-04T23:51:12.530+0200","caller":"initialization/environment.go:54","msg":"GRPC_URL = :50051"}
+{"level":"info","ts":"2026-04-04T23:51:12.530+0200","caller":"initialization/environment.go:55","msg":"GRPC_TLS = false"}
+{"level":"info","ts":"2026-04-04T23:51:12.530+0200","caller":"initialization/environment.go:56","msg":"CERT_FOLDER_PATH = cert"}
+{"level":"info","ts":"2026-04-04T23:51:12.530+0200","caller":"db/database.go:22","msg":"InitDb - connecting to MongoDB..."}
+{"level":"info","ts":"2026-04-04T23:51:12.539+0200","caller":"db/database.go:36","msg":"Connected to MongoDB"}
+{"level":"info","ts":"2026-04-04T23:51:12.539+0200","caller":"initialization/server.go:26","msg":"StartServer - gRPC - Initializing..."}
+{"level":"info","ts":"2026-04-04T23:51:12.539+0200","caller":"initialization/server.go:46","msg":"StartServer - gRPC TLS security not enabled"}
+{"level":"info","ts":"2026-04-04T23:51:12.540+0200","caller":"initialization/server.go:64","msg":"StartServer - gRPC client listening at [::]:50051"}
+{"level":"info","ts":"2026-04-04T23:51:12.540+0200","caller":"api-devices/main.go:17","msg":"MQTT starting..."}
+{"level":"fatal","ts":"2026-04-04T23:51:12.540+0200","caller":"api-devices/main.go:22","msg":"MQTT connection failed: network Error : dial tcp [::1]:1883: connect: connection refused","stacktrace":"main.main\n\t/Users/ks89/git/home-anthill/api-devices/main.go:22\nruntime.main\n\t/opt/homebrew/Cellar/go/1.26.1/libexec/src/runtime/proc.go:290"}
+{"level":"info","ts":"2026-04-04T23:51:30.861+0200","caller":"initialization/logger_config.go:16","msg":"InitLogger - called"}
+{"level":"debug","ts":"2026-04-04T23:51:30.861+0200","caller":"initialization/environment.go:19","msg":"InitLogger - envFile = /Users/ks89/git/home-anthill/api-devices/.env"}
+{"level":"info","ts":"2026-04-04T23:51:30.861+0200","caller":"initialization/environment.go:41","msg":"ENVIRONMENT = "}
+{"level":"info","ts":"2026-04-04T23:51:30.861+0200","caller":"initialization/environment.go:42","msg":"LOG_FOLDER = ./logs/"}
+{"level":"info","ts":"2026-04-04T23:51:30.861+0200","caller":"initialization/environment.go:43","msg":"MONGODB_URL = ****"}
+{"level":"info","ts":"2026-04-04T23:51:30.861+0200","caller":"initialization/environment.go:44","msg":"MQTT_URL = tcp://localhost"}
+{"level":"info","ts":"2026-04-04T23:51:30.861+0200","caller":"initialization/environment.go:45","msg":"MQTT_PORT = 1883"}
+{"level":"info","ts":"2026-04-04T23:51:30.861+0200","caller":"initialization/environment.go:46","msg":"MQTT_TLS = false"}
+{"level":"info","ts":"2026-04-04T23:51:30.861+0200","caller":"initialization/environment.go:47","msg":"MQTT_CA_FILE = "}
+{"level":"info","ts":"2026-04-04T23:51:30.861+0200","caller":"initialization/environment.go:48","msg":"MQTT_CERT_FILE = "}
+{"level":"info","ts":"2026-04-04T23:51:30.861+0200","caller":"initialization/environment.go:49","msg":"MQTT_KEY_FILE = "}
+{"level":"info","ts":"2026-04-04T23:51:30.861+0200","caller":"initialization/environment.go:50","msg":"MQTT_CLIENT_ID = apiDevices"}
+{"level":"info","ts":"2026-04-04T23:51:30.861+0200","caller":"initialization/environment.go:51","msg":"MQTT_AUTH = true"}
+{"level":"info","ts":"2026-04-04T23:51:30.861+0200","caller":"initialization/environment.go:52","msg":"MQTT_USER = ****"}
+{"level":"info","ts":"2026-04-04T23:51:30.861+0200","caller":"initialization/environment.go:53","msg":"MQTT_PASSWORD = ****"}
+{"level":"info","ts":"2026-04-04T23:51:30.861+0200","caller":"initialization/environment.go:54","msg":"GRPC_URL = :50051"}
+{"level":"info","ts":"2026-04-04T23:51:30.861+0200","caller":"initialization/environment.go:55","msg":"GRPC_TLS = false"}
+{"level":"info","ts":"2026-04-04T23:51:30.861+0200","caller":"initialization/environment.go:56","msg":"CERT_FOLDER_PATH = cert"}
+{"level":"info","ts":"2026-04-04T23:51:30.862+0200","caller":"db/database.go:22","msg":"InitDb - connecting to MongoDB..."}
+{"level":"info","ts":"2026-04-04T23:51:30.870+0200","caller":"db/database.go:36","msg":"Connected to MongoDB"}
+{"level":"info","ts":"2026-04-04T23:51:30.870+0200","caller":"initialization/server.go:26","msg":"StartServer - gRPC - Initializing..."}
+{"level":"info","ts":"2026-04-04T23:51:30.870+0200","caller":"initialization/server.go:46","msg":"StartServer - gRPC TLS security not enabled"}
+{"level":"info","ts":"2026-04-04T23:51:30.870+0200","caller":"initialization/server.go:64","msg":"StartServer - gRPC client listening at [::]:50051"}
+{"level":"info","ts":"2026-04-04T23:51:30.870+0200","caller":"api-devices/main.go:17","msg":"MQTT starting..."}
+{"level":"info","ts":"2026-04-04T23:51:30.874+0200","caller":"api-devices/main.go:24","msg":"MQTT running"}
+{"level":"info","ts":"2026-04-04T23:51:30.874+0200","caller":"api-devices/main.go:28","msg":"gRPC - starting server at [::]:50051"}
+{"level":"info","ts":"2026-04-04T23:57:13.340+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: 962b365e-8fed-4f44-a5fb-53dd477c2312, mac: 84:F7:03:89:42:94"}
+{"level":"info","ts":"2026-04-04T23:57:13.392+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: 962b365e-8fed-4f44-a5fb-53dd477c2312, mac: 84:F7:03:89:42:94"}
+{"level":"info","ts":"2026-04-04T23:57:13.477+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: 962b365e-8fed-4f44-a5fb-53dd477c2312, mac: 84:F7:03:89:42:94"}
+{"level":"info","ts":"2026-04-04T23:57:13.529+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: 962b365e-8fed-4f44-a5fb-53dd477c2312, mac: 84:F7:03:89:42:94"}
+{"level":"info","ts":"2026-04-04T23:57:13.636+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: 962b365e-8fed-4f44-a5fb-53dd477c2312, mac: 84:F7:03:89:42:94"}
+{"level":"info","ts":"2026-04-04T23:57:13.688+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: 962b365e-8fed-4f44-a5fb-53dd477c2312, mac: 84:F7:03:89:42:94"}
+{"level":"info","ts":"2026-04-04T23:57:32.257+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T23:57:32.299+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T23:57:32.354+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T23:57:32.408+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T23:57:32.487+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T23:57:32.534+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T23:57:32.585+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T23:57:32.638+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T23:57:34.058+0200","caller":"api/devicesGrpc.go:69","msg":"gRPC - SetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64, featureValues: 4"}
+{"level":"debug","ts":"2026-04-04T23:57:34.065+0200","caller":"api/devicesGrpc.go:115","msg":"gRPC - SetValue - updatedStatus models.Status{Value:1, CreatedAt:time.Date(2026, time.April, 4, 23, 57, 34, 65073000, time.Local), ModifiedAt:time.Date(2026, time.April, 4, 23, 57, 34, 65073000, time.Local)} "}
+{"level":"debug","ts":"2026-04-04T23:57:34.068+0200","caller":"api/devicesGrpc.go:115","msg":"gRPC - SetValue - updatedStatus models.Status{Value:3, CreatedAt:time.Date(2026, time.April, 4, 23, 57, 34, 68685000, time.Local), ModifiedAt:time.Date(2026, time.April, 4, 23, 57, 34, 68685000, time.Local)} "}
+{"level":"debug","ts":"2026-04-04T23:57:34.068+0200","caller":"api/devicesGrpc.go:115","msg":"gRPC - SetValue - updatedStatus models.Status{Value:3, CreatedAt:time.Date(2026, time.April, 4, 23, 57, 34, 68685000, time.Local), ModifiedAt:time.Date(2026, time.April, 4, 23, 57, 34, 68685000, time.Local)} "}
+{"level":"debug","ts":"2026-04-04T23:57:34.069+0200","caller":"api/devicesGrpc.go:115","msg":"gRPC - SetValue - updatedStatus models.Status{Value:26, CreatedAt:time.Date(2026, time.April, 4, 23, 57, 34, 69493000, time.Local), ModifiedAt:time.Date(2026, time.April, 4, 23, 57, 34, 69493000, time.Local)} "}
+{"level":"debug","ts":"2026-04-04T23:57:34.074+0200","caller":"api/devicesGrpc.go:187","msg":"gRPC - SetValue - Sending response"}
+{"level":"info","ts":"2026-04-04T23:57:34.121+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T23:57:34.165+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T23:57:34.217+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T23:57:34.274+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T23:57:34.377+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T23:57:34.429+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T23:57:34.483+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}
+{"level":"info","ts":"2026-04-04T23:57:34.534+0200","caller":"api/devicesGrpc.go:39","msg":"gRPC - GetValue - Called for deviceUuid: da0b9476-e10e-4b25-8a80-cdca6a6b0ef8, mac: 34:B4:72:70:21:64"}

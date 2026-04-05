@@ -23,10 +23,9 @@ const (
 
 type GetValueRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	DeviceUuid    string                 `protobuf:"bytes,2,opt,name=deviceUuid,proto3" json:"deviceUuid,omitempty"`
-	FeatureUuid   string                 `protobuf:"bytes,3,opt,name=featureUuid,proto3" json:"featureUuid,omitempty"`
-	FeatureName   string                 `protobuf:"bytes,4,opt,name=featureName,proto3" json:"featureName,omitempty"`
+	DeviceUuid    string                 `protobuf:"bytes,2,opt,name=device_uuid,json=deviceUuid,proto3" json:"device_uuid,omitempty"`
+	FeatureUuid   string                 `protobuf:"bytes,3,opt,name=feature_uuid,json=featureUuid,proto3" json:"feature_uuid,omitempty"`
+	FeatureName   string                 `protobuf:"bytes,4,opt,name=feature_name,json=featureName,proto3" json:"feature_name,omitempty"`
 	Mac           string                 `protobuf:"bytes,5,opt,name=mac,proto3" json:"mac,omitempty"`
 	ApiToken      string                 `protobuf:"bytes,6,opt,name=api_token,json=apiToken,proto3" json:"api_token,omitempty"`
 	unknownFields protoimpl.UnknownFields
@@ -61,13 +60,6 @@ func (x *GetValueRequest) ProtoReflect() protoreflect.Message {
 // Deprecated: Use GetValueRequest.ProtoReflect.Descriptor instead.
 func (*GetValueRequest) Descriptor() ([]byte, []int) {
 	return file_api_device_device_proto_rawDescGZIP(), []int{0}
-}
-
-func (x *GetValueRequest) GetId() string {
-	if x != nil {
-		return x.Id
-	}
-	return ""
 }
 
 func (x *GetValueRequest) GetDeviceUuid() string {
@@ -107,8 +99,8 @@ func (x *GetValueRequest) GetApiToken() string {
 
 type GetValueResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	FeatureUuid   string                 `protobuf:"bytes,1,opt,name=featureUuid,proto3" json:"featureUuid,omitempty"`
-	FeatureName   string                 `protobuf:"bytes,2,opt,name=featureName,proto3" json:"featureName,omitempty"`
+	FeatureUuid   string                 `protobuf:"bytes,1,opt,name=feature_uuid,json=featureUuid,proto3" json:"feature_uuid,omitempty"`
+	FeatureName   string                 `protobuf:"bytes,2,opt,name=feature_name,json=featureName,proto3" json:"feature_name,omitempty"`
 	Value         float32                `protobuf:"fixed32,3,opt,name=value,proto3" json:"value,omitempty"`
 	CreatedAt     int64                  `protobuf:"varint,4,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
 	ModifiedAt    int64                  `protobuf:"varint,5,opt,name=modified_at,json=modifiedAt,proto3" json:"modified_at,omitempty"`
@@ -183,11 +175,10 @@ func (x *GetValueResponse) GetModifiedAt() int64 {
 
 type SetValuesRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"` // device id
-	DeviceUuid    string                 `protobuf:"bytes,2,opt,name=deviceUuid,proto3" json:"deviceUuid,omitempty"`
+	DeviceUuid    string                 `protobuf:"bytes,2,opt,name=device_uuid,json=deviceUuid,proto3" json:"device_uuid,omitempty"`
 	Mac           string                 `protobuf:"bytes,3,opt,name=mac,proto3" json:"mac,omitempty"`
 	ApiToken      string                 `protobuf:"bytes,4,opt,name=api_token,json=apiToken,proto3" json:"api_token,omitempty"`
-	FeatureValues []*SetValueRequest     `protobuf:"bytes,5,rep,name=featureValues,proto3" json:"featureValues,omitempty"`
+	FeatureValues []*SetValueRequest     `protobuf:"bytes,5,rep,name=feature_values,json=featureValues,proto3" json:"feature_values,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -222,13 +213,6 @@ func (*SetValuesRequest) Descriptor() ([]byte, []int) {
 	return file_api_device_device_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *SetValuesRequest) GetId() string {
-	if x != nil {
-		return x.Id
-	}
-	return ""
-}
-
 func (x *SetValuesRequest) GetDeviceUuid() string {
 	if x != nil {
 		return x.DeviceUuid
@@ -259,8 +243,8 @@ func (x *SetValuesRequest) GetFeatureValues() []*SetValueRequest {
 
 type SetValueRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	FeatureUuid   string                 `protobuf:"bytes,1,opt,name=featureUuid,proto3" json:"featureUuid,omitempty"`
-	FeatureName   string                 `protobuf:"bytes,2,opt,name=featureName,proto3" json:"featureName,omitempty"`
+	FeatureUuid   string                 `protobuf:"bytes,1,opt,name=feature_uuid,json=featureUuid,proto3" json:"feature_uuid,omitempty"`
+	FeatureName   string                 `protobuf:"bytes,2,opt,name=feature_name,json=featureName,proto3" json:"feature_name,omitempty"`
 	Value         float32                `protobuf:"fixed32,3,opt,name=value,proto3" json:"value,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -373,42 +357,38 @@ var File_api_device_device_proto protoreflect.FileDescriptor
 
 const file_api_device_device_proto_rawDesc = "" +
 	"\n" +
-	"\x17api/device/device.proto\x12\x06device\"\xb4\x01\n" +
-	"\x0fGetValueRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1e\n" +
-	"\n" +
-	"deviceUuid\x18\x02 \x01(\tR\n" +
-	"deviceUuid\x12 \n" +
-	"\vfeatureUuid\x18\x03 \x01(\tR\vfeatureUuid\x12 \n" +
-	"\vfeatureName\x18\x04 \x01(\tR\vfeatureName\x12\x10\n" +
+	"\x17api/device/device.proto\x12\x06device\"\xad\x01\n" +
+	"\x0fGetValueRequest\x12\x1f\n" +
+	"\vdevice_uuid\x18\x02 \x01(\tR\n" +
+	"deviceUuid\x12!\n" +
+	"\ffeature_uuid\x18\x03 \x01(\tR\vfeatureUuid\x12!\n" +
+	"\ffeature_name\x18\x04 \x01(\tR\vfeatureName\x12\x10\n" +
 	"\x03mac\x18\x05 \x01(\tR\x03mac\x12\x1b\n" +
-	"\tapi_token\x18\x06 \x01(\tR\bapiToken\"\xac\x01\n" +
-	"\x10GetValueResponse\x12 \n" +
-	"\vfeatureUuid\x18\x01 \x01(\tR\vfeatureUuid\x12 \n" +
-	"\vfeatureName\x18\x02 \x01(\tR\vfeatureName\x12\x14\n" +
+	"\tapi_token\x18\x06 \x01(\tR\bapiTokenJ\x04\b\x01\x10\x02\"\xae\x01\n" +
+	"\x10GetValueResponse\x12!\n" +
+	"\ffeature_uuid\x18\x01 \x01(\tR\vfeatureUuid\x12!\n" +
+	"\ffeature_name\x18\x02 \x01(\tR\vfeatureName\x12\x14\n" +
 	"\x05value\x18\x03 \x01(\x02R\x05value\x12\x1d\n" +
 	"\n" +
 	"created_at\x18\x04 \x01(\x03R\tcreatedAt\x12\x1f\n" +
 	"\vmodified_at\x18\x05 \x01(\x03R\n" +
-	"modifiedAt\"\xb0\x01\n" +
-	"\x10SetValuesRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1e\n" +
-	"\n" +
-	"deviceUuid\x18\x02 \x01(\tR\n" +
+	"modifiedAt\"\xa8\x01\n" +
+	"\x10SetValuesRequest\x12\x1f\n" +
+	"\vdevice_uuid\x18\x02 \x01(\tR\n" +
 	"deviceUuid\x12\x10\n" +
 	"\x03mac\x18\x03 \x01(\tR\x03mac\x12\x1b\n" +
-	"\tapi_token\x18\x04 \x01(\tR\bapiToken\x12=\n" +
-	"\rfeatureValues\x18\x05 \x03(\v2\x17.device.SetValueRequestR\rfeatureValues\"k\n" +
-	"\x0fSetValueRequest\x12 \n" +
-	"\vfeatureUuid\x18\x01 \x01(\tR\vfeatureUuid\x12 \n" +
-	"\vfeatureName\x18\x02 \x01(\tR\vfeatureName\x12\x14\n" +
+	"\tapi_token\x18\x04 \x01(\tR\bapiToken\x12>\n" +
+	"\x0efeature_values\x18\x05 \x03(\v2\x17.device.SetValueRequestR\rfeatureValuesJ\x04\b\x01\x10\x02\"m\n" +
+	"\x0fSetValueRequest\x12!\n" +
+	"\ffeature_uuid\x18\x01 \x01(\tR\vfeatureUuid\x12!\n" +
+	"\ffeature_name\x18\x02 \x01(\tR\vfeatureName\x12\x14\n" +
 	"\x05value\x18\x03 \x01(\x02R\x05value\"D\n" +
 	"\x10SetValueResponse\x12\x16\n" +
 	"\x06status\x18\x01 \x01(\tR\x06status\x12\x18\n" +
 	"\amessage\x18\x02 \x01(\tR\amessage2\x8c\x01\n" +
 	"\x06Device\x12?\n" +
 	"\bGetValue\x12\x17.device.GetValueRequest\x1a\x18.device.GetValueResponse\"\x00\x12A\n" +
-	"\tSetValues\x12\x18.device.SetValuesRequest\x1a\x18.device.SetValueResponse\"\x00B1Z/github.com/Ks89/home-anthill/api-devices/deviceb\x06proto3"
+	"\tSetValues\x12\x18.device.SetValuesRequest\x1a\x18.device.SetValueResponse\"\x00B\x18Z\x16api-devices/api/deviceb\x06proto3"
 
 var (
 	file_api_device_device_proto_rawDescOnce sync.Once
@@ -431,7 +411,7 @@ var file_api_device_device_proto_goTypes = []any{
 	(*SetValueResponse)(nil), // 4: device.SetValueResponse
 }
 var file_api_device_device_proto_depIdxs = []int32{
-	3, // 0: device.SetValuesRequest.featureValues:type_name -> device.SetValueRequest
+	3, // 0: device.SetValuesRequest.feature_values:type_name -> device.SetValueRequest
 	0, // 1: device.Device.GetValue:input_type -> device.GetValueRequest
 	2, // 2: device.Device.SetValues:input_type -> device.SetValuesRequest
 	1, // 3: device.Device.GetValue:output_type -> device.GetValueResponse

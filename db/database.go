@@ -3,6 +3,7 @@ package db
 import (
 	"context"
 	"os"
+	"time"
 
 	"go.mongodb.org/mongo-driver/v2/mongo"
 	"go.mongodb.org/mongo-driver/v2/mongo/options"
@@ -10,29 +11,26 @@ import (
 	"go.uber.org/zap"
 )
 
-var client *mongo.Client
-
-// Collections struct
+// Collections holds references to all MongoDB collections used by the service.
 type Collections struct {
 	Controllers *mongo.Collection
 }
 
-// InitDb function
+// InitDb connects to MongoDB and returns the client.
 func InitDb(logger *zap.SugaredLogger) *mongo.Client {
-	mongoDBUrl := os.Getenv("MONGODB_URL")
-	logger.Info("InitDb - connecting to MongoDB URL = " + mongoDBUrl)
+	mongoDBURL := os.Getenv("MONGODB_URL")
+	logger.Info("InitDb - connecting to MongoDB...")
 
 	// connect to DB
-	var err error
-	client, err = mongo.Connect(options.Client().ApplyURI(mongoDBUrl))
+	client, err := mongo.Connect(options.Client().ApplyURI(mongoDBURL))
 	if err != nil {
 		logger.Fatalf("Cannot connect to MongoDB: %s", err)
-		panic("Cannot connect to MongoDB")
 	}
 	if os.Getenv("ENV") != "prod" {
-		if err = client.Ping(context.TODO(), readpref.Primary()); err != nil {
+		pingCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		defer cancel()
+		if err = client.Ping(pingCtx, readpref.Primary()); err != nil {
 			logger.Fatalf("Cannot ping MongoDB: %s", err)
-			panic("Cannot ping MongoDB")
 		}
 	}
 	logger.Info("Connected to MongoDB")
@@ -40,18 +38,17 @@ func InitDb(logger *zap.SugaredLogger) *mongo.Client {
 	return client
 }
 
-// GetCollections function
+// GetCollections returns the MongoDB collections for the appropriate database.
 func GetCollections(client *mongo.Client) *Collections {
 	return &Collections{
 		Controllers: client.Database(getDbName()).Collection("controllers"),
 	}
 }
 
-// getDbName function
+// getDbName returns the database name based on the environment.
 func getDbName() string {
 	if os.Getenv("ENV") == "testing" {
 		return "controllers-test"
-	} else {
-		return "controllers"
 	}
+	return "controllers"
 }

@@ -1,6 +1,6 @@
 package models
 
-// MqttFeatureValue struct
+// MqttFeatureValue represents the MQTT payload for a device feature value update.
 type MqttFeatureValue struct {
 	// profile info
 	APIToken string `json:"apiToken"`

@@ -27,7 +27,6 @@ var _ = Describe("Register", func() {
 	var client *mongo.Client
 	var controllersCollection *mongo.Collection
 	var server *grpc.Server
-	var listener net.Listener
 
 	apiToken := "473a4861-632b-4915-b01e-cf1d41896601"
 	deviceUUID := uuid.NewString()
@@ -150,8 +149,10 @@ var _ = Describe("Register", func() {
 	}
 
 	BeforeEach(func() {
-		logger, server, listener, ctx, client = initialization.Start()
-		defer logger.Sync()
+		var listener net.Listener
+		logger, server, listener, client = initialization.Start()
+		go server.Serve(listener) //nolint:errcheck
+		ctx = context.Background()
 
 		controllersCollection = db.GetCollections(client).Controllers
 
@@ -160,26 +161,19 @@ var _ = Describe("Register", func() {
 		if token := mqttclient.Connect(); token.Wait() && token.Error() != nil {
 			panic(token.Error())
 		}
-
-		logger.Infof("gRPC server listening at %v", listener.Addr())
-		go func() {
-			_ = server.Serve(listener)
-		}()
 	})
 
 	AfterEach(func() {
-		errLis := listener.Close()
-		Expect(errLis).ShouldNot(HaveOccurred())
-
 		server.Stop()
 
-		testutils.DropAllCollections(ctx, controllersCollection)
+		testutils.DropCollection(ctx, controllersCollection)
 
+		logger.Sync()
 	})
 
 	Context("calling register grpc api", func() {
 		It("should register on controller and return success", func() {
-			client := api.NewRegisterGrpc(ctx, logger, client)
+			client := api.NewRegisterGrpc(logger, client)
 			response, err := client.Register(ctx, &register.RegisterRequest{
 				// profile info
 				ApiToken:       on.APIToken,
@@ -212,7 +206,7 @@ var _ = Describe("Register", func() {
 		})
 
 		It("should register mode controller and return success", func() {
-			client := api.NewRegisterGrpc(ctx, logger, client)
+			client := api.NewRegisterGrpc(logger, client)
 			response, err := client.Register(ctx, &register.RegisterRequest{
 				// profile info
 				ApiToken:       mode.APIToken,
@@ -245,7 +239,7 @@ var _ = Describe("Register", func() {
 		})
 
 		It("should register fanSpeed controller and return success", func() {
-			client := api.NewRegisterGrpc(ctx, logger, client)
+			client := api.NewRegisterGrpc(logger, client)
 			response, err := client.Register(ctx, &register.RegisterRequest{
 				// profile info
 				ApiToken:       fanSpeed.APIToken,
@@ -278,7 +272,7 @@ var _ = Describe("Register", func() {
 		})
 
 		It("should register setpoint controller and return success", func() {
-			client := api.NewRegisterGrpc(ctx, logger, client)
+			client := api.NewRegisterGrpc(logger, client)
 			response, err := client.Register(ctx, &register.RegisterRequest{
 				// profile info
 				ApiToken:       setpoint.APIToken,
@@ -311,7 +305,7 @@ var _ = Describe("Register", func() {
 		})
 
 		It("should register tolerance controller and return success", func() {
-			client := api.NewRegisterGrpc(ctx, logger, client)
+			client := api.NewRegisterGrpc(logger, client)
 			response, err := client.Register(ctx, &register.RegisterRequest{
 				// profile info
 				ApiToken:       tolerance.APIToken,
@@ -345,7 +339,7 @@ var _ = Describe("Register", func() {
 	})
 
 	It("should return error, because profileOwnerId is not a valid ObjectId", func() {
-		client := api.NewRegisterGrpc(ctx, logger, client)
+		client := api.NewRegisterGrpc(logger, client)
 		response, err := client.Register(ctx, &register.RegisterRequest{
 			// profile info
 			ApiToken:       tolerance.APIToken,
@@ -358,6 +352,6 @@ var _ = Describe("Register", func() {
 		})
 		Expect(response).Should(BeNil())
 		Expect(err).Should(HaveOccurred())
-		Expect(err.Error()).To(Equal("the provided hex string is not a valid ObjectID"))
+		Expect(err.Error()).Should(ContainSubstring("not a valid ObjectID"))
 	})
 })

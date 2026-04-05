@@ -1,7 +1,6 @@
 package initialization
 
 import (
-	"context"
 	"net"
 
 	"go.mongodb.org/mongo-driver/v2/mongo"
@@ -9,20 +8,18 @@ import (
 	"google.golang.org/grpc"
 )
 
-// Start function
-func Start() (*zap.SugaredLogger, *grpc.Server, net.Listener, context.Context, *mongo.Client) {
+// Start initializes logger, environment, database, and gRPC server.
+func Start() (*zap.SugaredLogger, *grpc.Server, net.Listener, *mongo.Client) {
 	// 1. Init logger
 	logger := InitLogger()
 
 	// 2. Init env
-	InitEnv(logger)
+	if err := InitEnv(logger); err != nil {
+		logger.Fatalf("InitEnv failed: %v", err)
+	}
 
 	// 3. Init and start gRPC server
-	server, listener, ctx, client := StartServer(logger)
-	//logger.Infof("gRPC server listening at %v", listener.Addr())
-	//if errGrpc := server.Serve(listener); errGrpc != nil {
-	//  logger.Fatalf("gRPC server failed to serve: %v", errGrpc)
-	//}
+	server, listener, client := StartServer(logger)
 
-	return logger, server, listener, ctx, client
+	return logger, server, listener, client
 }

@@ -5,9 +5,9 @@ import (
 	pbd "api-devices/api/device"
 	pbr "api-devices/api/register"
 	"api-devices/db"
-	"context"
 	"net"
 	"os"
+	"path/filepath"
 
 	"go.mongodb.org/mongo-driver/v2/mongo"
 	"go.uber.org/zap"
@@ -17,11 +17,8 @@ import (
 	"google.golang.org/grpc/health/grpc_health_v1"
 )
 
-// StartServer function
-func StartServer(logger *zap.SugaredLogger) (*grpc.Server, net.Listener, context.Context, *mongo.Client) {
-	// Initialization
-	ctx := context.Background()
-
+// StartServer initializes the database, gRPC server, and network listener.
+func StartServer(logger *zap.SugaredLogger) (*grpc.Server, net.Listener, *mongo.Client) {
 	// Connect to DB
 	client := db.InitDb(logger)
 
@@ -29,15 +26,16 @@ func StartServer(logger *zap.SugaredLogger) (*grpc.Server, net.Listener, context
 	logger.Info("StartServer - gRPC - Initializing...")
 
 	// Create gRPC API instances
-	registerGrpc := api.NewRegisterGrpc(ctx, logger, client)
-	devicesGrpc := api.NewDevicesGrpc(ctx, logger, client)
+	registerGrpc := api.NewRegisterGrpc(logger, client)
+	devicesGrpc := api.NewDevicesGrpc(logger, client)
 
 	// Create new gRPC server with (blank) options
 	var server *grpc.Server
 	if os.Getenv("GRPC_TLS") == "true" {
+		certFolder := os.Getenv("CERT_FOLDER_PATH")
 		creds, credErr := credentials.NewServerTLSFromFile(
-			os.Getenv("CERT_FOLDER_PATH")+"/server-cert.pem",
-			os.Getenv("CERT_FOLDER_PATH")+"/server-key.pem",
+			filepath.Join(certFolder, "server-cert.pem"),
+			filepath.Join(certFolder, "server-key.pem"),
 		)
 		if credErr != nil {
 			logger.Fatalf("StartServer - NewServerTLSFromFile error %v", credErr)
@@ -63,7 +61,7 @@ func StartServer(logger *zap.SugaredLogger) (*grpc.Server, net.Listener, context
 	if errGrpc != nil {
 		logger.Fatalf("StartServer - failed to listen: %v", errGrpc)
 	}
-	logger.Info("StartServer - gRPC client listening at " + listener.Addr().String())
+	logger.Infof("StartServer - gRPC client listening at %s", listener.Addr().String())
 
-	return server, listener, ctx, client
+	return server, listener, client
 }

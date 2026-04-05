@@ -6,7 +6,7 @@ import (
 	"go.mongodb.org/mongo-driver/v2/bson"
 )
 
-// Type string
+// Type represents the category of a controller (e.g. controller, sensor).
 type Type string
 
 // ControllerType and SensorType types
@@ -15,14 +15,14 @@ const (
 	SensorType     Type = "sensor"
 )
 
-// Status struct
+// Status represents the current state and timestamps of a device feature.
 type Status struct {
 	Value      float32   `json:"value" bson:"value"`
 	CreatedAt  time.Time `json:"createdAt" bson:"createdAt"`
 	ModifiedAt time.Time `json:"modifiedAt" bson:"modifiedAt"`
 }
 
-// Controller struct
+// Controller represents a device feature document stored in MongoDB.
 type Controller struct {
 	// profile info
 	ProfileOwnerID bson.ObjectID `json:"profileOwnerId" bson:"profileOwnerId"`

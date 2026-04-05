@@ -5,48 +5,59 @@ import (
 	"crypto/x509"
 	"fmt"
 	"os"
+	"strings"
+	"sync"
 	"time"
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
+	"go.uber.org/zap"
 )
 
 const qos byte = 0
 
-var mqttClient mqtt.Client
+var (
+	mu         sync.RWMutex
+	mqttClient mqtt.Client
+)
 
-var defaultHandler mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Message) {
-	fmt.Printf("---UNKNOWN TOPIC---")
-	fmt.Printf("MessageID: %d\n", msg.MessageID())
-	fmt.Printf("Topic: %s\n", msg.Topic())
-	fmt.Printf("Payload: %s\n", msg.Payload())
-	fmt.Printf("------------------")
-}
-
-// InitMqtt function
-func InitMqtt() {
-	opts := getMqttConfig()
+// InitMqtt creates and configures the MQTT client.
+func InitMqtt(log *zap.SugaredLogger) error {
+	opts, err := getMqttConfig(log)
+	if err != nil {
+		return err
+	}
+	mu.Lock()
+	defer mu.Unlock()
 	mqttClient = mqtt.NewClient(opts)
+	return nil
 }
 
-// SetMqttClient public function used in testing to set a MQTT Mock Client
+// SetMqttClient is a public function used in testing to set a MQTT Mock Client
 // as mqttClient local private variable.
 func SetMqttClient(client mqtt.Client) {
+	mu.Lock()
+	defer mu.Unlock()
 	mqttClient = client
 }
 
-// Connect function
+// Connect initiates a connection to the MQTT broker.
 func Connect() mqtt.Token {
+	mu.RLock()
+	defer mu.RUnlock()
 	return mqttClient.Connect()
 }
 
-// SendValues function
-func SendValues(deviceUuid string, messageJSON []byte) mqtt.Token {
-	fmt.Printf("SendValues - publishing message... %s", messageJSON)
-	return mqttClient.Publish("devices/"+deviceUuid+"/values", qos, false, messageJSON)
+// SendValues publishes device feature values to the MQTT topic for the given device.
+func SendValues(deviceUUID string, messageJSON []byte) mqtt.Token {
+	// Sanitize deviceUUID to prevent MQTT topic injection via wildcards or extra separators
+	sanitized := strings.NewReplacer("+", "", "#", "", "/", "").Replace(deviceUUID)
+	mu.RLock()
+	defer mu.RUnlock()
+	return mqttClient.Publish(fmt.Sprintf("devices/%s/values", sanitized), qos, false, messageJSON)
 }
 
-func getMqttConfig() *mqtt.ClientOptions {
-	mqttURL := os.Getenv("MQTT_URL") + ":" + os.Getenv("MQTT_PORT")
+func getMqttConfig(log *zap.SugaredLogger) (*mqtt.ClientOptions, error) {
+	mqttURL := fmt.Sprintf("%s:%s", os.Getenv("MQTT_URL"), os.Getenv("MQTT_PORT"))
 	user := os.Getenv("MQTT_USER")
 	password := os.Getenv("MQTT_PASSWORD")
 	clientID := os.Getenv("MQTT_CLIENT_ID")
@@ -59,39 +70,42 @@ func getMqttConfig() *mqtt.ClientOptions {
 	opts.SetKeepAlive(5 * time.Second)
 	opts.SetPingTimeout(2 * time.Second)
 	opts.AddBroker(mqttURL)
-	opts.SetDefaultPublishHandler(defaultHandler)
+	opts.SetClientID(clientID)
+	opts.SetDefaultPublishHandler(func(client mqtt.Client, msg mqtt.Message) {
+		log.Warnf("UNKNOWN TOPIC - MessageID: %d, Topic: %s", msg.MessageID(), msg.Topic())
+	})
 
 	if os.Getenv("MQTT_TLS") == "true" {
-		tlsConfig := newTLSConfig()
-		opts.SetClientID(clientID).SetTLSConfig(tlsConfig)
-	} else {
-		opts.SetClientID(clientID)
+		tlsConfig, err := newTLSConfig()
+		if err != nil {
+			return nil, fmt.Errorf("getMqttConfig - TLS configuration failed: %w", err)
+		}
+		opts.SetTLSConfig(tlsConfig)
 	}
-	return opts
+	return opts, nil
 }
 
-func newTLSConfig() *tls.Config {
+func newTLSConfig() (*tls.Config, error) {
 	// Import trusted certificates from CAfile.pem.
-	// Alternatively, manually add CA certificates to
-	// default openssl CA bundle.
 	certpool := x509.NewCertPool()
 	pemCerts, err := os.ReadFile(os.Getenv("MQTT_CA_FILE"))
-	if err == nil {
-		certpool.AppendCertsFromPEM(pemCerts)
+	if err != nil {
+		return nil, fmt.Errorf("newTLSConfig - cannot read CA file: %w", err)
+	}
+	if !certpool.AppendCertsFromPEM(pemCerts) {
+		return nil, fmt.Errorf("newTLSConfig - failed to append CA certificates")
 	}
 
 	// Import client certificate/key pair
 	cert, err := tls.LoadX509KeyPair(os.Getenv("MQTT_CERT_FILE"), os.Getenv("MQTT_KEY_FILE"))
 	if err != nil {
-		panic(err)
+		return nil, fmt.Errorf("newTLSConfig - cannot load key pair: %w", err)
 	}
 
-	// Just to print out the client certificate..
 	cert.Leaf, err = x509.ParseCertificate(cert.Certificate[0])
 	if err != nil {
-		panic(err)
+		return nil, fmt.Errorf("newTLSConfig - cannot parse certificate: %w", err)
 	}
-	fmt.Println(cert.Leaf)
 
 	// Create tls.Config with desired tls properties
 	return &tls.Config{
@@ -110,5 +124,5 @@ func newTLSConfig() *tls.Config {
 		InsecureSkipVerify: false,
 		// Certificates = list of certs client sends to server.
 		Certificates: []tls.Certificate{cert},
-	}
+	}, nil
 }

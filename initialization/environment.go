@@ -1,7 +1,9 @@
 package initialization
 
 import (
+	"fmt"
 	"os"
+	"path/filepath"
 	"regexp"
 
 	"github.com/joho/godotenv"
@@ -10,43 +12,46 @@ import (
 
 const projectDirName = "api-devices"
 
-// InitEnv function
-func InitEnv(logger *zap.SugaredLogger) {
+// InitEnv loads the .env file and prints the environment configuration.
+func InitEnv(logger *zap.SugaredLogger) error {
 	// Load .env file and print variables
 	envFile, err := readEnv()
 	logger.Debugf("InitLogger - envFile = %s", envFile)
 	if err != nil {
-		logger.Error("InitEnv - failed to load the env file")
-		panic("InitEnv - failed to load the env file at ./" + envFile)
+		return fmt.Errorf("failed to load the env file at ./%s: %w", envFile, err)
 	}
 	printEnv(logger)
+	return nil
 }
 
 func readEnv() (string, error) {
 	// solution taken from https://stackoverflow.com/a/68347834/3590376
 	projectName := regexp.MustCompile(`^(.*` + projectDirName + `)`)
-	currentWorkDirectory, _ := os.Getwd()
+	currentWorkDirectory, err := os.Getwd()
+	if err != nil {
+		return "", fmt.Errorf("cannot get current working directory: %w", err)
+	}
 	rootPath := projectName.Find([]byte(currentWorkDirectory))
-	envFilePath := string(rootPath) + `/.env`
-	err := godotenv.Load(envFilePath)
+	envFilePath := filepath.Join(string(rootPath), ".env")
+	err = godotenv.Load(envFilePath)
 	return envFilePath, err
 }
 
 func printEnv(logger *zap.SugaredLogger) {
-	logger.Info("ENVIRONMENT = " + os.Getenv("ENV"))
-	logger.Info("LOG_FOLDER = " + os.Getenv("LOG_FOLDER"))
-	logger.Info("MONGODB_URL = " + os.Getenv("MONGODB_URL"))
-	logger.Info("MQTT_URL = " + os.Getenv("MQTT_URL"))
-	logger.Info("MQTT_PORT = " + os.Getenv("MQTT_PORT"))
-	logger.Info("MQTT_TLS = " + os.Getenv("MQTT_TLS"))
-	logger.Info("MQTT_CA_FILE = " + os.Getenv("MQTT_CA_FILE"))
-	logger.Info("MQTT_CERT_FILE = " + os.Getenv("MQTT_CERT_FILE"))
-	logger.Info("MQTT_KEY_FILE = " + os.Getenv("MQTT_KEY_FILE"))
-	logger.Info("MQTT_CLIENT_ID = " + os.Getenv("MQTT_CLIENT_ID"))
-	logger.Info("MQTT_AUTH = " + os.Getenv("MQTT_AUTH"))
-	logger.Info("MQTT_USER = " + os.Getenv("MQTT_USER"))
-	logger.Info("MQTT_PASSWORD = " + os.Getenv("MQTT_PASSWORD"))
-	logger.Info("GRPC_URL = " + os.Getenv("GRPC_URL"))
-	logger.Info("GRPC_TLS = " + os.Getenv("GRPC_TLS"))
-	logger.Info("CERT_FOLDER_PATH = " + os.Getenv("CERT_FOLDER_PATH"))
+	logger.Infof("ENVIRONMENT = %s", os.Getenv("ENV"))
+	logger.Infof("LOG_FOLDER = %s", os.Getenv("LOG_FOLDER"))
+	logger.Info("MONGODB_URL = ****")
+	logger.Infof("MQTT_URL = %s", os.Getenv("MQTT_URL"))
+	logger.Infof("MQTT_PORT = %s", os.Getenv("MQTT_PORT"))
+	logger.Infof("MQTT_TLS = %s", os.Getenv("MQTT_TLS"))
+	logger.Infof("MQTT_CA_FILE = %s", os.Getenv("MQTT_CA_FILE"))
+	logger.Infof("MQTT_CERT_FILE = %s", os.Getenv("MQTT_CERT_FILE"))
+	logger.Infof("MQTT_KEY_FILE = %s", os.Getenv("MQTT_KEY_FILE"))
+	logger.Infof("MQTT_CLIENT_ID = %s", os.Getenv("MQTT_CLIENT_ID"))
+	logger.Infof("MQTT_AUTH = %s", os.Getenv("MQTT_AUTH"))
+	logger.Info("MQTT_USER = ****")
+	logger.Info("MQTT_PASSWORD = ****")
+	logger.Infof("GRPC_URL = %s", os.Getenv("GRPC_URL"))
+	logger.Infof("GRPC_TLS = %s", os.Getenv("GRPC_TLS"))
+	logger.Infof("CERT_FOLDER_PATH = %s", os.Getenv("CERT_FOLDER_PATH"))
 }

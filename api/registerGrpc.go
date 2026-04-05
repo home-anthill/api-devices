@@ -10,39 +10,44 @@ import (
 	"go.mongodb.org/mongo-driver/v2/mongo"
 	"go.mongodb.org/mongo-driver/v2/mongo/options"
 	"go.uber.org/zap"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
-// RegisterGrpc struct
+// RegisterGrpc implements the gRPC Registration service.
 type RegisterGrpc struct {
 	register.UnimplementedRegistrationServer
-	client                *mongo.Client
 	controllersCollection *mongo.Collection
-	ctx                   context.Context
 	logger                *zap.SugaredLogger
 }
 
-// NewRegisterGrpc function
-func NewRegisterGrpc(ctx context.Context, logger *zap.SugaredLogger, client *mongo.Client) *RegisterGrpc {
+// NewRegisterGrpc creates a new RegisterGrpc handler.
+func NewRegisterGrpc(logger *zap.SugaredLogger, client *mongo.Client) *RegisterGrpc {
 	return &RegisterGrpc{
-		client:                client,
 		controllersCollection: db.GetCollections(client).Controllers,
-		ctx:                   ctx,
 		logger:                logger,
 	}
 }
 
-// Register function
-func (handler *RegisterGrpc) Register(ctx context.Context, in *register.RegisterRequest) (*register.RegisterReply, error) {
-	handler.logger.Infof("gRPC - Register - Called with in: %#v", in)
+// Register upserts a device controller document in the database.
+func (r *RegisterGrpc) Register(ctx context.Context, in *register.RegisterRequest) (*register.RegisterReply, error) {
+	r.logger.Infof("gRPC - Register - Called for deviceUuid: %s, mac: %s", in.DeviceUuid, in.Mac)
+
+	if in.Feature == nil {
+		r.logger.Error("gRPC - Register - missing feature field")
+		return nil, status.Errorf(codes.InvalidArgument, "feature is required")
+	}
 
 	profileOwnerID, err := bson.ObjectIDFromHex(in.ProfileOwnerId)
 	if err != nil {
-		handler.logger.Error("gRPC - Register - Cannot update db because profileOwnerID = " + in.ProfileOwnerId + " is not a valid ObjectID")
-		return nil, err
+		r.logger.Errorf("gRPC - Register - Cannot update db: profileOwnerId is not a valid ObjectID: %v", err)
+		return nil, status.Errorf(codes.InvalidArgument, "profileOwnerId is not a valid ObjectID: %v", err)
 	}
 
+	now := time.Now()
+
 	// query to upsert the registered controller
-	var setQuery = bson.M{
+	setQuery := bson.M{
 		"$set": bson.M{
 			// profile info
 			"profileOwnerId": profileOwnerID,
@@ -56,15 +61,15 @@ func (handler *RegisterGrpc) Register(ctx context.Context, in *register.Register
 			"featureUuid":       in.Feature.FeatureUuid,
 			"featureName":       in.Feature.FeatureName,
 			"status.value":      -999,
-			"status.createdAt":  time.Now(),
-			"status.modifiedAt": time.Now(),
+			"status.createdAt":  now,
+			"status.modifiedAt": now,
 			// dates
-			"createdAt":  time.Now(),
-			"modifiedAt": time.Now(),
+			"createdAt":  now,
+			"modifiedAt": now,
 		},
 	}
 
-	_, err = handler.controllersCollection.UpdateOne(handler.ctx, bson.M{
+	_, err = r.controllersCollection.UpdateOne(ctx, bson.M{
 		// profile info
 		"profileOwnerId": profileOwnerID,
 		"apiToken":       in.ApiToken,
@@ -79,9 +84,9 @@ func (handler *RegisterGrpc) Register(ctx context.Context, in *register.Register
 	}, setQuery, options.UpdateOne().SetUpsert(true))
 
 	if err != nil {
-		handler.logger.Error("gRPC - Register - Cannot update db with the registered device with mac " + in.Mac)
-		return nil, err
+		r.logger.Errorf("gRPC - Register - Cannot update db with the registered device: %v", err)
+		return nil, status.Errorf(codes.Internal, "cannot register controller: %v", err)
 	}
 
-	return &register.RegisterReply{Status: "200", Message: "Inserted"}, err
+	return &register.RegisterReply{Status: "200", Message: "Inserted"}, nil
 }

@@ -2,24 +2,24 @@ syntax = "proto3";
 
 package register;
 
-option go_package = "github.com/Ks89/home-anthill/api-devices/register";
+option go_package = "api-devices/api/register";
 
 service Registration {
   rpc Register (RegisterRequest) returns (RegisterReply) {}
 }
 
 message RegisterFeature {
-  string featureUuid = 1;
-  string featureName = 2;
+  string feature_uuid = 1;
+  string feature_name = 2;
 }
 
 message RegisterRequest {
-  string deviceUuid = 1;
+  string device_uuid = 1;
   string mac = 2;
   string manufacturer = 3;
   string model = 4;
-  string profileOwnerId = 5;
-  string apiToken = 6;
+  string profile_owner_id = 5;
+  string api_token = 6;
   RegisterFeature feature = 7;
 }
 

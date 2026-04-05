@@ -8,12 +8,12 @@ import (
 	"go.mongodb.org/mongo-driver/v2/mongo"
 )
 
-func DropAllCollections(ctx context.Context, collectionDevices *mongo.Collection) {
+func DropCollection(ctx context.Context, collectionDevices *mongo.Collection) {
 	err := collectionDevices.Drop(ctx)
 	gomega.Expect(err).ShouldNot(gomega.HaveOccurred())
 }
 
-func FindOneById[T interface{}](ctx context.Context, collection *mongo.Collection, id bson.ObjectID) (T, error) {
+func FindOneById[T any](ctx context.Context, collection *mongo.Collection, id bson.ObjectID) (T, error) {
 	var model T
 	err := collection.FindOne(ctx, bson.M{
 		"_id": id,
@@ -21,7 +21,7 @@ func FindOneById[T interface{}](ctx context.Context, collection *mongo.Collectio
 	return model, err
 }
 
-func FindOneByKeyValue[T interface{}](ctx context.Context, collection *mongo.Collection, key, value string) (T, error) {
+func FindOneByKeyValue[T any](ctx context.Context, collection *mongo.Collection, key, value string) (T, error) {
 	var model T
 	err := collection.FindOne(ctx, bson.M{
 		key: value,
@@ -29,7 +29,7 @@ func FindOneByKeyValue[T interface{}](ctx context.Context, collection *mongo.Col
 	return model, err
 }
 
-func InsertOne(ctx context.Context, collection *mongo.Collection, obj interface{}) error {
+func InsertOne(ctx context.Context, collection *mongo.Collection, obj any) error {
 	_, err := collection.InsertOne(ctx, obj)
 	return err
 }
