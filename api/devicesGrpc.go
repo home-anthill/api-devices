@@ -10,6 +10,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/v2/bson"
 	"go.mongodb.org/mongo-driver/v2/mongo"
 	"go.uber.org/zap"
@@ -37,6 +38,11 @@ func NewDevicesGrpc(logger *zap.SugaredLogger, client *mongo.Client) *DevicesGrp
 // GetValue retrieves the current value of a device feature from the database.
 func (d *DevicesGrpc) GetValue(ctx context.Context, in *device.GetValueRequest) (*device.GetValueResponse, error) {
 	d.logger.Infof("gRPC - GetValue - Called for deviceUuid: %s, mac: %s", in.DeviceUuid, in.Mac)
+
+	if _, err := uuid.Parse(in.DeviceUuid); err != nil {
+		d.logger.Errorf("gRPC - GetValue - invalid deviceUuid: %v", err)
+		return nil, status.Errorf(codes.InvalidArgument, "deviceUuid is not a valid UUID")
+	}
 
 	var controller models.Controller
 	err := d.controllersCollection.FindOne(ctx, bson.M{
@@ -72,6 +78,10 @@ func (d *DevicesGrpc) SetValues(ctx context.Context, in *device.SetValuesRequest
 	if len(in.FeatureValues) > maxFeatureValues {
 		d.logger.Errorf("gRPC - SetValue - too many feature values: %d", len(in.FeatureValues))
 		return nil, status.Errorf(codes.InvalidArgument, "too many feature values: got %d, max %d", len(in.FeatureValues), maxFeatureValues)
+	}
+	if _, err := uuid.Parse(in.DeviceUuid); err != nil {
+		d.logger.Errorf("gRPC - SetValue - invalid deviceUuid: %v", err)
+		return nil, status.Errorf(codes.InvalidArgument, "deviceUuid is not a valid UUID")
 	}
 
 	results := make([]models.MqttFeatureValue, len(in.FeatureValues))
@@ -175,7 +185,11 @@ func (d *DevicesGrpc) SetValues(ctx context.Context, in *device.SetValuesRequest
 		d.logger.Errorf("gRPC - SetValue - Cannot create mqtt payload: %v", err)
 		return nil, status.Errorf(codes.Internal, "cannot create mqtt payload: %v", err)
 	}
-	t := mqttclient.SendValues(in.DeviceUuid, messageJSON)
+	t, err := mqttclient.SendValues(in.DeviceUuid, messageJSON)
+	if err != nil {
+		d.logger.Errorf("gRPC - SetValue - invalid MQTT publish topic: %v", err)
+		return nil, status.Errorf(codes.InvalidArgument, "deviceUuid is not a valid UUID")
+	}
 	if !t.WaitTimeout(devicesTimeout) {
 		d.logger.Error("gRPC - SetValue - MQTT publish timed out")
 		return nil, status.Errorf(codes.Unavailable, "mqtt publish timed out")

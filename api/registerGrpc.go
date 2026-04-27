@@ -6,6 +6,7 @@ import (
 	"context"
 	"time"
 
+	"github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/v2/bson"
 	"go.mongodb.org/mongo-driver/v2/mongo"
 	"go.mongodb.org/mongo-driver/v2/mongo/options"
@@ -36,6 +37,10 @@ func (r *RegisterGrpc) Register(ctx context.Context, in *register.RegisterReques
 	if in.Feature == nil {
 		r.logger.Error("gRPC - Register - missing feature field")
 		return nil, status.Errorf(codes.InvalidArgument, "feature is required")
+	}
+	if _, err := uuid.Parse(in.DeviceUuid); err != nil {
+		r.logger.Errorf("gRPC - Register - deviceUuid is not a valid UUID: %v", err)
+		return nil, status.Errorf(codes.InvalidArgument, "deviceUuid is not a valid UUID")
 	}
 
 	profileOwnerID, err := bson.ObjectIDFromHex(in.ProfileOwnerId)

@@ -5,11 +5,11 @@ import (
 	"crypto/x509"
 	"fmt"
 	"os"
-	"strings"
 	"sync"
 	"time"
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
+	"github.com/google/uuid"
 	"go.uber.org/zap"
 )
 
@@ -48,12 +48,14 @@ func Connect() mqtt.Token {
 }
 
 // SendValues publishes device feature values to the MQTT topic for the given device.
-func SendValues(deviceUUID string, messageJSON []byte) mqtt.Token {
-	// Sanitize deviceUUID to prevent MQTT topic injection via wildcards or extra separators
-	sanitized := strings.NewReplacer("+", "", "#", "", "/", "").Replace(deviceUUID)
+func SendValues(deviceUUID string, messageJSON []byte) (mqtt.Token, error) {
+	if _, err := uuid.Parse(deviceUUID); err != nil {
+		return nil, fmt.Errorf("invalid device UUID: %w", err)
+	}
+
 	mu.RLock()
 	defer mu.RUnlock()
-	return mqttClient.Publish(fmt.Sprintf("devices/%s/values", sanitized), qos, false, messageJSON)
+	return mqttClient.Publish(fmt.Sprintf("devices/%s/values", deviceUUID), qos, false, messageJSON), nil
 }
 
 func getMqttConfig(log *zap.SugaredLogger) (*mqtt.ClientOptions, error) {
