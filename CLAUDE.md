@@ -136,8 +136,8 @@ Copy `.env_template` to `.env` (gitignored). Key variables:
 | `MQTT_KEY_FILE` | MQTT client key (if MQTT_TLS=true) | `cert/client.key` |
 | `MQTT_CLIENT_ID` | MQTT client identifier | `apiDevices` |
 | `MQTT_AUTH` | Enable MQTT authentication | `true`/`false` |
-| `MQTT_USER` | MQTT username (if MQTT_AUTH=true) | `mosquser` |
-| `MQTT_PASSWORD` | MQTT password (if MQTT_AUTH=true) | `Password1!` |
+| `MQTT_USER` | MQTT username (if MQTT_AUTH=true) | `api_devices_pub` |
+| `MQTT_PASSWORD` | MQTT password (if MQTT_AUTH=true) | `ApiDevicesPassword1!` |
 
 ## Code Patterns and Conventions
 
