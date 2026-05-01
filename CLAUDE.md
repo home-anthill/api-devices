@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**api-devices** is a gRPC microservice in the home-anthill home automation platform. It manages device registration and control, using MongoDB for persistence and MQTT for device communication. Written in Go 1.26.
+**api-devices** is a gRPC microservice in the home-anthill home automation platform. It manages device registration and control, using MongoDB for persistence and MQTT for device communication. Written in Go 1.26.2.
 
 ## Build & Development Commands
 
@@ -26,10 +26,10 @@ make check          # Run govulncheck to find vulnerabilities
 
 **Run a single test:**
 ```bash
-ENV=testing go test -v -count=1 -run "TestName" ./integration_tests/
+ENV=testing go test -v -count=1 -run "TestName" ./...
 ```
 
-**Test framework:** Ginkgo v2 (BDD) + Gomega. Tests are in `integration_tests/` and require a running MongoDB replica set (uses `controllers-test` database when `ENV=testing`). Coverage is generated to `./coverage/` (HTML + SVG treemap).
+**Test framework:** Ginkgo v2 (BDD) + Gomega for integration tests; standard Go tests are used where simpler unit coverage is sufficient. Integration tests require a running MongoDB replica set and use `controllers-test` when `ENV=testing`. Coverage is generated to `./coverage/` (HTML + SVG treemap).
 
 ## Architecture
 
@@ -56,9 +56,11 @@ Defined in `api/` with protobuf specs in `api/{device,register}/`:
 - **Device** (`devicesGrpc.go`): Implements two RPCs:
   - `GetValue`: Reads device feature value from MongoDB, returns with timestamps
   - `SetValues`: Updates device feature values in MongoDB and publishes to MQTT topic `devices/{uuid}/values`. Uses goroutines and mutexes to handle multiple feature values concurrently. Capped at 100 values per request to prevent resource exhaustion.
+  - Both RPCs reject malformed device UUIDs with `codes.InvalidArgument`.
 
 - **Registration** (`registerGrpc.go`): Implements one RPC:
   - `Register`: Upserts device/controller documents in MongoDB with profile, device info, features, and status
+  - Rejects missing `Feature`, malformed device UUIDs, and invalid `profileOwnerId` ObjectIDs with `codes.InvalidArgument`
 
 - **Health** (`grpc_health_v1`): Standard gRPC health check probe. Registered in `server.go`
 
@@ -85,14 +87,15 @@ Defined in `api/` with protobuf specs in `api/{device,register}/`:
 `mqttclient/` implements a global client with:
 - TLS support (mTLS with CA cert, client cert/key)
 - Publishes to topic `devices/{uuid}/values` at QoS 0
-- **Security:** Device UUIDs are sanitized (removing `+`, `#`, `/`) before interpolation to prevent MQTT topic injection
+- **Security:** Device UUIDs are validated with `github.com/google/uuid` before interpolation to prevent MQTT topic injection
 - `InitMqtt()` propagates TLS configuration errors instead of panicking
+- Client access is expected to use Mosquitto ACL-oriented publisher credentials (`api_devices_pub` by default)
 - QoS 0 (at-most-once delivery) chosen for real-time sensor data where occasional loss is acceptable
 
 ## Docker
 
 Multi-stage Dockerfile:
-- **Builder stage**: Go 1.26 Alpine container, compiles the binary
+- **Builder stage**: Go 1.26.2 Alpine container, installs protoc tooling, verifies modules, and compiles the binary
 - **Runtime stage**: Hardened Alpine base image (`dhi.io/alpine-base:3.23`)
   - Runs as non-root (UID 65534/nobody)
   - Pre-creates `/logs` directory owned by `nobody`
@@ -101,13 +104,15 @@ Multi-stage Dockerfile:
 
 ## Testing
 
-**Setup**: MongoDB replica set must be running (see `docs/local-development.md` for `sharded-mongodb-compose` setup).
+**Setup**: MongoDB replica set must be running for integration tests that exercise MongoDB behavior.
 
 **Test structure:**
-- **Integration tests** in `integration_tests/`: Connect to real MongoDB (replica set required for transactions)
+- **Repository tests** run with `make test`: generates protobuf, runs vet, shadow, staticcheck, then `ENV=testing go test -v -race -count=1 -coverpkg ./... -coverprofile ./coverage/profile.cov ./...`
+- **Integration tests** in `integration_tests/`: Connect to real MongoDB (replica set required for transaction-capable CI setups)
   - Use `controllers-test` database (auto-created on first run)
   - Ginkgo v2 (BDD) test framework with Gomega matchers
   - Test suites in `*_test.go` files; main suite in `tests_suite_test.go`
+- **MQTT unit tests** in `mqttclient/`: Validate UUID rejection/acceptance with the mock MQTT client
 - **MQTT mocking** via `testutils/mqtt_client_mock.go`: Fully mocked, no broker required
 - **DB helpers** in `testutils/db_utils.go`: Drop collections, find documents, insert test data
 
@@ -149,7 +154,7 @@ Copy `.env_template` to `.env` (gitignored). Key variables:
 - Use per-request context in gRPC handlers (never cache `context.Background()`)
 
 **Security patterns:**
-- **UUID sanitization**: Device UUIDs are stripped of `+`, `#`, `/` before MQTT topic interpolation to prevent topic injection
+- **UUID validation**: Device UUIDs are parsed with `github.com/google/uuid` in gRPC handlers and MQTT publishing before topic interpolation
 - **Request validation**: gRPC handlers validate apiToken, deviceUuid, mac fields with FindOne queries (encodes auth check in DB lookup)
 - **Credential masking**: MONGODB_URL, MQTT_USER, MQTT_PASSWORD are masked in startup logs
 - **TLS error propagation**: TLS misconfiguration returns errors instead of panicking
