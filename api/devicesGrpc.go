@@ -6,8 +6,12 @@ import (
 	"api-devices/models"
 	mqttclient "api-devices/mqttclient"
 	"context"
+	"crypto/hmac"
+	"crypto/rand"
+	"crypto/sha256"
+	"encoding/hex"
 	"encoding/json"
-	"sync"
+	"fmt"
 	"time"
 
 	"github.com/google/uuid"
@@ -19,6 +23,7 @@ import (
 )
 
 const devicesTimeout = 5 * time.Second
+const commandNonceBytes = 16
 
 // DevicesGrpc implements the gRPC Device service.
 type DevicesGrpc struct {
@@ -33,6 +38,50 @@ func NewDevicesGrpc(logger *zap.SugaredLogger, client *mongo.Client) *DevicesGrp
 		controllersCollection: db.GetCollections(client).Controllers,
 		logger:                logger,
 	}
+}
+
+func randomHex(byteLen int) (string, error) {
+	bytes := make([]byte, byteLen)
+	if _, err := rand.Read(bytes); err != nil {
+		return "", fmt.Errorf("generate nonce: %w", err)
+	}
+	return hex.EncodeToString(bytes), nil
+}
+
+func hmacSha256Hex(key, message string) string {
+	mac := hmac.New(sha256.New, []byte(key))
+	mac.Write([]byte(message))
+	return hex.EncodeToString(mac.Sum(nil))
+}
+
+func signCommand(controller models.Controller, value float32, timestamp int64, nonce string) (models.MqttFeatureValue, error) {
+	payload := models.Payload{Value: value}
+	payloadJSON, err := json.Marshal(payload)
+	if err != nil {
+		return models.MqttFeatureValue{}, fmt.Errorf("marshal command payload: %w", err)
+	}
+	signedPayload := fmt.Sprintf("%s\n%s\n%s\n%s\n%s\n%d\n%s\n%s",
+		controller.DeviceUUID,
+		controller.Mac,
+		controller.Model,
+		controller.FeatureUUID,
+		controller.FeatureName,
+		timestamp,
+		nonce,
+		string(payloadJSON),
+	)
+
+	return models.MqttFeatureValue{
+		DeviceUUID:  controller.DeviceUUID,
+		Mac:         controller.Mac,
+		Model:       controller.Model,
+		FeatureUUID: controller.FeatureUUID,
+		FeatureName: controller.FeatureName,
+		Timestamp:   timestamp,
+		Nonce:       nonce,
+		Signature:   hmacSha256Hex(controller.APIToken, signedPayload),
+		Payload:     payload,
+	}, nil
 }
 
 // GetValue retrieves the current value of a device feature from the database.
@@ -85,99 +134,69 @@ func (d *DevicesGrpc) SetValues(ctx context.Context, in *device.SetValuesRequest
 	}
 
 	results := make([]models.MqttFeatureValue, len(in.FeatureValues))
-	var mu sync.Mutex
-	var firstErr error
-
-	var wg sync.WaitGroup
 	for i, value := range in.FeatureValues {
-		wg.Add(1)
-		go func(idx int, val *device.SetValueRequest) {
-			defer wg.Done()
+		var controller models.Controller
+		err := d.controllersCollection.FindOne(ctx, bson.M{
+			// profile info
+			"apiToken": in.ApiToken,
+			// device info
+			"deviceUuid": in.DeviceUuid,
+			"mac":        in.Mac,
+			// feature info
+			"featureUuid": value.FeatureUuid,
+			"featureName": value.FeatureName,
+		}).Decode(&controller)
+		if err != nil {
+			d.logger.Errorf("gRPC - SetValue - Cannot find device: %v", err)
+			return nil, status.Errorf(codes.NotFound, "cannot find controller: %v", err)
+		}
 
-			var controller models.Controller
-			err := d.controllersCollection.FindOne(ctx, bson.M{
-				// profile info
-				"apiToken": in.ApiToken,
-				// device info
-				"deviceUuid": in.DeviceUuid,
-				"mac":        in.Mac,
-				// feature info
-				"featureUuid": val.FeatureUuid,
-				"featureName": val.FeatureName,
-			}).Decode(&controller)
-			if err != nil {
-				mu.Lock()
-				if firstErr == nil {
-					d.logger.Errorf("gRPC - SetValue - Cannot find device: %v", err)
-					firstErr = status.Errorf(codes.NotFound, "cannot find controller: %v", err)
-				}
-				mu.Unlock()
-				return
-			}
+		now := time.Now()
+		updatedStatus := models.Status{
+			Value:      value.Value,
+			CreatedAt:  now,
+			ModifiedAt: now,
+		}
 
-			now := time.Now()
-			updatedStatus := models.Status{
-				Value:      val.Value,
-				CreatedAt:  now,
-				ModifiedAt: now,
-			}
+		d.logger.Debugf("gRPC - SetValue - updatedStatus %#v ", updatedStatus)
 
-			d.logger.Debugf("gRPC - SetValue - updatedStatus %#v ", updatedStatus)
+		updateResult, err := d.controllersCollection.UpdateOne(ctx, bson.M{
+			// profile info
+			"apiToken": in.ApiToken,
+			// device info
+			"deviceUuid": in.DeviceUuid,
+			"mac":        in.Mac,
+			// feature info
+			"featureUuid": value.FeatureUuid,
+			"featureName": value.FeatureName,
+		}, bson.M{
+			"$set": bson.M{
+				"status":     updatedStatus,
+				"modifiedAt": now,
+			},
+		})
 
-			updateResult, err := d.controllersCollection.UpdateOne(ctx, bson.M{
-				// profile info
-				"apiToken": in.ApiToken,
-				// device info
-				"deviceUuid": in.DeviceUuid,
-				"mac":        in.Mac,
-				// feature info
-				"featureUuid": val.FeatureUuid,
-				"featureName": val.FeatureName,
-			}, bson.M{
-				"$set": bson.M{
-					"status":     updatedStatus,
-					"modifiedAt": now,
-				},
-			})
+		if err != nil {
+			d.logger.Errorf("gRPC - SetValue - Cannot update db with the registered device: %v", err)
+			return nil, status.Errorf(codes.Internal, "cannot update controller: %v", err)
+		}
 
-			if err != nil {
-				mu.Lock()
-				if firstErr == nil {
-					d.logger.Errorf("gRPC - SetValue - Cannot update db with the registered device: %v", err)
-					firstErr = status.Errorf(codes.Internal, "cannot update controller: %v", err)
-				}
-				mu.Unlock()
-				return
-			}
+		if updateResult.MatchedCount != 1 {
+			d.logger.Error("gRPC - SetValue - Cannot find a unique controller")
+			return nil, status.Errorf(codes.NotFound, "cannot find a unique controller")
+		}
 
-			if updateResult.MatchedCount != 1 {
-				mu.Lock()
-				if firstErr == nil {
-					d.logger.Error("gRPC - SetValue - Cannot find a unique controller")
-					firstErr = status.Errorf(codes.NotFound, "cannot find a unique controller")
-				}
-				mu.Unlock()
-				return
-			}
-
-			results[idx] = models.MqttFeatureValue{
-				// profile info
-				APIToken: controller.APIToken,
-				// device info
-				DeviceUUID: controller.DeviceUUID,
-				Mac:        controller.Mac,
-				Model:      controller.Model,
-				// feature info
-				FeatureUUID: controller.FeatureUUID,
-				FeatureName: controller.FeatureName,
-				Value:       val.Value,
-			}
-		}(i, value)
-	}
-	wg.Wait()
-
-	if firstErr != nil {
-		return nil, firstErr
+		nonce, err := randomHex(commandNonceBytes)
+		if err != nil {
+			d.logger.Errorf("gRPC - SetValue - Cannot generate command nonce: %v", err)
+			return nil, status.Errorf(codes.Internal, "cannot generate command nonce: %v", err)
+		}
+		command, err := signCommand(controller, value.Value, now.Unix(), nonce)
+		if err != nil {
+			d.logger.Errorf("gRPC - SetValue - Cannot sign mqtt payload: %v", err)
+			return nil, status.Errorf(codes.Internal, "cannot sign mqtt payload: %v", err)
+		}
+		results[i] = command
 	}
 
 	messageJSON, err := json.Marshal(results)

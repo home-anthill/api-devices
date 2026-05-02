@@ -2,6 +2,7 @@ package testutils
 
 import (
 	"context"
+	"os"
 
 	"github.com/onsi/gomega"
 	"go.mongodb.org/mongo-driver/v2/bson"
@@ -9,6 +10,8 @@ import (
 )
 
 func DropCollection(ctx context.Context, collectionDevices *mongo.Collection) {
+	gomega.Expect(os.Getenv("ENV")).To(gomega.Equal("testing"), "refusing to drop collections outside ENV=testing")
+	gomega.Expect(collectionDevices.Database().Name()).To(gomega.Equal("controllers-test"), "refusing to drop non-test database")
 	err := collectionDevices.Drop(ctx)
 	gomega.Expect(err).ShouldNot(gomega.HaveOccurred())
 }
