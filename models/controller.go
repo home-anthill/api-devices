@@ -17,7 +17,7 @@ const (
 
 // Status represents the current state and timestamps of a device feature.
 type Status struct {
-	Value      float32   `json:"value" bson:"value"`
+	Value      float32   `json:"value" bson:"value,truncate"`
 	CreatedAt  time.Time `json:"createdAt" bson:"createdAt"`
 	ModifiedAt time.Time `json:"modifiedAt" bson:"modifiedAt"`
 }
