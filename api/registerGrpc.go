@@ -3,6 +3,7 @@ package api
 import (
 	"api-devices/api/register"
 	"api-devices/db"
+	"api-devices/utils"
 	"context"
 	"time"
 
@@ -50,13 +51,24 @@ func (r *RegisterGrpc) Register(ctx context.Context, in *register.RegisterReques
 	}
 
 	now := time.Now()
+	apiTokenEncrypted, err := utils.EncryptAPIToken(in.ApiToken)
+	if err != nil {
+		r.logger.Errorf("gRPC - Register - Cannot encrypt apiToken: %v", err)
+		return nil, status.Errorf(codes.Internal, "cannot register controller")
+	}
+	apiTokenHash, err := utils.HashAPIToken(in.ApiToken)
+	if err != nil {
+		r.logger.Errorf("gRPC - Register - Cannot hash apiToken: %v", err)
+		return nil, status.Errorf(codes.Internal, "cannot register controller")
+	}
 
 	// query to upsert the registered controller
 	setQuery := bson.M{
 		"$set": bson.M{
 			// profile info
-			"profileOwnerId": profileOwnerID,
-			"apiToken":       in.ApiToken,
+			"profileOwnerId":    profileOwnerID,
+			"apiTokenHash":      apiTokenHash,
+			"apiTokenEncrypted": apiTokenEncrypted,
 			// device info
 			"deviceUuid":   in.DeviceUuid,
 			"mac":          in.Mac,
@@ -77,7 +89,7 @@ func (r *RegisterGrpc) Register(ctx context.Context, in *register.RegisterReques
 	_, err = r.controllersCollection.UpdateOne(ctx, bson.M{
 		// profile info
 		"profileOwnerId": profileOwnerID,
-		"apiToken":       in.ApiToken,
+		"apiTokenHash":   apiTokenHash,
 		// device info
 		"deviceUuid":   in.DeviceUuid,
 		"mac":          in.Mac,

@@ -9,12 +9,21 @@ import (
 // This is our mqtt.Client struct mock!
 // It must implement all methods of mqtt.Client to
 // implicitly implement that interface
-type mqttClientMock struct{}
+type mqttClientMock struct {
+	publishErr error
+}
 
 // NewMockClient Exposes a builder function to instantiate the
 // mock and return it as mqtt.Client interface
 func NewMockClient() mqtt.Client {
 	c := &mqttClientMock{}
+	return c
+}
+
+// NewMockClientWithPublishError returns a mock MQTT client whose Publish token
+// completes with the provided error.
+func NewMockClientWithPublishError(err error) mqtt.Client {
+	c := &mqttClientMock{publishErr: err}
 	return c
 }
 
@@ -41,7 +50,7 @@ func (c *mqttClientMock) OptionsReader() mqtt.ClientOptionsReader {
 	return mqtt.ClientOptionsReader{}
 }
 func (c *mqttClientMock) Publish(topic string, qos byte, retained bool, payload interface{}) mqtt.Token {
-	t := newToken()
+	t := newTokenWithError(c.publishErr)
 	go func() {
 		t.release()
 	}()
@@ -79,7 +88,12 @@ type token struct {
 }
 
 func newToken() *token {
+	return newTokenWithError(nil)
+}
+
+func newTokenWithError(err error) *token {
 	return &token{
+		err:  err,
 		done: make(chan struct{}),
 	}
 }

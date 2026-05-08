@@ -25,8 +25,10 @@ type Status struct {
 // Controller represents a device feature document stored in MongoDB.
 type Controller struct {
 	// profile info
-	ProfileOwnerID bson.ObjectID `json:"profileOwnerId" bson:"profileOwnerId"`
-	APIToken       string        `json:"apiToken" bson:"apiToken"`
+	ProfileOwnerID    bson.ObjectID `json:"profileOwnerId" bson:"profileOwnerId"`
+	APIToken          string        `json:"apiToken" bson:"-"`
+	APITokenHash      string        `json:"-" bson:"apiTokenHash,omitempty"`
+	APITokenEncrypted string        `json:"-" bson:"apiTokenEncrypted,omitempty"`
 	// device info
 	ID           bson.ObjectID `json:"id" bson:"_id"`
 	DeviceUUID   string        `json:"deviceUuid" bson:"deviceUuid"`

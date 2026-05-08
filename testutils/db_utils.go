@@ -1,6 +1,8 @@
 package testutils
 
 import (
+	"api-devices/models"
+	"api-devices/utils"
 	"context"
 	"os"
 
@@ -33,6 +35,20 @@ func FindOneByKeyValue[T any](ctx context.Context, collection *mongo.Collection,
 }
 
 func InsertOne(ctx context.Context, collection *mongo.Collection, obj any) error {
+	if controller, ok := obj.(models.Controller); ok && controller.APIToken != "" {
+		apiTokenEncrypted, err := utils.EncryptAPIToken(controller.APIToken)
+		if err != nil {
+			return err
+		}
+		apiTokenHash, err := utils.HashAPIToken(controller.APIToken)
+		if err != nil {
+			return err
+		}
+		controller.APITokenHash = apiTokenHash
+		controller.APITokenEncrypted = apiTokenEncrypted
+		controller.APIToken = ""
+		obj = controller
+	}
 	_, err := collection.InsertOne(ctx, obj)
 	return err
 }

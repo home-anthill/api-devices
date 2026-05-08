@@ -8,6 +8,7 @@ import (
 	"api-devices/models"
 	mqttclient "api-devices/mqttclient"
 	"api-devices/testutils"
+	"api-devices/utils"
 	"context"
 	"net"
 	"time"
@@ -193,7 +194,12 @@ var _ = Describe("Register", func() {
 			controllerDb, err := testutils.FindOneByKeyValue[models.Controller](ctx, controllersCollection, "featureUuid", onFeatureUUID)
 			Expect(err).ShouldNot(HaveOccurred())
 			// check profile info
-			Expect(controllerDb.APIToken).To(Equal(on.APIToken))
+			apiTokenHash, err := utils.HashAPIToken(on.APIToken)
+			Expect(err).ToNot(HaveOccurred())
+			Expect(controllerDb.APITokenHash).To(Equal(apiTokenHash))
+			decryptedToken, err := utils.DecryptAPIToken(controllerDb.APITokenEncrypted)
+			Expect(err).ShouldNot(HaveOccurred())
+			Expect(decryptedToken).To(Equal(on.APIToken))
 			Expect(controllerDb.ProfileOwnerID).To(Equal(on.ProfileOwnerID))
 			// check device info
 			Expect(controllerDb.DeviceUUID).To(Equal(on.DeviceUUID))
@@ -226,7 +232,12 @@ var _ = Describe("Register", func() {
 			controllerDb, err := testutils.FindOneByKeyValue[models.Controller](ctx, controllersCollection, "featureUuid", modeFeatureUUID)
 			Expect(err).ShouldNot(HaveOccurred())
 			// check profile info
-			Expect(controllerDb.APIToken).To(Equal(mode.APIToken))
+			apiTokenHash, err := utils.HashAPIToken(mode.APIToken)
+			Expect(err).ToNot(HaveOccurred())
+			Expect(controllerDb.APITokenHash).To(Equal(apiTokenHash))
+			decryptedToken, err := utils.DecryptAPIToken(controllerDb.APITokenEncrypted)
+			Expect(err).ShouldNot(HaveOccurred())
+			Expect(decryptedToken).To(Equal(mode.APIToken))
 			Expect(controllerDb.ProfileOwnerID).To(Equal(mode.ProfileOwnerID))
 			// check device info
 			Expect(controllerDb.DeviceUUID).To(Equal(mode.DeviceUUID))
@@ -259,7 +270,12 @@ var _ = Describe("Register", func() {
 			controllerDb, err := testutils.FindOneByKeyValue[models.Controller](ctx, controllersCollection, "featureUuid", fanSpeedFeatureUUID)
 			Expect(err).ShouldNot(HaveOccurred())
 			// check profile info
-			Expect(controllerDb.APIToken).To(Equal(fanSpeed.APIToken))
+			apiTokenHash, err := utils.HashAPIToken(fanSpeed.APIToken)
+			Expect(err).ToNot(HaveOccurred())
+			Expect(controllerDb.APITokenHash).To(Equal(apiTokenHash))
+			decryptedToken, err := utils.DecryptAPIToken(controllerDb.APITokenEncrypted)
+			Expect(err).ShouldNot(HaveOccurred())
+			Expect(decryptedToken).To(Equal(fanSpeed.APIToken))
 			Expect(controllerDb.ProfileOwnerID).To(Equal(fanSpeed.ProfileOwnerID))
 			// check device info
 			Expect(controllerDb.DeviceUUID).To(Equal(fanSpeed.DeviceUUID))
@@ -292,7 +308,12 @@ var _ = Describe("Register", func() {
 			controllerDb, err := testutils.FindOneByKeyValue[models.Controller](ctx, controllersCollection, "featureUuid", setpointFeatureUUID)
 			Expect(err).ShouldNot(HaveOccurred())
 			// check profile info
-			Expect(controllerDb.APIToken).To(Equal(setpoint.APIToken))
+			apiTokenHash, err := utils.HashAPIToken(setpoint.APIToken)
+			Expect(err).ToNot(HaveOccurred())
+			Expect(controllerDb.APITokenHash).To(Equal(apiTokenHash))
+			decryptedToken, err := utils.DecryptAPIToken(controllerDb.APITokenEncrypted)
+			Expect(err).ShouldNot(HaveOccurred())
+			Expect(decryptedToken).To(Equal(setpoint.APIToken))
 			Expect(controllerDb.ProfileOwnerID).To(Equal(setpoint.ProfileOwnerID))
 			// check device info
 			Expect(controllerDb.DeviceUUID).To(Equal(setpoint.DeviceUUID))
@@ -325,7 +346,12 @@ var _ = Describe("Register", func() {
 			controllerDb, err := testutils.FindOneByKeyValue[models.Controller](ctx, controllersCollection, "featureUuid", toleranceFeatureUUID)
 			Expect(err).ShouldNot(HaveOccurred())
 			// check profile info
-			Expect(controllerDb.APIToken).To(Equal(tolerance.APIToken))
+			apiTokenHash, err := utils.HashAPIToken(tolerance.APIToken)
+			Expect(err).ToNot(HaveOccurred())
+			Expect(controllerDb.APITokenHash).To(Equal(apiTokenHash))
+			decryptedToken, err := utils.DecryptAPIToken(controllerDb.APITokenEncrypted)
+			Expect(err).ShouldNot(HaveOccurred())
+			Expect(decryptedToken).To(Equal(tolerance.APIToken))
 			Expect(controllerDb.ProfileOwnerID).To(Equal(tolerance.ProfileOwnerID))
 			// check device info
 			Expect(controllerDb.DeviceUUID).To(Equal(tolerance.DeviceUUID))

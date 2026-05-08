@@ -55,7 +55,7 @@ Defined in `api/` with protobuf specs in `api/{device,register}/`:
 
 - **Device** (`devicesGrpc.go`): Implements two RPCs:
   - `GetValue`: Reads device feature value from MongoDB, returns with timestamps
-  - `SetValues`: Updates device feature values in MongoDB and publishes to MQTT topic `devices/{uuid}/values`. Uses goroutines and mutexes to handle multiple feature values concurrently. Capped at 100 values per request to prevent resource exhaustion.
+  - `SetValues`: Loads authorized controller documents, signs requested feature values, publishes them to MQTT topic `devices/{uuid}/values`, then updates MongoDB only after the publish token reports success. Capped at 100 values per request to prevent resource exhaustion.
   - Both RPCs reject malformed device UUIDs with `codes.InvalidArgument`.
 
 - **Registration** (`registerGrpc.go`): Implements one RPC:
@@ -79,7 +79,7 @@ Defined in `api/` with protobuf specs in `api/{device,register}/`:
 ### Models
 
 `models/` defines:
-- **Controller**: Device document with profile info (apiToken, profileOwnerId), device info (UUID, MAC), feature details, and status (value with created/modified timestamps)
+- **Controller**: Device document with profile info (`apiTokenHash`, `apiTokenEncrypted`, `profileOwnerId`), device info (UUID, MAC), feature details, and status (value with created/modified timestamps)
 - **MqttFeatureValue**: MQTT payload structure for publishing device value changes
 
 ### MQTT Client
@@ -87,6 +87,7 @@ Defined in `api/` with protobuf specs in `api/{device,register}/`:
 `mqttclient/` implements a global client with:
 - TLS support (mTLS with CA cert, client cert/key)
 - Publishes to topic `devices/{uuid}/values` at QoS 0
+- `SetValues` treats MongoDB status as the last successfully published command state; failed MQTT publishes must not mark a controller status as applied.
 - **Security:** Device UUIDs are validated with `github.com/google/uuid` before interpolation to prevent MQTT topic injection
 - `InitMqtt()` propagates TLS configuration errors instead of panicking
 - Client access is expected to use Mosquitto ACL-oriented publisher credentials (`api_devices_pub` by default)
@@ -143,6 +144,8 @@ Copy `.env_template` to `.env` (gitignored). Key variables:
 | `MQTT_AUTH` | Enable MQTT authentication | `true`/`false` |
 | `MQTT_USER` | MQTT username (if MQTT_AUTH=true) | `api_devices_pub` |
 | `MQTT_PASSWORD` | MQTT password (if MQTT_AUTH=true) | `ApiDevicesPassword1!` |
+| `API_TOKEN_HASH_SECRET` | Mandatory HMAC secret/pepper for controller API token lookup hashes | `change-me` |
+| `API_TOKEN_ENCRYPTION_KEY` | Mandatory 32-byte raw or base64/base64url AES-GCM key for encrypted API token storage | `0123456789abcdef0123456789abcdef` |
 
 ## Code Patterns and Conventions
 
@@ -156,13 +159,14 @@ Copy `.env_template` to `.env` (gitignored). Key variables:
 **Security patterns:**
 - **UUID validation**: Device UUIDs are parsed with `github.com/google/uuid` in gRPC handlers and MQTT publishing before topic interpolation
 - **Request validation**: gRPC handlers validate apiToken, deviceUuid, mac fields with FindOne queries (encodes auth check in DB lookup)
+- **API token storage**: Raw profile API tokens are not persisted in controller documents. `apiTokenHash` is used for lookup, and `apiTokenEncrypted` is decrypted only when signing MQTT commands for a controller.
 - **Credential masking**: MONGODB_URL, MQTT_USER, MQTT_PASSWORD are masked in startup logs
 - **TLS error propagation**: TLS misconfiguration returns errors instead of panicking
 
 **Concurrency:**
-- `SetValues` uses goroutines (`sync.WaitGroup`) and mutexes (`sync.Mutex`) to update multiple feature values concurrently
+- `SetValues` processes requested feature values sequentially so authorization/signing errors stop the command batch before MQTT publish
 - Max 100 feature values per request to prevent resource exhaustion
-- First error encountered stops goroutines from being spawned and is returned to caller
+- First validation, signing, MQTT, or MongoDB error is returned to the caller
 
 **Protobuf conventions:**
 - Proto files: `api/device/device.proto` and `api/register/register.proto`

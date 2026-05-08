@@ -8,7 +8,9 @@ import (
 	"api-devices/models"
 	mqttclient "api-devices/mqttclient"
 	"api-devices/testutils"
+	"api-devices/utils"
 	"context"
+	"errors"
 	"net"
 	"time"
 
@@ -19,6 +21,8 @@ import (
 	"go.mongodb.org/mongo-driver/v2/mongo"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+	grpcstatus "google.golang.org/grpc/status"
 )
 
 var _ = Describe("Devices", func() {
@@ -161,7 +165,12 @@ var _ = Describe("Devices", func() {
 		controller, err := testutils.FindOneById[models.Controller](ctx, controllersCollection, featureId)
 		Expect(err).ShouldNot(HaveOccurred())
 		// check profile info
-		Expect(controller.APIToken).To(Equal(apiToken))
+		apiTokenHash, err := utils.HashAPIToken(apiToken)
+		Expect(err).ToNot(HaveOccurred())
+		Expect(controller.APITokenHash).To(Equal(apiTokenHash))
+		decryptedToken, err := utils.DecryptAPIToken(controller.APITokenEncrypted)
+		Expect(err).ShouldNot(HaveOccurred())
+		Expect(decryptedToken).To(Equal(apiToken))
 		Expect(controller.ProfileOwnerID).To(Equal(profileOwnerId))
 		// check device info
 		Expect(controller.ID).To(Equal(featureId))
@@ -363,6 +372,49 @@ var _ = Describe("Devices", func() {
 				})
 				Expect(err).Should(HaveOccurred())
 				Expect(err.Error()).Should(ContainSubstring("cannot find controller"))
+			})
+
+			It("should not update controller status when MQTT publish fails", func() {
+				initialTimestamp := time.Now().Add(-time.Hour).Truncate(time.Millisecond)
+				initialStatus := models.Status{
+					Value:      7,
+					CreatedAt:  initialTimestamp,
+					ModifiedAt: initialTimestamp,
+				}
+				controller := onAirConditioner
+				controller.Status = initialStatus
+				err := testutils.InsertOne(ctx, controllersCollection, controller)
+				Expect(err).ShouldNot(HaveOccurred())
+
+				mqttclient.SetMqttClient(testutils.NewMockClientWithPublishError(errors.New("mqtt unavailable")))
+				if token := mqttclient.Connect(); token.Wait() && token.Error() != nil {
+					panic(token.Error())
+				}
+
+				client := api.NewDevicesGrpc(logger, client)
+				_, err = client.SetValues(ctx, &devicepb.SetValuesRequest{
+					// profile info
+					ApiToken: apiToken,
+					// device info
+					DeviceUuid: airConditionerUUID,
+					Mac:        airConditionerMac,
+					// feature info
+					FeatureValues: []*devicepb.SetValueRequest{
+						{
+							FeatureUuid: onAirConditioner.FeatureUUID,
+							FeatureName: onAirConditioner.FeatureName,
+							Value:       1,
+						},
+					},
+				})
+				Expect(err).Should(HaveOccurred())
+				Expect(grpcstatus.Code(err)).To(Equal(codes.Internal))
+
+				storedController, err := testutils.FindOneById[models.Controller](ctx, controllersCollection, onAirConditioner.ID)
+				Expect(err).ShouldNot(HaveOccurred())
+				Expect(storedController.Status.Value).To(Equal(initialStatus.Value))
+				Expect(storedController.Status.CreatedAt.Equal(initialStatus.CreatedAt)).To(BeTrue())
+				Expect(storedController.Status.ModifiedAt.Equal(initialStatus.ModifiedAt)).To(BeTrue())
 			})
 		})
 	})

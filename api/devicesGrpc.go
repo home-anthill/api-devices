@@ -5,6 +5,7 @@ import (
 	"api-devices/db"
 	"api-devices/models"
 	mqttclient "api-devices/mqttclient"
+	"api-devices/utils"
 	"context"
 	"crypto/hmac"
 	"crypto/rand"
@@ -24,6 +25,11 @@ import (
 
 const devicesTimeout = 5 * time.Second
 const commandNonceBytes = 16
+
+type statusUpdate struct {
+	controllerID bson.ObjectID
+	status       models.Status
+}
 
 // DevicesGrpc implements the gRPC Device service.
 type DevicesGrpc struct {
@@ -55,6 +61,10 @@ func hmacSha256Hex(key, message string) string {
 }
 
 func signCommand(controller models.Controller, value float32, timestamp int64, nonce string) (models.MqttFeatureValue, error) {
+	apiToken, err := controllerAPIToken(controller)
+	if err != nil {
+		return models.MqttFeatureValue{}, err
+	}
 	payload := models.Payload{Value: value}
 	payloadJSON, err := json.Marshal(payload)
 	if err != nil {
@@ -79,9 +89,16 @@ func signCommand(controller models.Controller, value float32, timestamp int64, n
 		FeatureName: controller.FeatureName,
 		Timestamp:   timestamp,
 		Nonce:       nonce,
-		Signature:   hmacSha256Hex(controller.APIToken, signedPayload),
+		Signature:   hmacSha256Hex(apiToken, signedPayload),
 		Payload:     payload,
 	}, nil
+}
+
+func controllerAPIToken(controller models.Controller) (string, error) {
+	if controller.APITokenEncrypted != "" {
+		return utils.DecryptAPIToken(controller.APITokenEncrypted)
+	}
+	return "", fmt.Errorf("controller has no usable api token")
 }
 
 // GetValue retrieves the current value of a device feature from the database.
@@ -92,11 +109,16 @@ func (d *DevicesGrpc) GetValue(ctx context.Context, in *device.GetValueRequest) 
 		d.logger.Errorf("gRPC - GetValue - invalid deviceUuid: %v", err)
 		return nil, status.Errorf(codes.InvalidArgument, "deviceUuid is not a valid UUID")
 	}
+	apiTokenHash, err := utils.HashAPIToken(in.ApiToken)
+	if err != nil {
+		d.logger.Errorf("gRPC - GetValue - Cannot hash apiToken: %v", err)
+		return nil, status.Errorf(codes.Internal, "cannot get controller")
+	}
 
 	var controller models.Controller
-	err := d.controllersCollection.FindOne(ctx, bson.M{
+	err = d.controllersCollection.FindOne(ctx, bson.M{
 		// profile info
-		"apiToken": in.ApiToken,
+		"apiTokenHash": apiTokenHash,
 		// device info
 		"deviceUuid": in.DeviceUuid,
 		"mac":        in.Mac,
@@ -119,7 +141,7 @@ func (d *DevicesGrpc) GetValue(ctx context.Context, in *device.GetValueRequest) 
 	return &statusResponse, nil
 }
 
-// SetValues updates device feature values in the database and publishes them via MQTT.
+// SetValues publishes device feature values via MQTT and records them after publish success.
 func (d *DevicesGrpc) SetValues(ctx context.Context, in *device.SetValuesRequest) (*device.SetValueResponse, error) {
 	d.logger.Infof("gRPC - SetValue - Called for deviceUuid: %s, mac: %s, featureValues: %d", in.DeviceUuid, in.Mac, len(in.FeatureValues))
 
@@ -132,13 +154,19 @@ func (d *DevicesGrpc) SetValues(ctx context.Context, in *device.SetValuesRequest
 		d.logger.Errorf("gRPC - SetValue - invalid deviceUuid: %v", err)
 		return nil, status.Errorf(codes.InvalidArgument, "deviceUuid is not a valid UUID")
 	}
+	apiTokenHash, err := utils.HashAPIToken(in.ApiToken)
+	if err != nil {
+		d.logger.Errorf("gRPC - SetValue - Cannot hash apiToken: %v", err)
+		return nil, status.Errorf(codes.Internal, "cannot set controller value")
+	}
 
 	results := make([]models.MqttFeatureValue, len(in.FeatureValues))
+	updates := make([]statusUpdate, len(in.FeatureValues))
 	for i, value := range in.FeatureValues {
 		var controller models.Controller
-		err := d.controllersCollection.FindOne(ctx, bson.M{
+		err = d.controllersCollection.FindOne(ctx, bson.M{
 			// profile info
-			"apiToken": in.ApiToken,
+			"apiTokenHash": apiTokenHash,
 			// device info
 			"deviceUuid": in.DeviceUuid,
 			"mac":        in.Mac,
@@ -160,43 +188,23 @@ func (d *DevicesGrpc) SetValues(ctx context.Context, in *device.SetValuesRequest
 
 		d.logger.Debugf("gRPC - SetValue - updatedStatus %#v ", updatedStatus)
 
-		updateResult, err := d.controllersCollection.UpdateOne(ctx, bson.M{
-			// profile info
-			"apiToken": in.ApiToken,
-			// device info
-			"deviceUuid": in.DeviceUuid,
-			"mac":        in.Mac,
-			// feature info
-			"featureUuid": value.FeatureUuid,
-			"featureName": value.FeatureName,
-		}, bson.M{
-			"$set": bson.M{
-				"status":     updatedStatus,
-				"modifiedAt": now,
-			},
-		})
-
-		if err != nil {
-			d.logger.Errorf("gRPC - SetValue - Cannot update db with the registered device: %v", err)
-			return nil, status.Errorf(codes.Internal, "cannot update controller: %v", err)
-		}
-
-		if updateResult.MatchedCount != 1 {
-			d.logger.Error("gRPC - SetValue - Cannot find a unique controller")
-			return nil, status.Errorf(codes.NotFound, "cannot find a unique controller")
-		}
-
-		nonce, err := randomHex(commandNonceBytes)
+		var nonce string
+		nonce, err = randomHex(commandNonceBytes)
 		if err != nil {
 			d.logger.Errorf("gRPC - SetValue - Cannot generate command nonce: %v", err)
 			return nil, status.Errorf(codes.Internal, "cannot generate command nonce: %v", err)
 		}
-		command, err := signCommand(controller, value.Value, now.Unix(), nonce)
+		var command models.MqttFeatureValue
+		command, err = signCommand(controller, value.Value, now.Unix(), nonce)
 		if err != nil {
 			d.logger.Errorf("gRPC - SetValue - Cannot sign mqtt payload: %v", err)
 			return nil, status.Errorf(codes.Internal, "cannot sign mqtt payload: %v", err)
 		}
 		results[i] = command
+		updates[i] = statusUpdate{
+			controllerID: controller.ID,
+			status:       updatedStatus,
+		}
 	}
 
 	messageJSON, err := json.Marshal(results)
@@ -216,6 +224,26 @@ func (d *DevicesGrpc) SetValues(ctx context.Context, in *device.SetValuesRequest
 	if t.Error() != nil {
 		d.logger.Errorf("gRPC - SetValue - Cannot send data via mqtt: %v", t.Error())
 		return nil, status.Errorf(codes.Internal, "cannot send data via mqtt: %v", t.Error())
+	}
+	for _, update := range updates {
+		updateResult, err := d.controllersCollection.UpdateOne(ctx, bson.M{
+			"_id": update.controllerID,
+		}, bson.M{
+			"$set": bson.M{
+				"status":     update.status,
+				"modifiedAt": update.status.ModifiedAt,
+			},
+		})
+
+		if err != nil {
+			d.logger.Errorf("gRPC - SetValue - Cannot update db with the registered device: %v", err)
+			return nil, status.Errorf(codes.Internal, "cannot update controller: %v", err)
+		}
+
+		if updateResult.MatchedCount != 1 {
+			d.logger.Error("gRPC - SetValue - Cannot find a unique controller")
+			return nil, status.Errorf(codes.NotFound, "cannot find a unique controller")
+		}
 	}
 	d.logger.Debug("gRPC - SetValue - Sending response")
 	return &device.SetValueResponse{Status: "200", Message: "Updated"}, nil

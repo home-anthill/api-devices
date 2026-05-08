@@ -16,10 +16,12 @@
 
 ## Security
 
+- **Controller state integrity:** `SetValues` now publishes the signed MQTT command batch before updating MongoDB status, so a failed publish no longer marks a controller state as applied.
 - **MQTT topic injection:** Device UUID handling was hardened; the current implementation rejects values unless they parse as valid UUIDs in gRPC handlers and `mqttclient.SendValues()`.
 - **Silent TLS failure:** CA file read errors are now propagated by `newTLSConfig()` instead of being swallowed.
 - **Panic on bad TLS config:** Replaced `panic()` calls in MQTT TLS setup with proper error returns.
 - **Credentials in logs:** `MONGODB_URL`, `MQTT_USER`, and `MQTT_PASSWORD` are masked (`****`) in startup logs.
+- **Controller API token storage:** Controller documents now store `apiTokenHash` plus AES-GCM `apiTokenEncrypted` instead of plaintext `apiToken`; command signing decrypts only when needed and requires `API_TOKEN_HASH_SECRET` / `API_TOKEN_ENCRYPTION_KEY`.
 - **Sensitive data exposure:** Removed a `fmt.Println` that dumped TLS certificate details and a `fmt.Printf` that logged full MQTT JSON payloads.
 - **Unbounded input:** Added a cap of 100 feature values per `SetValues` request to prevent resource exhaustion.
 - **Nil dereference in Register:** Added nil check for `in.Feature` before accessing its fields.
