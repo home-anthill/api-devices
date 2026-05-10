@@ -30,9 +30,6 @@ RUN mkdir -p /scratch/logs && chown -R 65534:65534 /scratch/logs
 # ── Stage 2: Hardened runtime ────────────────────────────────────────────────
 FROM dhi.io/alpine-base:3.23
 
-ENV ENV=prod
-ENV LOG_FOLDER=/logs/
-
 WORKDIR /
 
 # App directory skeleton (empty /logs owned by nobody).
