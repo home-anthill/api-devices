@@ -144,7 +144,7 @@ Copy `.env_template` to `.env` (gitignored). Key variables:
 | `MQTT_AUTH` | Enable MQTT authentication | `true`/`false` |
 | `MQTT_USER` | MQTT username (if MQTT_AUTH=true) | `api_devices_pub` |
 | `MQTT_PASSWORD` | MQTT password (if MQTT_AUTH=true) | `ApiDevicesPassword1!` |
-| `API_TOKEN_HASH_SECRET` | Mandatory HMAC secret/pepper for controller API token lookup hashes | `change-me` |
+| `API_TOKEN_HASH_SECRET` | Mandatory HMAC secret/pepper for controller API token lookup hashes; startup rejects values shorter than 32 characters | `change-me` |
 | `API_TOKEN_ENCRYPTION_KEY` | Mandatory 32-byte raw or base64/base64url AES-GCM key for encrypted API token storage | `0123456789abcdef0123456789abcdef` |
 
 ## Code Patterns and Conventions

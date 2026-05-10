@@ -1,10 +1,12 @@
 package initialization
 
 import (
+	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
 	"regexp"
+	"strings"
 
 	"github.com/joho/godotenv"
 	"go.uber.org/zap"
@@ -20,8 +22,7 @@ func InitEnv(logger *zap.SugaredLogger) error {
 	if err != nil {
 		return fmt.Errorf("failed to load the env file at ./%s: %w", envFile, err)
 	}
-	printEnv(logger)
-	return nil
+	return printEnv(logger)
 }
 
 func readEnv() (string, error) {
@@ -37,7 +38,17 @@ func readEnv() (string, error) {
 	return envFilePath, err
 }
 
-func printEnv(logger *zap.SugaredLogger) {
+func printEnv(logger *zap.SugaredLogger) error {
+	if strings.TrimSpace(os.Getenv("API_TOKEN_HASH_SECRET")) == "" {
+		return errors.New("'API_TOKEN_HASH_SECRET' environment variable is mandatory")
+	}
+	if len(os.Getenv("API_TOKEN_HASH_SECRET")) < 32 {
+		return errors.New("'API_TOKEN_HASH_SECRET' environment variable must be at least 32 characters")
+	}
+	if strings.TrimSpace(os.Getenv("API_TOKEN_ENCRYPTION_KEY")) == "" {
+		return errors.New("'API_TOKEN_ENCRYPTION_KEY' environment variable is mandatory")
+	}
+
 	logger.Infof("ENVIRONMENT = %s", os.Getenv("ENV"))
 	logger.Infof("LOG_FOLDER = %s", os.Getenv("LOG_FOLDER"))
 	logger.Info("MONGODB_URL = ****")
@@ -54,4 +65,7 @@ func printEnv(logger *zap.SugaredLogger) {
 	logger.Infof("GRPC_URL = %s", os.Getenv("GRPC_URL"))
 	logger.Infof("GRPC_TLS = %s", os.Getenv("GRPC_TLS"))
 	logger.Infof("CERT_FOLDER_PATH = %s", os.Getenv("CERT_FOLDER_PATH"))
+	logger.Info("API_TOKEN_HASH_SECRET = ****")
+	logger.Info("API_TOKEN_ENCRYPTION_KEY = ****")
+	return nil
 }
