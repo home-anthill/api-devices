@@ -3,9 +3,10 @@
 .vscode
 
 .env
-tmp/
-out/
-build/
-logs/
+tmp
+logs
 coverage
 *.log
+.gocache/
+.gomodcache/
+build
