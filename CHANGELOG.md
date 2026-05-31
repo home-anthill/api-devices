@@ -1,5 +1,17 @@
 # Changelog
 
+## 4.0.1
+
+### Tests
+
+- Added device gRPC unit tests for command signing, missing controller API tokens, invalid encrypted tokens, invalid device UUIDs, missing hash secrets, and oversized `SetValues` batches.
+- Added registration gRPC unit tests for missing features, invalid device UUIDs, invalid profile owner IDs, and missing API token secrets.
+- Added API token crypto tests for hashing stability, encryption/decryption round trips, missing or invalid encryption keys, base64 key formats, and invalid ciphertext handling.
+- Added initialization tests for required API token environment variables, logger creation, and log writer setup.
+- Added database tests for production vs. testing database name selection and controller collection wiring.
+- Added MQTT configuration tests for TLS setup failures, missing or invalid CA files, and non-TLS client initialization.
+
+
 ## 4.0.0
 
 ### Bug Fixes
