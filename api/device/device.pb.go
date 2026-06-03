@@ -353,6 +353,58 @@ func (x *SetValueResponse) GetMessage() string {
 	return ""
 }
 
+type DeleteValueRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	DeviceUuid    string                 `protobuf:"bytes,1,opt,name=device_uuid,json=deviceUuid,proto3" json:"device_uuid,omitempty"`
+	FeatureUuid   string                 `protobuf:"bytes,2,opt,name=feature_uuid,json=featureUuid,proto3" json:"feature_uuid,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeleteValueRequest) Reset() {
+	*x = DeleteValueRequest{}
+	mi := &file_api_device_device_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeleteValueRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeleteValueRequest) ProtoMessage() {}
+
+func (x *DeleteValueRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_api_device_device_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeleteValueRequest.ProtoReflect.Descriptor instead.
+func (*DeleteValueRequest) Descriptor() ([]byte, []int) {
+	return file_api_device_device_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *DeleteValueRequest) GetDeviceUuid() string {
+	if x != nil {
+		return x.DeviceUuid
+	}
+	return ""
+}
+
+func (x *DeleteValueRequest) GetFeatureUuid() string {
+	if x != nil {
+		return x.FeatureUuid
+	}
+	return ""
+}
+
 var File_api_device_device_proto protoreflect.FileDescriptor
 
 const file_api_device_device_proto_rawDesc = "" +
@@ -385,10 +437,15 @@ const file_api_device_device_proto_rawDesc = "" +
 	"\x05value\x18\x03 \x01(\x02R\x05value\"D\n" +
 	"\x10SetValueResponse\x12\x16\n" +
 	"\x06status\x18\x01 \x01(\tR\x06status\x12\x18\n" +
-	"\amessage\x18\x02 \x01(\tR\amessage2\x8c\x01\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\"X\n" +
+	"\x12DeleteValueRequest\x12\x1f\n" +
+	"\vdevice_uuid\x18\x01 \x01(\tR\n" +
+	"deviceUuid\x12!\n" +
+	"\ffeature_uuid\x18\x02 \x01(\tR\vfeatureUuid2\xd3\x01\n" +
 	"\x06Device\x12?\n" +
 	"\bGetValue\x12\x17.device.GetValueRequest\x1a\x18.device.GetValueResponse\"\x00\x12A\n" +
-	"\tSetValues\x12\x18.device.SetValuesRequest\x1a\x18.device.SetValueResponse\"\x00B\x18Z\x16api-devices/api/deviceb\x06proto3"
+	"\tSetValues\x12\x18.device.SetValuesRequest\x1a\x18.device.SetValueResponse\"\x00\x12E\n" +
+	"\vDeleteValue\x12\x1a.device.DeleteValueRequest\x1a\x18.device.SetValueResponse\"\x00B\x18Z\x16api-devices/api/deviceb\x06proto3"
 
 var (
 	file_api_device_device_proto_rawDescOnce sync.Once
@@ -402,22 +459,25 @@ func file_api_device_device_proto_rawDescGZIP() []byte {
 	return file_api_device_device_proto_rawDescData
 }
 
-var file_api_device_device_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
+var file_api_device_device_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_api_device_device_proto_goTypes = []any{
-	(*GetValueRequest)(nil),  // 0: device.GetValueRequest
-	(*GetValueResponse)(nil), // 1: device.GetValueResponse
-	(*SetValuesRequest)(nil), // 2: device.SetValuesRequest
-	(*SetValueRequest)(nil),  // 3: device.SetValueRequest
-	(*SetValueResponse)(nil), // 4: device.SetValueResponse
+	(*GetValueRequest)(nil),    // 0: device.GetValueRequest
+	(*GetValueResponse)(nil),   // 1: device.GetValueResponse
+	(*SetValuesRequest)(nil),   // 2: device.SetValuesRequest
+	(*SetValueRequest)(nil),    // 3: device.SetValueRequest
+	(*SetValueResponse)(nil),   // 4: device.SetValueResponse
+	(*DeleteValueRequest)(nil), // 5: device.DeleteValueRequest
 }
 var file_api_device_device_proto_depIdxs = []int32{
 	3, // 0: device.SetValuesRequest.feature_values:type_name -> device.SetValueRequest
 	0, // 1: device.Device.GetValue:input_type -> device.GetValueRequest
 	2, // 2: device.Device.SetValues:input_type -> device.SetValuesRequest
-	1, // 3: device.Device.GetValue:output_type -> device.GetValueResponse
-	4, // 4: device.Device.SetValues:output_type -> device.SetValueResponse
-	3, // [3:5] is the sub-list for method output_type
-	1, // [1:3] is the sub-list for method input_type
+	5, // 3: device.Device.DeleteValue:input_type -> device.DeleteValueRequest
+	1, // 4: device.Device.GetValue:output_type -> device.GetValueResponse
+	4, // 5: device.Device.SetValues:output_type -> device.SetValueResponse
+	4, // 6: device.Device.DeleteValue:output_type -> device.SetValueResponse
+	4, // [4:7] is the sub-list for method output_type
+	1, // [1:4] is the sub-list for method input_type
 	1, // [1:1] is the sub-list for extension type_name
 	1, // [1:1] is the sub-list for extension extendee
 	0, // [0:1] is the sub-list for field type_name
@@ -434,7 +494,7 @@ func file_api_device_device_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_api_device_device_proto_rawDesc), len(file_api_device_device_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   5,
+			NumMessages:   6,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

@@ -140,6 +140,37 @@ func TestSetValuesRejectsInvalidDeviceUUID(t *testing.T) {
 	}
 }
 
+func TestDeleteValueRejectsInvalidDeviceUUID(t *testing.T) {
+	client := &DevicesGrpc{logger: zap.NewNop().Sugar()}
+
+	response, err := client.DeleteValue(context.Background(), &devicepb.DeleteValueRequest{
+		DeviceUuid: "bad-device-uuid",
+	})
+
+	if response != nil {
+		t.Fatal("expected nil response")
+	}
+	if status.Code(err) != codes.InvalidArgument {
+		t.Fatalf("code = %v, want %v", status.Code(err), codes.InvalidArgument)
+	}
+}
+
+func TestDeleteValueRejectsInvalidFeatureUUID(t *testing.T) {
+	client := &DevicesGrpc{logger: zap.NewNop().Sugar()}
+
+	response, err := client.DeleteValue(context.Background(), &devicepb.DeleteValueRequest{
+		DeviceUuid:  uuid.NewString(),
+		FeatureUuid: "bad-feature-uuid",
+	})
+
+	if response != nil {
+		t.Fatal("expected nil response")
+	}
+	if status.Code(err) != codes.InvalidArgument {
+		t.Fatalf("code = %v, want %v", status.Code(err), codes.InvalidArgument)
+	}
+}
+
 func TestSetValuesRejectsTooManyFeatureValues(t *testing.T) {
 	client := &DevicesGrpc{logger: zap.NewNop().Sugar()}
 	features := make([]*devicepb.SetValueRequest, 101)

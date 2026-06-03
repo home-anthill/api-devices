@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Features
+
+- Added `DeleteValue` gRPC cleanup for removing controller documents by device UUID and feature UUID.
+
 ## 4.0.1
 
 ### Tests

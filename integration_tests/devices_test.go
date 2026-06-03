@@ -417,5 +417,40 @@ var _ = Describe("Devices", func() {
 				Expect(storedController.Status.ModifiedAt.Equal(initialStatus.ModifiedAt)).To(BeTrue())
 			})
 		})
+
+		When("deleteValue", func() {
+			It("should delete a controller by device and feature UUID", func() {
+				err := testutils.InsertOne(ctx, controllersCollection, onAirConditioner)
+				Expect(err).ShouldNot(HaveOccurred())
+				err = testutils.InsertOne(ctx, controllersCollection, setpointAirConditioner)
+				Expect(err).ShouldNot(HaveOccurred())
+
+				client := api.NewDevicesGrpc(logger, client)
+				response, err := client.DeleteValue(ctx, &devicepb.DeleteValueRequest{
+					DeviceUuid:  airConditionerUUID,
+					FeatureUuid: onAirConditioner.FeatureUUID,
+				})
+				Expect(err).ShouldNot(HaveOccurred())
+				Expect(response.GetStatus()).To(Equal("200"))
+				Expect(response.GetMessage()).To(Equal("Deleted"))
+
+				_, err = testutils.FindOneById[models.Controller](ctx, controllersCollection, onAirConditioner.ID)
+				Expect(err).Should(HaveOccurred())
+				storedController, err := testutils.FindOneById[models.Controller](ctx, controllersCollection, setpointAirConditioner.ID)
+				Expect(err).ShouldNot(HaveOccurred())
+				Expect(storedController.FeatureUUID).To(Equal(setpointAirConditioner.FeatureUUID))
+			})
+
+			It("should return success when controller is already missing", func() {
+				client := api.NewDevicesGrpc(logger, client)
+				response, err := client.DeleteValue(ctx, &devicepb.DeleteValueRequest{
+					DeviceUuid:  airConditionerUUID,
+					FeatureUuid: onAirConditioner.FeatureUUID,
+				})
+				Expect(err).ShouldNot(HaveOccurred())
+				Expect(response.GetStatus()).To(Equal("200"))
+				Expect(response.GetMessage()).To(Equal("Deleted"))
+			})
+		})
 	})
 })

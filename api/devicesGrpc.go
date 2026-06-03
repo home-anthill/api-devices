@@ -141,6 +141,32 @@ func (d *DevicesGrpc) GetValue(ctx context.Context, in *device.GetValueRequest) 
 	return &statusResponse, nil
 }
 
+// DeleteValue removes a stored controller feature document from the database.
+func (d *DevicesGrpc) DeleteValue(ctx context.Context, in *device.DeleteValueRequest) (*device.SetValueResponse, error) {
+	d.logger.Infof("gRPC - DeleteValue - Called for deviceUuid: %s, featureUuid: %s", in.DeviceUuid, in.FeatureUuid)
+
+	if _, err := uuid.Parse(in.DeviceUuid); err != nil {
+		d.logger.Errorf("gRPC - DeleteValue - invalid deviceUuid: %v", err)
+		return nil, status.Errorf(codes.InvalidArgument, "deviceUuid is not a valid UUID")
+	}
+	if _, err := uuid.Parse(in.FeatureUuid); err != nil {
+		d.logger.Errorf("gRPC - DeleteValue - invalid featureUuid: %v", err)
+		return nil, status.Errorf(codes.InvalidArgument, "featureUuid is not a valid UUID")
+	}
+
+	result, err := d.controllersCollection.DeleteMany(ctx, bson.M{
+		"deviceUuid":  in.DeviceUuid,
+		"featureUuid": in.FeatureUuid,
+	})
+	if err != nil {
+		d.logger.Errorf("gRPC - DeleteValue - Cannot delete controller: %v", err)
+		return nil, status.Errorf(codes.Internal, "cannot delete controller: %v", err)
+	}
+
+	d.logger.Debugf("gRPC - DeleteValue - deletedCount = %d", result.DeletedCount)
+	return &device.SetValueResponse{Status: "200", Message: "Deleted"}, nil
+}
+
 // SetValues publishes device feature values via MQTT and records them after publish success.
 func (d *DevicesGrpc) SetValues(ctx context.Context, in *device.SetValuesRequest) (*device.SetValueResponse, error) {
 	d.logger.Infof("gRPC - SetValue - Called for deviceUuid: %s, mac: %s, featureValues: %d", in.DeviceUuid, in.Mac, len(in.FeatureValues))

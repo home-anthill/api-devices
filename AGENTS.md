@@ -149,7 +149,7 @@ Copy `.env_template` to `.env` (gitignored). Key variables:
 
 ## Code Patterns and Conventions
 
-**Go style** (per parent CLAUDE.md):
+**Go style** (per parent AGENTS.md):
 - Use tabs for indentation
 - Never discard errors with `_`
 - Constructor-based DI: `NewDevicesGrpc(logger, client)` and `NewRegisterGrpc(logger, client)`
