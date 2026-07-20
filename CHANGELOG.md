@@ -1,12 +1,12 @@
 # Changelog
 
-## Unreleased
 
-### Features
+## 4.1.0
 
+### Features
+
+- Added thermostat `mode` sensor feature
 - Added `DeleteValue` gRPC cleanup for removing controller documents by device UUID and feature UUID.
-
-## 4.0.1
 
 ### Tests
 
