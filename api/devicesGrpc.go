@@ -180,6 +180,12 @@ func (d *DevicesGrpc) SetValues(ctx context.Context, in *device.SetValuesRequest
 		d.logger.Errorf("gRPC - SetValue - invalid deviceUuid: %v", err)
 		return nil, status.Errorf(codes.InvalidArgument, "deviceUuid is not a valid UUID")
 	}
+	for _, value := range in.FeatureValues {
+		if value.FeatureName == "mode" && !models.IsModeValue(value.Value) {
+			d.logger.Errorf("gRPC - SetValue - invalid mode value: %v", value.Value)
+			return nil, status.Errorf(codes.InvalidArgument, "invalid mode value: %v; admitted values are -1.0, 0.0, 1.0, and 2.0", value.Value)
+		}
+	}
 	apiTokenHash, err := utils.HashAPIToken(in.ApiToken)
 	if err != nil {
 		d.logger.Errorf("gRPC - SetValue - Cannot hash apiToken: %v", err)

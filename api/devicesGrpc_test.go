@@ -94,6 +94,24 @@ func TestSignCommandRejectsInvalidEncryptedToken(t *testing.T) {
 	}
 }
 
+func TestSetValuesRejectsInvalidModeValue(t *testing.T) {
+	client := &DevicesGrpc{logger: zap.NewNop().Sugar()}
+
+	response, err := client.SetValues(context.Background(), &devicepb.SetValuesRequest{
+		DeviceUuid: uuid.NewString(),
+		FeatureValues: []*devicepb.SetValueRequest{
+			{FeatureName: "mode", Value: 1.5},
+		},
+	})
+
+	if response != nil {
+		t.Fatal("expected nil response")
+	}
+	if status.Code(err) != codes.InvalidArgument {
+		t.Fatalf("code = %v, want %v", status.Code(err), codes.InvalidArgument)
+	}
+}
+
 func TestGetValueRejectsInvalidDeviceUUID(t *testing.T) {
 	client := &DevicesGrpc{logger: zap.NewNop().Sugar()}
 

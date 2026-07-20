@@ -15,6 +15,24 @@ const (
 	SensorType     Type = "sensor"
 )
 
+// Admitted mode sensor values.
+const (
+	ModeOff  float32 = -1.0
+	ModeAuto float32 = 0.0
+	ModeHeat float32 = 1.0
+	ModeCool float32 = 2.0
+)
+
+// IsModeValue reports whether value is admitted for a mode sensor.
+func IsModeValue(value float32) bool {
+	switch value {
+	case ModeOff, ModeAuto, ModeHeat, ModeCool:
+		return true
+	default:
+		return false
+	}
+}
+
 // Status represents the current state and timestamps of a device feature.
 type Status struct {
 	Value      float32   `json:"value" bson:"value,truncate"`

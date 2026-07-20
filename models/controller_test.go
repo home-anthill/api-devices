@@ -2,11 +2,40 @@ package models_test
 
 import (
 	"api-devices/models"
+	"math"
 	"testing"
 	"time"
 
 	"go.mongodb.org/mongo-driver/v2/bson"
 )
+
+func TestIsModeValue(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name  string
+		value float32
+		want  bool
+	}{
+		{name: "off", value: -1.0, want: true},
+		{name: "auto", value: 0.0, want: true},
+		{name: "heat", value: 1.0, want: true},
+		{name: "cool", value: 2.0, want: true},
+		{name: "fractional", value: 1.5, want: false},
+		{name: "below range", value: -2.0, want: false},
+		{name: "above range", value: 3.0, want: false},
+		{name: "NaN", value: float32(math.NaN()), want: false},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			if got := models.IsModeValue(tt.value); got != tt.want {
+				t.Fatalf("IsModeValue(%v) = %v, want %v", tt.value, got, tt.want)
+			}
+		})
+	}
+}
 
 func TestControllerStatusValueDecodesBSONDouble(t *testing.T) {
 	now := time.Now().UTC().Truncate(time.Millisecond)
