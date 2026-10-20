@@ -41,18 +41,11 @@ jobs:
       - name: Install Make and protoc
         run: sudo apt-get install -y make protobuf-compiler
       - name: Install and start MongoDB
-        id: mongodb
         uses: supercharge/mongodb-github-action@1.12.1
         with:
-          mongodb-version: '8.0'
+          mongodb-version: 8.0
           mongodb-replica-set: test-rs
           mongodb-port: 27017
-      - name: Diagnose MongoDB startup failure
-        if: ${{ failure() && steps.mongodb.outcome == 'failure' }}
-        run: |
-          docker ps -a
-          docker inspect mongodb
-          docker logs mongodb
       - name: Run tests
         run: |
           cp .env_template .env
