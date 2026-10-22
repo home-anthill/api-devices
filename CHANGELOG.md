@@ -6,8 +6,6 @@
 
 - Added thermostat `mode` sensor feature
 - Added `DeleteValue` gRPC cleanup for removing controller documents by device UUID and feature UUID.
-- Quote the MongoDB `8.0` image version to preserve the minor version in GitHub Actions inputs.
-- Print container state and MongoDB logs when CI database startup fails, exposing the cause of early container exits.
 
 ### Tests
 
