@@ -1,11 +1,13 @@
 # Changelog
 
-## 4.1.0
+## 5.0.0
 
 ### Features
 
 - Added thermostat `mode` sensor feature
 - Added `DeleteValue` gRPC cleanup for removing controller documents by device UUID and feature UUID.
+- Validate registration MAC, model (2–50), and manufacturer (3–50 printable ASCII); uppercase MACs for persistence and value lookups. Add identity validation and mixed-case regression coverage.
+- Use a five-second total controller command deadline, respect request cancellation while waiting for MQTT, and commit the entire controller status batch in one MongoDB transaction after publish success. Keep MQTT outside transaction retries; test rollback and cancellation.
 
 ### Tests
 

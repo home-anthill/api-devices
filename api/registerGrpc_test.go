@@ -3,6 +3,7 @@ package api
 import (
 	"api-devices/api/register"
 	"context"
+	"strings"
 	"testing"
 
 	"github.com/google/uuid"
@@ -11,6 +12,30 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
+
+func TestRegisterRejectsInvalidIdentityBeforeDatabase(t *testing.T) {
+	client := &RegisterGrpc{logger: zap.NewNop().Sugar()}
+	for _, tt := range []struct{ name, mac, model, manufacturer string }{
+		{"invalid MAC", "AA-BB-CC-DD-EE-FF", "model", "maker"},
+		{"short model", "AA:BB:CC:DD:EE:FF", "a", "maker"},
+		{"long model", "AA:BB:CC:DD:EE:FF", strings.Repeat("a", 51), "maker"},
+		{"short manufacturer", "AA:BB:CC:DD:EE:FF", "model", "ab"},
+		{"long manufacturer", "AA:BB:CC:DD:EE:FF", "model", strings.Repeat("a", 51)},
+		{"non ASCII", "AA:BB:CC:DD:EE:FF", "Modèle", "maker"},
+		{"control character", "AA:BB:CC:DD:EE:FF", "model", "maker\n"},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			response, err := client.Register(context.Background(), &register.RegisterRequest{
+				DeviceUuid: uuid.NewString(), ProfileOwnerId: bson.NewObjectID().Hex(),
+				Mac: tt.mac, Model: tt.model, Manufacturer: tt.manufacturer,
+				Feature: &register.RegisterFeature{},
+			})
+			if response != nil || status.Code(err) != codes.InvalidArgument {
+				t.Fatalf("expected InvalidArgument, got %v, %v", response, err)
+			}
+		})
+	}
+}
 
 func TestRegisterRejectsMissingFeature(t *testing.T) {
 	client := &RegisterGrpc{logger: zap.NewNop().Sugar()}
@@ -65,7 +90,8 @@ func TestRegisterReturnsInternalWhenEncryptionKeyIsMissing(t *testing.T) {
 	response, err := client.Register(context.Background(), &register.RegisterRequest{
 		DeviceUuid:     uuid.NewString(),
 		ProfileOwnerId: bson.NewObjectID().Hex(),
-		Feature:        &register.RegisterFeature{},
+		Mac:            "aA:bb:CC:dd:EE:ff", Model: "model", Manufacturer: "maker",
+		Feature: &register.RegisterFeature{},
 	})
 
 	if response != nil {
@@ -84,7 +110,8 @@ func TestRegisterReturnsInternalWhenHashSecretIsMissing(t *testing.T) {
 	response, err := client.Register(context.Background(), &register.RegisterRequest{
 		DeviceUuid:     uuid.NewString(),
 		ProfileOwnerId: bson.NewObjectID().Hex(),
-		Feature:        &register.RegisterFeature{},
+		Mac:            "aA:bb:CC:dd:EE:ff", Model: "model", Manufacturer: "maker",
+		Feature: &register.RegisterFeature{},
 	})
 
 	if response != nil {

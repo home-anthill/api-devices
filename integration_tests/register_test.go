@@ -2,6 +2,7 @@ package integration_tests
 
 import (
 	"api-devices/api"
+	devicepb "api-devices/api/device"
 	"api-devices/api/register"
 	"api-devices/db"
 	"api-devices/initialization"
@@ -173,6 +174,30 @@ var _ = Describe("Register", func() {
 	})
 
 	Context("calling register grpc api", func() {
+		It("should uppercase MAC addresses for registration and controller lookups", func() {
+			handler := api.NewRegisterGrpc(logger, client)
+			request := &register.RegisterRequest{
+				ApiToken: on.APIToken, ProfileOwnerId: on.ProfileOwnerID.Hex(), DeviceUuid: on.DeviceUUID,
+				Mac: "aA:bb:CC:dd:EE:ff", Model: on.Model, Manufacturer: on.Manufacturer, Feature: &onFeature,
+			}
+			_, err := handler.Register(ctx, request)
+			Expect(err).ToNot(HaveOccurred())
+			stored, err := testutils.FindOneByKeyValue[models.Controller](ctx, controllersCollection, "featureUuid", onFeatureUUID)
+			Expect(err).ToNot(HaveOccurred())
+			Expect(stored.Mac).To(Equal("AA:BB:CC:DD:EE:FF"))
+			request.Mac = "aa:bb:cc:dd:ee:ff"
+			_, err = handler.Register(ctx, request)
+			Expect(err).ToNot(HaveOccurred())
+			count, err := controllersCollection.CountDocuments(ctx, bson.M{"featureUuid": onFeatureUUID})
+			Expect(err).ToNot(HaveOccurred())
+			Expect(count).To(Equal(int64(1)))
+			value, err := api.NewDevicesGrpc(logger, client).GetValue(ctx, &devicepb.GetValueRequest{
+				DeviceUuid: on.DeviceUUID, Mac: request.Mac, ApiToken: on.APIToken,
+				FeatureUuid: onFeatureUUID, FeatureName: on.FeatureName,
+			})
+			Expect(err).ToNot(HaveOccurred())
+			Expect(value.FeatureUuid).To(Equal(onFeatureUUID))
+		})
 		It("should register on controller and return success", func() {
 			client := api.NewRegisterGrpc(logger, client)
 			response, err := client.Register(ctx, &register.RegisterRequest{

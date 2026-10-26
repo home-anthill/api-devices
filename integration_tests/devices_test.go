@@ -416,6 +416,45 @@ var _ = Describe("Devices", func() {
 				Expect(storedController.Status.CreatedAt.Equal(initialStatus.CreatedAt)).To(BeTrue())
 				Expect(storedController.Status.ModifiedAt.Equal(initialStatus.ModifiedAt)).To(BeTrue())
 			})
+
+			It("rolls back the whole status batch when a controller disappears after publish", func() {
+				Expect(testutils.InsertOne(ctx, controllersCollection, onAirConditioner)).To(Succeed())
+				Expect(testutils.InsertOne(ctx, controllersCollection, setpointAirConditioner)).To(Succeed())
+				var deleteErr error
+				publishes := 0
+				mqttclient.SetMqttClient(testutils.NewMockClientWithPublishHook(func() {
+					publishes++
+					_, deleteErr = controllersCollection.DeleteOne(ctx, bson.M{"_id": setpointAirConditioner.ID})
+				}))
+				_, err := api.NewDevicesGrpc(logger, client).SetValues(ctx, &devicepb.SetValuesRequest{
+					ApiToken: apiToken, DeviceUuid: airConditionerUUID, Mac: airConditionerMac,
+					FeatureValues: []*devicepb.SetValueRequest{
+						{FeatureUuid: onAirConditioner.FeatureUUID, FeatureName: onAirConditioner.FeatureName, Value: 1},
+						{FeatureUuid: setpointAirConditioner.FeatureUUID, FeatureName: setpointAirConditioner.FeatureName, Value: 22},
+					},
+				})
+				Expect(deleteErr).ToNot(HaveOccurred())
+				Expect(grpcstatus.Code(err)).To(Equal(codes.NotFound))
+				Expect(publishes).To(Equal(1))
+				stored, err := testutils.FindOneById[models.Controller](ctx, controllersCollection, onAirConditioner.ID)
+				Expect(err).ToNot(HaveOccurred())
+				Expect(stored.Status.Value).To(Equal(onAirConditioner.Status.Value))
+			})
+
+			It("stops before status updates when the request is cancelled during publish", func() {
+				Expect(testutils.InsertOne(ctx, controllersCollection, onAirConditioner)).To(Succeed())
+				requestCtx, cancel := context.WithCancel(ctx)
+				defer cancel()
+				mqttclient.SetMqttClient(testutils.NewMockClientWithPublishHook(cancel))
+				_, err := api.NewDevicesGrpc(logger, client).SetValues(requestCtx, &devicepb.SetValuesRequest{
+					ApiToken: apiToken, DeviceUuid: airConditionerUUID, Mac: airConditionerMac,
+					FeatureValues: []*devicepb.SetValueRequest{{FeatureUuid: onAirConditioner.FeatureUUID, FeatureName: onAirConditioner.FeatureName, Value: 1}},
+				})
+				Expect(grpcstatus.Code(err)).To(Equal(codes.Canceled))
+				stored, err := testutils.FindOneById[models.Controller](ctx, controllersCollection, onAirConditioner.ID)
+				Expect(err).ToNot(HaveOccurred())
+				Expect(stored.Status.Value).To(Equal(onAirConditioner.Status.Value))
+			})
 		})
 
 		When("deleteValue", func() {

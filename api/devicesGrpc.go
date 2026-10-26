@@ -18,6 +18,8 @@ import (
 	"github.com/google/uuid"
 	"go.mongodb.org/mongo-driver/v2/bson"
 	"go.mongodb.org/mongo-driver/v2/mongo"
+	"go.mongodb.org/mongo-driver/v2/mongo/options"
+	"go.mongodb.org/mongo-driver/v2/mongo/writeconcern"
 	"go.uber.org/zap"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -109,6 +111,10 @@ func (d *DevicesGrpc) GetValue(ctx context.Context, in *device.GetValueRequest) 
 		d.logger.Errorf("gRPC - GetValue - invalid deviceUuid: %v", err)
 		return nil, status.Errorf(codes.InvalidArgument, "deviceUuid is not a valid UUID")
 	}
+	mac, err := utils.NormalizeMAC(in.Mac)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
 	apiTokenHash, err := utils.HashAPIToken(in.ApiToken)
 	if err != nil {
 		d.logger.Errorf("gRPC - GetValue - Cannot hash apiToken: %v", err)
@@ -121,7 +127,7 @@ func (d *DevicesGrpc) GetValue(ctx context.Context, in *device.GetValueRequest) 
 		"apiTokenHash": apiTokenHash,
 		// device info
 		"deviceUuid": in.DeviceUuid,
-		"mac":        in.Mac,
+		"mac":        mac,
 		// feature info
 		"featureUuid": in.FeatureUuid,
 		"featureName": in.FeatureName,
@@ -169,6 +175,8 @@ func (d *DevicesGrpc) DeleteValue(ctx context.Context, in *device.DeleteValueReq
 
 // SetValues publishes device feature values via MQTT and records them after publish success.
 func (d *DevicesGrpc) SetValues(ctx context.Context, in *device.SetValuesRequest) (*device.SetValueResponse, error) {
+	ctx, cancel := context.WithTimeout(ctx, devicesTimeout)
+	defer cancel()
 	d.logger.Infof("gRPC - SetValue - Called for deviceUuid: %s, mac: %s, featureValues: %d", in.DeviceUuid, in.Mac, len(in.FeatureValues))
 
 	const maxFeatureValues = 100
@@ -186,6 +194,10 @@ func (d *DevicesGrpc) SetValues(ctx context.Context, in *device.SetValuesRequest
 			return nil, status.Errorf(codes.InvalidArgument, "invalid mode value: %v; admitted values are -1.0, 0.0, 1.0, and 2.0", value.Value)
 		}
 	}
+	mac, err := utils.NormalizeMAC(in.Mac)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
 	apiTokenHash, err := utils.HashAPIToken(in.ApiToken)
 	if err != nil {
 		d.logger.Errorf("gRPC - SetValue - Cannot hash apiToken: %v", err)
@@ -201,7 +213,7 @@ func (d *DevicesGrpc) SetValues(ctx context.Context, in *device.SetValuesRequest
 			"apiTokenHash": apiTokenHash,
 			// device info
 			"deviceUuid": in.DeviceUuid,
-			"mac":        in.Mac,
+			"mac":        mac,
 			// feature info
 			"featureUuid": value.FeatureUuid,
 			"featureName": value.FeatureName,
@@ -244,39 +256,70 @@ func (d *DevicesGrpc) SetValues(ctx context.Context, in *device.SetValuesRequest
 		d.logger.Errorf("gRPC - SetValue - Cannot create mqtt payload: %v", err)
 		return nil, status.Errorf(codes.Internal, "cannot create mqtt payload: %v", err)
 	}
+	if err = ctx.Err(); err != nil {
+		return nil, status.FromContextError(err).Err()
+	}
 	t, err := mqttclient.SendValues(in.DeviceUuid, messageJSON)
 	if err != nil {
 		d.logger.Errorf("gRPC - SetValue - invalid MQTT publish topic: %v", err)
 		return nil, status.Errorf(codes.InvalidArgument, "deviceUuid is not a valid UUID")
 	}
-	if !t.WaitTimeout(devicesTimeout) {
-		d.logger.Error("gRPC - SetValue - MQTT publish timed out")
-		return nil, status.Errorf(codes.Unavailable, "mqtt publish timed out")
+	select {
+	case <-ctx.Done():
+		return nil, status.FromContextError(ctx.Err()).Err()
+	case <-t.Done():
 	}
 	if t.Error() != nil {
 		d.logger.Errorf("gRPC - SetValue - Cannot send data via mqtt: %v", t.Error())
 		return nil, status.Errorf(codes.Internal, "cannot send data via mqtt: %v", t.Error())
 	}
-	for _, update := range updates {
-		updateResult, err := d.controllersCollection.UpdateOne(ctx, bson.M{
-			"_id": update.controllerID,
-		}, bson.M{
-			"$set": bson.M{
-				"status":     update.status,
-				"modifiedAt": update.status.ModifiedAt,
-			},
-		})
-
-		if err != nil {
-			d.logger.Errorf("gRPC - SetValue - Cannot update db with the registered device: %v", err)
-			return nil, status.Errorf(codes.Internal, "cannot update controller: %v", err)
-		}
-
-		if updateResult.MatchedCount != 1 {
-			d.logger.Error("gRPC - SetValue - Cannot find a unique controller")
-			return nil, status.Errorf(codes.NotFound, "cannot find a unique controller")
-		}
+	if err = ctx.Err(); err != nil {
+		return nil, status.FromContextError(err).Err()
+	}
+	if err = d.updateControllerStatuses(ctx, updates); err != nil {
+		return nil, err
 	}
 	d.logger.Debug("gRPC - SetValue - Sending response")
 	return &device.SetValueResponse{Status: "200", Message: "Updated"}, nil
+}
+
+func (d *DevicesGrpc) updateControllerStatuses(ctx context.Context, updates []statusUpdate) error {
+	session, err := d.controllersCollection.Database().Client().StartSession()
+	if err != nil {
+		return status.Errorf(codes.Internal, "cannot start controller update transaction: %v", err)
+	}
+	defer session.EndSession(ctx)
+	// Only database writes are retried; publishing must stay outside the callback.
+	_, err = session.WithTransaction(ctx, func(sessionCtx context.Context) (any, error) {
+		for _, update := range updates {
+			updateResult, updateErr := d.controllersCollection.UpdateOne(sessionCtx, bson.M{
+				"_id": update.controllerID,
+			}, bson.M{
+				"$set": bson.M{
+					"status":     update.status,
+					"modifiedAt": update.status.ModifiedAt,
+				},
+			})
+
+			if updateErr != nil {
+				return nil, updateErr
+			}
+
+			if updateResult.MatchedCount != 1 {
+				d.logger.Error("gRPC - SetValue - Cannot find a unique controller")
+				return nil, status.Errorf(codes.NotFound, "cannot find a unique controller")
+			}
+		}
+		return nil, nil
+	}, options.Transaction().SetWriteConcern(writeconcern.Majority()))
+	if err != nil {
+		if ctx.Err() != nil {
+			return status.FromContextError(ctx.Err()).Err()
+		}
+		if status.Code(err) == codes.NotFound {
+			return err
+		}
+		return status.Errorf(codes.Internal, "cannot update controllers: %v", err)
+	}
+	return nil
 }

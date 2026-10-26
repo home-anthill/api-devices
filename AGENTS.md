@@ -91,7 +91,7 @@ Defined in `api/` with protobuf specs in `api/{device,register}/`:
 - **Security:** Device UUIDs are validated with `github.com/google/uuid` before interpolation to prevent MQTT topic injection
 - `InitMqtt()` propagates TLS configuration errors instead of panicking
 - Client access is expected to use Mosquitto ACL-oriented publisher credentials (`api_devices_pub` by default)
-- QoS 0 (at-most-once delivery) chosen for real-time sensor data where occasional loss is acceptable
+- Controller commands publish with QoS 0 (at-most-once delivery). Publish success is not an acknowledgement that the firmware applied the command; do not describe this service as a sensor telemetry publisher.
 
 ## Docker
 
@@ -164,6 +164,15 @@ Copy `.env_template` to `.env` (gitignored). Key variables:
 - **TLS error propagation**: TLS misconfiguration returns errors instead of panicking
 
 **Concurrency:**
+
+- Controller `SetValues` has a five-second total budget, including lookup, MQTT
+  waiting, and the database transaction; honor earlier caller cancellation.
+  api-server uses the same five-second RPC timeout. Cancellation stops waiting
+  and subsequent writes but cannot retract an MQTT publish already submitted.
+- After publish success, update all controller statuses in one MongoDB transaction.
+  Keep MQTT publishing outside the retryable callback so retries never republish.
+  MQTT and MongoDB remain separate systems: a successful publish followed by a
+  transaction failure can still leave stored state behind the published command.
 - `SetValues` processes requested feature values sequentially so authorization/signing errors stop the command batch before MQTT publish
 - Max 100 feature values per request to prevent resource exhaustion
 - First validation, signing, MQTT, or MongoDB error is returned to the caller
@@ -172,3 +181,12 @@ Copy `.env_template` to `.env` (gitignored). Key variables:
 - Proto files: `api/device/device.proto` and `api/register/register.proto`
 - Generated files: `*.pb.go` and `*_grpc.pb.go` — **do not edit these directly**
 - Regenerate with `make proto` after modifying `.proto` files
+
+## Shared device identity contract
+
+Keep identity rules aligned with admission, register, api-devices, and
+esp32-configurator, including their tests. MAC addresses must be six
+colon-separated hexadecimal octets and must be uppercased before processing,
+lookup, or persistence. Model must be 2–50 printable ASCII characters;
+manufacturer must be 3–50 printable ASCII characters (spaces and punctuation
+are allowed; control characters and non-ASCII text are rejected).

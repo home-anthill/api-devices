@@ -133,6 +133,7 @@ func TestGetValueReturnsInternalWhenHashSecretIsMissing(t *testing.T) {
 
 	response, err := client.GetValue(context.Background(), &devicepb.GetValueRequest{
 		DeviceUuid: uuid.NewString(),
+		Mac:        "aA:bb:CC:dd:EE:ff",
 	})
 
 	if response != nil {
@@ -214,6 +215,7 @@ func TestSetValuesReturnsInternalWhenHashSecretIsMissing(t *testing.T) {
 
 	response, err := client.SetValues(context.Background(), &devicepb.SetValuesRequest{
 		DeviceUuid: uuid.NewString(),
+		Mac:        "aA:bb:CC:dd:EE:ff",
 	})
 
 	if response != nil {

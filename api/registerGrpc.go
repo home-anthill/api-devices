@@ -49,6 +49,13 @@ func (r *RegisterGrpc) Register(ctx context.Context, in *register.RegisterReques
 		r.logger.Errorf("gRPC - Register - Cannot update db: profileOwnerId is not a valid ObjectID: %v", err)
 		return nil, status.Errorf(codes.InvalidArgument, "profileOwnerId is not a valid ObjectID: %v", err)
 	}
+	mac, err := utils.NormalizeMAC(in.Mac)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
+	if err = utils.ValidateDeviceText(in.Model, in.Manufacturer); err != nil {
+		return nil, status.Error(codes.InvalidArgument, err.Error())
+	}
 
 	now := time.Now()
 	apiTokenEncrypted, err := utils.EncryptAPIToken(in.ApiToken)
@@ -71,7 +78,7 @@ func (r *RegisterGrpc) Register(ctx context.Context, in *register.RegisterReques
 			"apiTokenEncrypted": apiTokenEncrypted,
 			// device info
 			"deviceUuid":   in.DeviceUuid,
-			"mac":          in.Mac,
+			"mac":          mac,
 			"model":        in.Model,
 			"manufacturer": in.Manufacturer,
 			// feature info
@@ -92,7 +99,7 @@ func (r *RegisterGrpc) Register(ctx context.Context, in *register.RegisterReques
 		"apiTokenHash":   apiTokenHash,
 		// device info
 		"deviceUuid":   in.DeviceUuid,
-		"mac":          in.Mac,
+		"mac":          mac,
 		"model":        in.Model,
 		"manufacturer": in.Manufacturer,
 		// feature info

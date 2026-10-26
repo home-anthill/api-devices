@@ -10,7 +10,13 @@ import (
 // It must implement all methods of mqtt.Client to
 // implicitly implement that interface
 type mqttClientMock struct {
-	publishErr error
+	publishErr  error
+	publishHook func()
+}
+
+// NewMockClientWithPublishHook runs hook when a command is published.
+func NewMockClientWithPublishHook(hook func()) mqtt.Client {
+	return &mqttClientMock{publishHook: hook}
 }
 
 // NewMockClient Exposes a builder function to instantiate the
@@ -50,6 +56,9 @@ func (c *mqttClientMock) OptionsReader() mqtt.ClientOptionsReader {
 	return mqtt.ClientOptionsReader{}
 }
 func (c *mqttClientMock) Publish(topic string, qos byte, retained bool, payload interface{}) mqtt.Token {
+	if c.publishHook != nil {
+		c.publishHook()
+	}
 	t := newTokenWithError(c.publishErr)
 	go func() {
 		t.release()
