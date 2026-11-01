@@ -38,13 +38,6 @@ Versions:
 - 11/01/2023 - 1.0.0-beta.1
 
 
-## :sparkling_heart: A big thank you to :sparkling_heart:
-
-##### the authors of the main icon of this project:
-
-- <a href="https://www.freepik.com/free-vector/underground-ant-nest-with-red-ants_18582279.htm">Image by brgfx</a> from <a href="https://www.freepik.com/" title="Freepik">Freepik</a>
-
-
 # :copyright: License :copyright:
 
 The MIT License (MIT)
